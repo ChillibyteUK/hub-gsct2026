@@ -1,0 +1,109 @@
+/* Base element reset — the "reboot" equivalent. Deliberately small. */
+
+*,
+*::before,
+*::after {
+	box-sizing: border-box;
+}
+
+html {
+	-webkit-text-size-adjust: 100%;
+}
+
+body {
+	margin: 0;
+	font-family: var(--font-family-base);
+	font-size: var(--fs-base);
+	font-weight: var(--fw-400);
+	line-height: var(--line-height-base);
+	color: var(--col-body);
+	background-color: var(--col-body-bg);
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+	margin: 0 0 var(--space-3);
+	font-weight: var(--fw-700);
+	line-height: var(--line-height-heading);
+}
+
+h1 {
+	font-size: var(--fs-h1);
+}
+h2 {
+	font-size: var(--fs-h2);
+}
+h3 {
+	font-size: var(--fs-h3);
+}
+h4 {
+	font-size: var(--fs-h4);
+}
+h5 {
+	font-size: var(--fs-h5);
+}
+h6 {
+	font-size: var(--fs-h6);
+}
+
+p {
+	margin: 0 0 var(--space-3);
+}
+
+a {
+	color: var(--col-primary);
+	text-decoration: none;
+}
+
+/*
+ * Underline-on-hover only for plain content links (no class) — cards,
+ * buttons, nav items, and social/icon links all carry their own class and
+ * define their own hover treatment, so they're excluded here rather than
+ * needing a `text-decoration: none` override per component.
+ */
+a:not([class]):hover {
+	text-decoration: underline;
+}
+
+img,
+svg,
+video {
+	max-width: 100%;
+	height: auto;
+	display: block;
+}
+
+/*
+ * Bootstrap-derived project themes get this from `.figure-caption` — this
+ * skeleton has no Bootstrap to extend, so it's a plain reset instead.
+ * `color` is Bootstrap's own $gray-600 default, not one of this project's
+ * tokens (deliberately a literal, not a token, since a project's own
+ * --col-muted-equivalent value will vary).
+ */
+figcaption {
+	margin-top: 0.5em;
+	font-size: 0.875rem;
+	line-height: var(--line-height-base);
+	color: #6c757d;
+}
+
+ul,
+ol {
+	padding-left: var(--space-4);
+}
+
+.visually-hidden {
+	position: absolute !important;
+	width: 1px !important;
+	height: 1px !important;
+	padding: 0 !important;
+	margin: -1px !important;
+	overflow: hidden !important;
+	clip: rect(0, 0, 0, 0) !important;
+	white-space: nowrap !important;
+	border: 0 !important;
+}
