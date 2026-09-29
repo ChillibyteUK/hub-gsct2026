@@ -1,0 +1,90 @@
+/* Media column fills its ratio box (aspect set inline from the block's
+   aspect-ratio attribute); video embeds in a fixed 16/9 frame. Order comes
+   from the block's order attribute via --first, so the markup never moves. */
+.hub-content-block__media--first {
+    order: -1;
+}
+
+.hub-content-block__image {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.hub-content-block__video {
+    position: relative;
+    aspect-ratio: 16 / 9;
+}
+
+.hub-content-block__video iframe {
+    display: block;
+    width: 100%;
+    height: 100%;
+    border: 0;
+}
+
+/* Facade layers: thumbnail fills the frame, play sits centred above it,
+   corners float 4px outside the frame edges, player frame fills behind.
+   [hidden] needs re-asserting on the play button — its own display:flex
+   would otherwise override the UA's display:none. */
+.hub-content-block__video-thumb {
+    position: absolute;
+    inset: 0;
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.hub-content-block__video-play {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 4rem;
+    height: 4rem;
+    border: 0;
+    border-radius: 50%;
+    padding: 0;
+    cursor: pointer;
+    background: var(--col-brand-purple);
+    color: var(--col-brand-yellow);
+    font-size: 1rem;
+}
+
+.hub-content-block__video-play.btn-video::before {
+    margin: 0;
+    width: 1.5rem;
+    height: 1.5rem;
+}
+
+.hub-content-block__video-play[hidden],
+.hub-content-block__video-thumb[hidden] {
+    display: none;
+}
+
+.hub-content-block__video-frame {
+    position: absolute;
+    inset: 0;
+}
+
+.hub-content-block__corner {
+    position: absolute;
+    width: 70px;
+    height: 70px;
+    pointer-events: none;
+}
+
+.hub-content-block__corner--tl {
+    top: -8px;
+    left: -8px;
+}
+
+.hub-content-block__corner--br {
+    bottom: -8px;
+    right: -8px;
+}

@@ -1,0 +1,102 @@
+{
+	"title": "HUB 3 Points",
+	"color_support": false,
+	"fields": [
+		{
+			"label": "Eyebrow",
+			"type": "text",
+			"help": "",
+			"width": 100,
+			"options": "",
+			"textarea_style": "paragraph",
+			"link_target": false,
+			"name": "eyebrow",
+			"snake": "eyebrow",
+			"sub_fields": [],
+			"repeater_layout": "row",
+			"post_type_slug": "",
+			"field_key": "field_cnmyxpju",
+			"conditional_logic": [],
+			"allowed_extensions": ""
+		},
+		{
+			"label": "Title",
+			"type": "text",
+			"help": "",
+			"width": 100,
+			"options": "",
+			"textarea_style": "paragraph",
+			"link_target": false,
+			"name": "title",
+			"snake": "title",
+			"sub_fields": [],
+			"repeater_layout": "row",
+			"post_type_slug": "",
+			"field_key": "field_sg0zah2i",
+			"conditional_logic": [],
+			"allowed_extensions": ""
+		},
+		{
+			"label": "Intro",
+			"type": "textarea",
+			"help": "",
+			"width": 100,
+			"options": "",
+			"textarea_style": "paragraph",
+			"link_target": false,
+			"name": "intro",
+			"snake": "intro",
+			"sub_fields": [],
+			"repeater_layout": "row",
+			"post_type_slug": "",
+			"field_key": "field_wft24v52",
+			"conditional_logic": [],
+			"allowed_extensions": ""
+		},
+		{
+			"label": "Points",
+			"type": "repeater",
+			"help": "",
+			"width": 100,
+			"options": "",
+			"textarea_style": "paragraph",
+			"link_target": false,
+			"name": "points",
+			"snake": "points",
+			"sub_fields": [
+				{
+					"label": "Big Stat",
+					"type": "text",
+					"mime_types": "",
+					"link_target": false,
+					"options": "",
+					"name": "bigStat",
+					"snake": "big_stat"
+				},
+				{
+					"label": "Subtitle",
+					"type": "text",
+					"mime_types": "",
+					"link_target": false,
+					"options": "",
+					"name": "subtitle",
+					"snake": "subtitle"
+				},
+				{
+					"label": "Content",
+					"type": "textarea",
+					"mime_types": "",
+					"link_target": false,
+					"options": "",
+					"name": "content",
+					"snake": "content"
+				}
+			],
+			"repeater_layout": "row",
+			"post_type_slug": "",
+			"field_key": "field_7z36a124",
+			"conditional_logic": [],
+			"allowed_extensions": ""
+		}
+	]
+}

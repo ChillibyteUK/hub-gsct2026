@@ -5,6 +5,14 @@
  * linkmod/icon handling, no Bootstrap 4/5 branching. Submenus are shown via
  * dropdown-toggle buttons, which are accessible and work with keyboard navigation.
  *
+ * Classes added to a menu item in the WP menu editor ("CSS Classes") are
+ * passed through onto the link (or dropdown-toggle button) alongside
+ * nav-link — WordPress's own bookkeeping classes (menu-item-*,
+ * current-*, page-item-*) are filtered out. Note this walker replaces
+ * core's start_el() wholesale, so the nav_menu_css_class /
+ * nav_menu_link_attributes filters never run here; this passthrough is
+ * what keeps editor classes working.
+ *
  * @package hub-gsct2026
  */
 
@@ -61,8 +69,10 @@ if ( ! class_exists( 'Hub_GSCT_2026_Nav_Walker' ) ) {
 		 * @return void
 		 */
 		public function start_el( &$output, $item, $depth = 0, $args = null, $id = 0 ) {
-			$has_children = in_array( 'menu-item-has-children', $item->classes, true );
-			$is_current   = in_array( 'current-menu-item', $item->classes, true );
+			$item_classes   = is_array( $item->classes ) ? $item->classes : array();
+			$has_children   = in_array( 'menu-item-has-children', $item_classes, true );
+			$is_current     = in_array( 'current-menu-item', $item_classes, true );
+			$custom_classes = array_values( array_unique( array_filter( $item_classes, 'hub_gsct2026_nav_menu_custom_class' ) ) );
 
 			$li_classes = array( 'nav-item' );
 			if ( $has_children ) {
@@ -74,12 +84,13 @@ if ( ! class_exists( 'Hub_GSCT_2026_Nav_Walker' ) ) {
 			if ( $has_children ) {
 				// Dropdown parents never navigate — the whole item is the toggle.
 				$this->current_submenu_id = 'dropdown-' . $item->ID;
-				$output                  .= '<button type="button" class="nav-link dropdown-toggle" aria-haspopup="true" aria-expanded="false" aria-controls="' . esc_attr( $this->current_submenu_id ) . '">';
+				$toggle_classes           = array_merge( array( 'nav-link', 'dropdown-toggle' ), $custom_classes );
+				$output                  .= '<button type="button" class="' . esc_attr( implode( ' ', $toggle_classes ) ) . '" aria-haspopup="true" aria-expanded="false" aria-controls="' . esc_attr( $this->current_submenu_id ) . '">';
 				$output                  .= '<span>' . esc_html( $item->title ) . '</span>';
 				$output                  .= '<svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M2.5 4.5 6 8l3.5-3.5" /></svg>';
 				$output                  .= '</button>';
 			} else {
-				$link_classes = array( 'nav-link' );
+				$link_classes = array_merge( array( 'nav-link' ), $custom_classes );
 				if ( $is_current ) {
 					$link_classes[] = 'active';
 				}
@@ -105,4 +116,25 @@ if ( ! class_exists( 'Hub_GSCT_2026_Nav_Walker' ) ) {
 			$output .= '</li>';
 		}
 	}
+}
+
+/**
+ * Keep a menu item's editor-added classes, drop WordPress's own
+ * bookkeeping ones (menu-item-*, current-*, page-item-*).
+ *
+ * @param string $class Single class from the menu item's class list.
+ * @return bool
+ */
+function hub_gsct2026_nav_menu_custom_class( $class ) {
+	if ( ! is_string( $class ) || '' === $class ) {
+		return false;
+	}
+
+	foreach ( array( 'menu-item', 'current-', 'page-item', 'page_item' ) as $prefix ) {
+		if ( 0 === strpos( $class, $prefix ) ) {
+			return false;
+		}
+	}
+
+	return true;
 }

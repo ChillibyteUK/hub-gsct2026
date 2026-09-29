@@ -117,6 +117,74 @@
 	  });
 	}
 
+	/**
+	 * Bridges for span popover triggers.
+	 *
+	 * Popover triggers are <span>s, not <button>s — a button won't flow inline
+	 * mid-sentence (it stays an atomic, centred box), while a span wraps with
+	 * the surrounding text. Two gaps come with that, both bridged here and
+	 * nothing else — Esc/outside-click/× dismiss stays fully native:
+	 *
+	 * - Click: only <button> invokers fire popovertarget natively, so span
+	 *   clicks toggle the popover by hand. Native <button> triggers (e.g. the
+	 *   × close buttons) are left to the platform.
+	 * - Keyboard: buttons get Enter/Space free, spans don't — a focused span
+	 *   trigger synthesises a click, which flows through the bridge above.
+	 */
+	function initPopovers() {
+	  document.addEventListener('click', event => {
+	    const trigger = event.target instanceof Element ? event.target.closest('[popovertarget]') : null;
+	    if (!trigger || 'BUTTON' === trigger.tagName) {
+	      return;
+	    }
+	    const popover = document.getElementById(trigger.getAttribute('popovertarget'));
+	    if (popover instanceof HTMLElement && 'function' === typeof popover.togglePopover) {
+	      popover.togglePopover();
+	    }
+	  });
+	  document.addEventListener('keydown', event => {
+	    if ('Enter' !== event.key && ' ' !== event.key) {
+	      return;
+	    }
+	    const trigger = event.target instanceof Element ? event.target.closest('[popovertarget]') : null;
+	    if (!trigger || 'BUTTON' === trigger.tagName) {
+	      return;
+	    }
+	    event.preventDefault();
+	    trigger.click();
+	  });
+	}
+
+	/**
+	 * Click-to-play video facades: thumbnail + play button swap for the real
+	 * player on click. The iframe carries data-src only (same lazy pattern as
+	 * dialog.js), so nothing is fetched until asked for; thumbnail and button
+	 * hide while the frame unhides.
+	 */
+	function initVideoFacades() {
+	  document.querySelectorAll('[data-video-facade]').forEach(root => {
+	    const play = root.querySelector('[data-video-play]');
+	    const frame = root.querySelector('[data-video-frame]');
+	    if (!play || !frame) {
+	      return;
+	    }
+	    play.addEventListener('click', () => {
+	      const iframe = frame.querySelector('iframe[data-src]');
+	      if (iframe && !iframe.getAttribute('src')) {
+	        iframe.setAttribute('src', iframe.getAttribute('data-src'));
+	      }
+	      frame.hidden = false;
+	      play.hidden = true;
+	      const thumbnail = root.querySelector('[data-video-thumbnail]');
+	      if (thumbnail) {
+	        thumbnail.hidden = true;
+	      }
+	    }, {
+	      once: true
+	    });
+	  });
+	}
+
 	// Keeps a fraction a hair away from 0 or 1 — the zoom formula below divides
 	// by fraction and by (1 - fraction), which would divide by zero for a focal
 	// point dragged exactly to an edge.
@@ -149,7 +217,7 @@
 	  return Math.max(t / f, (1 - t) / (1 - f));
 	}
 	function layoutPrimaryHero(media) {
-	  const background = media.querySelector('.hub-gsct2026-primary-hero__background');
+	  const background = media.querySelector('.hub-primary-hero__background');
 	  if (!background) return;
 	  const style = getComputedStyle(media);
 	  const focalX = parseFloat(style.getPropertyValue('--focal-x')) || 0.5;
@@ -184,16 +252,16 @@
 	  background.style.top = `${targetYFraction * containerHeight - focalY * scaledHeight}px`;
 	}
 	function initPrimaryHero() {
-	  const mediaEls = document.querySelectorAll('.hub-gsct2026-primary-hero__media');
+	  const mediaEls = document.querySelectorAll('.hub-primary-hero__media');
 	  if (!mediaEls.length) return;
 	  mediaEls.forEach(media => {
-	    const background = media.querySelector('.hub-gsct2026-primary-hero__background');
+	    const background = media.querySelector('.hub-primary-hero__background');
 	    if (background && !background.complete) {
 	      background.addEventListener('load', () => layoutPrimaryHero(media));
 	    }
 	  });
 
-	  // A window resize listener alone isn't enough: .hub-gsct2026-primary-hero__media
+	  // A window resize listener alone isn't enough: .hub-primary-hero__media
 	  // is sized off the section's content (see primary-hero.css), so its own box
 	  // can change size from things that aren't a viewport resize at all — a
 	  // web font swapping in and reflowing the heading/intro, for instance.
@@ -212,6 +280,8 @@
 	  initNavToggle();
 	  initNavDropdowns();
 	  initDialogs();
+	  initPopovers();
+	  initVideoFacades();
 	  initPrimaryHero();
 	});
 

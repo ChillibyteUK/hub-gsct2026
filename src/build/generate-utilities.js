@@ -19,23 +19,19 @@ const fs = require('fs');
 const path = require('path');
 const fg = require('fast-glob');
 const { breakpoints, gridColumns, utilities, spacingScale } = require('./tokens.config');
+const { readTokensFromFile } = require('./read-tokens');
 
 const cssDir = path.resolve(__dirname, '../css');
 const blocksStylesDir = path.resolve(__dirname, '../blocks');
 const tokensFile = path.resolve(cssDir, 'tokens.css');
 
-// Reads --{prefix}* custom properties straight out of tokens.css's :root block
-// (same approach as generate-theme-json.js) so a utility's value set stays in
-// sync with the token scale with no second place to edit.
+// Reads --{prefix}* custom properties out of tokens.css's :root blocks
+// (shared reader with generate-theme-json.js) so a utility's value set
+// stays in sync with the token scale with no second place to edit.
 function readTokenValues(prefix) {
-	const cssContent = fs.readFileSync(tokensFile, 'utf8');
-	const rootBlockMatch = cssContent.match(/:root\s*{([\s\S]*?)}/);
-	if (!rootBlockMatch) return {};
-	const varRegex = /--([\w-]+):\s*([^;]+);/g;
+	const tokens = readTokensFromFile(tokensFile);
 	const values = {};
-	let match;
-	while ((match = varRegex.exec(rootBlockMatch[1])) !== null) {
-		const key = match[1];
+	for (const key of Object.keys(tokens)) {
 		if (key.startsWith(prefix)) {
 			values[key.slice(prefix.length)] = `var(--${key})`;
 		}

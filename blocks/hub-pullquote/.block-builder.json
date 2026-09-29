@@ -1,0 +1,57 @@
+{
+	"title": "HUB Pullquote",
+	"color_support": true,
+	"fields": [
+		{
+			"label": "Quote",
+			"type": "textarea",
+			"help": "",
+			"width": 100,
+			"options": "",
+			"textarea_style": "paragraph",
+			"link_target": false,
+			"name": "quote",
+			"snake": "quote",
+			"sub_fields": [],
+			"repeater_layout": "row",
+			"post_type_slug": "",
+			"field_key": "field_m27e7w29",
+			"conditional_logic": [],
+			"allowed_extensions": ""
+		},
+		{
+			"label": "Attribution",
+			"type": "text",
+			"help": "",
+			"width": 100,
+			"options": "",
+			"textarea_style": "paragraph",
+			"link_target": false,
+			"name": "attribution",
+			"snake": "attribution",
+			"sub_fields": [],
+			"repeater_layout": "row",
+			"post_type_slug": "",
+			"field_key": "field_whrk7d9n",
+			"conditional_logic": [],
+			"allowed_extensions": ""
+		},
+		{
+			"label": "Image",
+			"type": "image",
+			"help": "",
+			"width": 100,
+			"options": "",
+			"textarea_style": "paragraph",
+			"link_target": false,
+			"name": "image",
+			"snake": "image",
+			"sub_fields": [],
+			"repeater_layout": "row",
+			"post_type_slug": "",
+			"field_key": "field_ttg99gw9",
+			"conditional_logic": [],
+			"allowed_extensions": ""
+		}
+	]
+}

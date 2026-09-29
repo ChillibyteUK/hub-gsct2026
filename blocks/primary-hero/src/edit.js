@@ -19,11 +19,11 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 		introText,
 		primaryCtaText,
 		primaryCtaUrl,
-		secondaryCtaText,
-		secondaryCtaUrl,
+		videoButtonText,
+		videoUrl,
 	} = attributes;
 	const previewUrl = backgroundUrl || fallbackBackgroundUrl;
-	const blockProps = useBlockProps( { className: 'container hub-gsct2026-editor-block' } );
+	const blockProps = useBlockProps( { className: 'container hub-editor-block' } );
 
 	return (
 		<>
@@ -43,9 +43,9 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 					/>
 				</PanelBody>
 			</InspectorControls>
-			<EditorBlockShell blockProps={ blockProps } clientId={ clientId } textDomain="hub-gsct2026" title="Primary Hero">
-				<div className="hub-gsct2026-editor-field">
-					<label className="hub-gsct2026-editor-field__label">{ __( 'Background image', 'hub-gsct2026' ) }</label>
+			<EditorBlockShell blockProps={ blockProps } clientId={ clientId } textDomain="hub-gsct2026" title="HUB Primary Hero">
+				<div className="hub-editor-field">
+					<label className="hub-editor-field__label">{ __( 'Background image', 'hub-gsct2026' ) }</label>
 					<MediaUploadCheck>
 						<MediaUpload
 							onSelect={ ( media ) =>
@@ -58,7 +58,7 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 							allowedTypes={ [ 'image' ] }
 							value={ backgroundId }
 							render={ ( { open } ) => (
-								<div className="hub-gsct2026-editor-field__control">
+								<div className="hub-editor-field__control">
 									{ previewUrl && (
 										<img
 											src={ previewUrl }
@@ -105,8 +105,8 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 					<div style={ { flex: '50 1 0%' } }>
 						<TextControl
 							label={ __( 'Video button text', 'hub-gsct2026' ) }
-							value={ secondaryCtaText }
-							onChange={ ( value ) => setAttributes( { secondaryCtaText: value } ) }
+							value={ videoButtonText }
+							onChange={ ( value ) => setAttributes( { videoButtonText: value } ) }
 							help={ __( 'Opens the Vimeo video below in a modal player.', 'hub-gsct2026' ) }
 						/>
 					</div>
@@ -114,9 +114,9 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 						<TextControl
 							type="url"
 							label={ __( 'Vimeo URL', 'hub-gsct2026' ) }
-							value={ secondaryCtaUrl }
-							onChange={ ( value ) => setAttributes( { secondaryCtaUrl: value } ) }
-							help={ __( 'e.g. https://vimeo.com/123456789 — anything else renders as a plain link.', 'hub-gsct2026' ) }
+							value={ videoUrl }
+							onChange={ ( value ) => setAttributes( { videoUrl: value } ) }
+							help={ __( 'e.g. https://vimeo.com/123456789', 'hub-gsct2026' ) }
 						/>
 					</div>
 				</div>

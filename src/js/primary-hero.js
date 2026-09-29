@@ -31,7 +31,7 @@ function requiredZoom(focal, target) {
 }
 
 function layoutPrimaryHero(media) {
-	const background = media.querySelector('.hub-gsct2026-primary-hero__background');
+	const background = media.querySelector('.hub-primary-hero__background');
 	if (!background) return;
 
 	const style = getComputedStyle(media);
@@ -72,17 +72,17 @@ function layoutPrimaryHero(media) {
 }
 
 export function initPrimaryHero() {
-	const mediaEls = document.querySelectorAll('.hub-gsct2026-primary-hero__media');
+	const mediaEls = document.querySelectorAll('.hub-primary-hero__media');
 	if (!mediaEls.length) return;
 
 	mediaEls.forEach((media) => {
-		const background = media.querySelector('.hub-gsct2026-primary-hero__background');
+		const background = media.querySelector('.hub-primary-hero__background');
 		if (background && !background.complete) {
 			background.addEventListener('load', () => layoutPrimaryHero(media));
 		}
 	});
 
-	// A window resize listener alone isn't enough: .hub-gsct2026-primary-hero__media
+	// A window resize listener alone isn't enough: .hub-primary-hero__media
 	// is sized off the section's content (see primary-hero.css), so its own box
 	// can change size from things that aren't a viewport resize at all — a
 	// web font swapping in and reflowing the heading/intro, for instance.

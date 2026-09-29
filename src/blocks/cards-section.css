@@ -1,0 +1,93 @@
+.hub-cards-section {
+    display: flex;
+    flex-direction: column;
+    background-size: cover;
+    background-position: bottom;
+    min-height: 90vh;
+    position: relative;
+    isolation: isolate;
+
+    @media (max-width: 768px) {
+        min-height: unset;
+    }
+}
+
+.hub-cards-section__overlay {
+	position: absolute;
+	inset: 0;
+	background: hsla(0 0 0 / .25);
+	pointer-events: none;
+    z-index: -1;
+}
+
+
+.hub-cards-section .container {
+    margin-block-start: auto;
+}
+
+.hub-cards-section h2 {
+    padding-bottom: var(--space-2);
+    @media (min-width: 768px) {
+        border-bottom: 1px solid var(--col-white);
+    }
+}
+/* Cards are flex columns: title/content stack at the top, the number is
+   pushed to the bottom. The --first/--second/--third modifiers are styling
+   hooks only. */
+.hub-cards-section__card {
+    display: flex;
+    flex-direction: column;
+    padding: var(--space-4);
+    border-radius: var(--radius-lg);
+}
+
+.hub-cards-section__card--first {
+    background-color: var(--col-brand-blue-300-x90);
+    color: var(--col-black);
+    .hub-cards-section__number {
+        color: var(--col-brand-purple);
+    }
+}
+.hub-cards-section__card--second {
+    background-color: var(--col-brand-yellow-x90);
+    color: var(--col-black);
+    .hub-cards-section__number {
+        color: var(--col-brand-red);
+    }
+}
+.hub-cards-section__card--third {
+    background-color: var(--col-brand-purple-x90);
+    color: var(--col-white);
+    .hub-cards-section__number {
+        color: var(--col-brand-yellow);
+    }
+}
+
+.hub-cards-section__number {
+    margin-top: auto;
+    line-height: 1;
+    display: none;
+    @media (min-width: 768px) {
+        display: block;
+    }
+}
+
+/* Section link: block-level flex pushed right, so it aligns to the
+   container edge without touching siblings. Flex items don't inherit text
+   decorations, so the arrow stays clean even if the link text is ever
+   underlined. */
+.hub-cards-section__link {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 0.5em;
+}
+
+.hub-cards-section__link-arrow {
+    flex: none;
+}
+
+.hub-cards-section .text-link {
+    color: var(--col-white);
+    text-decoration: underline;
+}

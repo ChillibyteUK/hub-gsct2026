@@ -1,6 +1,105 @@
 import { __ } from '@wordpress/i18n';
-import { MediaUpload, MediaUploadCheck } from '@wordpress/block-editor';
+import { MediaUpload, MediaUploadCheck, RichText } from '@wordpress/block-editor';
 import { TextControl, TextareaControl, ToggleControl, Button, RadioControl } from '@wordpress/components';
+import { useEffect, useMemo } from '@wordpress/element';
+import { useSelect } from '@wordpress/data';
+import { store as coreStore } from '@wordpress/core-data';
+
+/**
+ * Makes a legacy plain-text value safe to hand to RichText. RichText's
+ * editable content silently fails to render at all when given a value with
+ * no wrapping HTML tag whatsoever (isolated down to a single-row,
+ * single-character repro — "a" renders nothing, "<p>a</p>" renders fine).
+ * Rows saved before a field was RichText (plain textarea content, no markup
+ * at all — some with literal `\n` line breaks from a plain textarea) hit
+ * this on every read until they're re-saved through RichText's own
+ * onChange, which always produces real markup — so this exists
+ * specifically to bridge that one legacy moment, not as an ongoing
+ * safeguard. Literal newlines become <br> first (matching a plain
+ * textarea's own line-break-only semantics).
+ *
+ * The wrapping tag itself must match the field's own `multiline` mode: a
+ * non-multiline field gets a plain inline `<span>` wrapper, since a `<p>`
+ * wrapper would force multiline-style paragraph behaviour on it (reproduced
+ * as visible content corruption — text typed immediately after mount
+ * splitting mid-word onto a new line). Multiline fields keep `<p>`, since
+ * multiline="p" mode genuinely expects `<p>` children.
+ */
+function toSafeRichTextHtml( value, multiline ) {
+	const html = value || '';
+	if ( html.includes( '<' ) ) {
+		return html;
+	}
+	const withBreaks = html.replace( /\r\n|\r|\n/g, '<br>' );
+	return multiline ? `<p>${ withBreaks }</p>` : `<span>${ withBreaks }</span>`;
+}
+
+/**
+ * Short random id for a repeater row, stable for that row's lifetime once
+ * assigned (kept as-is by updateRow's `{ ...next[index], ...patch }` spread,
+ * since patch never includes `id`). Not cryptographic, doesn't need to be —
+ * only needs to be unique among this one row's siblings, as a stable React
+ * `key` (see the "why" comment further down, near the .map() call).
+ */
+function generateRowId() {
+	return `row-${ Date.now().toString( 36 ) }-${ Math.random().toString( 36 ).slice( 2, 8 ) }`;
+}
+
+/**
+ * A repeater row's own image field, as a real component rather than
+ * inlined into the big fields.map() below — needed so it can call its own
+ * useSelect() per row/field to derive the preview URL live from the
+ * attachment id, instead of trusting a `{field}Url` value stored only at
+ * the moment of selection. A row backfilled from existing data, or any path
+ * that doesn't go through onSelect, leaves that stored Url empty forever
+ * even though the id itself is genuinely valid — showing as a blank preview
+ * with a working "Replace" button, easy to mistake for "this row has no
+ * image" when it does. The stored Url is still written on select and kept
+ * as a fallback for the reverse case (a Url with no id to look up).
+ */
+function RepeaterImageField( { field, row, index, updateRow, isColumn } ) {
+	const id = row[ field.name ];
+	const liveUrl = useSelect(
+		( select ) => {
+			if ( ! id ) {
+				return '';
+			}
+			return select( coreStore ).getMedia( id )?.source_url || '';
+		},
+		[ id ]
+	);
+	const url = liveUrl || row[ `${ field.name }Url` ] || '';
+
+	return (
+		<MediaUploadCheck key={ field.name }>
+			<MediaUpload
+				onSelect={ ( media ) =>
+					updateRow( index, {
+						[ field.name ]: media.id,
+						[ `${ field.name }Url` ]: media.url,
+					} )
+				}
+				allowedTypes={ [ 'image' ] }
+				value={ id }
+				render={ ( { open } ) => (
+					<div className="hub-repeater-field__image">
+						<span className={ isColumn ? 'hub-editor-field__label' : 'screen-reader-text' }>
+							{ field.label }
+						</span>
+						{ url && (
+							<img src={ url } alt="" />
+						) }
+						<Button variant="secondary" size="small" onClick={ open }>
+							{ id
+								? __( 'Replace', 'hub-gsct2026' )
+								: __( 'Select', 'hub-gsct2026' ) }
+						</Button>
+					</div>
+				) }
+			/>
+		</MediaUploadCheck>
+	);
+}
 
 /**
  * Generic repeater UI for a block attribute holding an array of row objects.
@@ -25,18 +124,60 @@ import { TextControl, TextareaControl, ToggleControl, Button, RadioControl } fro
  * @param {string}   props.label    Field group label.
  * @param {Object[]} props.value    Current rows.
  * @param {Function} props.onChange ( rows ) => void
- * @param {Object[]} props.fields   [ { name, label, type: 'text'|'number'|'textarea'|'image'|'file'|'link'|'radio', help, mimeTypes, linkTarget, options } ]
+ * @param {Object[]} props.fields   [ { name, label, type: 'text'|'number'|'textarea'|'richtext'|'image'|'file'|'link'|'radio', help, mimeTypes, linkTarget, options, className, showIf, multiline } ]
  *                                  `linkTarget` (link fields only) adds an "open in new tab" toggle,
  *                                  storing `{name}Target` on the row — same opt-in shape as the
  *                                  top-level `link` field type's `link_target` option. `options`
  *                                  (radio fields only) is `[ { label, value } ]`, mirroring the
  *                                  top-level `select`/`radio` field types' options shape.
+ *                                  `className` (radio fields only) lands on the RadioControl's
+ *                                  fieldset — e.g. 'hub-radio-horizontal' for a Yes/No row
+ *                                  instead of the default stacked options.
+ *                                  `showIf: { field, value }` hides the field unless that row's
+ *                                  `field` equals `value` — e.g. popover detail fields that
+ *                                  only apply when a 'popover' radio is set. In `row` layout
+ *                                  the shared column header keeps a cell while any row
+ *                                  shows the field. `multiline` (richtext fields only)
+ *                                  turns on real multi-paragraph editing (RichText's
+ *                                  `multiline="p"`); leave it unset for a field that's
+ *                                  just single-line-with-line-breaks, e.g. a title.
  * @param {Object}   props.emptyRow Shape of a freshly-added row, e.g. { stat: '', title: '' }.
  * @param {string}   [props.layout] 'row' (default) or 'column'.
  */
 export default function RepeaterField( { label, value, onChange, fields, emptyRow, layout = 'row' } ) {
 	const isColumn = 'column' === layout;
 	const rows = value || [];
+
+	// Rows saved before this `id` field existed (or any other future
+	// producer of rows without one) need an id from their very first render,
+	// not just eventually: a useEffect-only backfill (running after that
+	// first paint) still lets every id-less row mount once sharing the same
+	// "no id" identity, and confirmed live, that's enough for a RichText
+	// field's internal state to only ever end up correctly wired for the
+	// first of them — every other row's RichText silently renders empty,
+	// permanently, even after the effect assigns real ids on the next
+	// render. useMemo computes real-enough ids synchronously, before
+	// anything downstream ever mounts.
+	const displayRows = useMemo( () => rows.map( ( row ) => ( row.id ? row : { ...row, id: generateRowId() } ) ), [ rows ] );
+
+	// Persists those ids back into the actual attribute once React commits,
+	// so they're stable across reloads/reorders instead of regenerating
+	// every render — moveRow/removeRow/updateRow below still key off array
+	// index, not id, so this is purely about giving each row a durable
+	// identity, not something anything else depends on to function.
+	//
+	// Dep is [ rows ], not [ rows.length ] as upstream: until ids persist,
+	// every edit re-maps new random ids (remounting rows and dropping
+	// focus), and a length-only dep never fires for text edits — so legacy
+	// rows would stay unstable until a row is added or removed. Guarded by
+	// the .some() check, so the steady state (all rows identified) is a
+	// no-op, not a loop.
+	useEffect( () => {
+		if ( rows.some( ( row ) => ! row.id ) ) {
+			onChange( displayRows );
+		}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [ rows ] );
 
 	function updateRow( index, patch ) {
 		const next = rows.slice();
@@ -45,7 +186,7 @@ export default function RepeaterField( { label, value, onChange, fields, emptyRo
 	}
 
 	function addRow() {
-		onChange( [ ...rows, { ...emptyRow } ] );
+		onChange( [ ...rows, { ...emptyRow, id: generateRowId() } ] );
 	}
 
 	function removeRow( index ) {
@@ -69,70 +210,81 @@ export default function RepeaterField( { label, value, onChange, fields, emptyRo
 		onChange( next );
 	}
 
+	function fieldVisible( field, row ) {
+		if ( ! field.showIf ) {
+			return true;
+		}
+
+		return ( row[ field.showIf.field ] ?? '' ) === field.showIf.value;
+	}
+
 	return (
 		<div
 			className={
 				isColumn
-					? 'hub-gsct2026-repeater-field hub-gsct2026-repeater-field--column'
-					: 'hub-gsct2026-repeater-field'
+					? 'hub-repeater-field hub-repeater-field--column'
+					: 'hub-repeater-field'
 			}
 		>
-			<label className="hub-gsct2026-editor-field__label">{ label }</label>
+			<label className="hub-editor-field__label">{ label }</label>
 			{ ! isColumn && rows.length > 0 && (
-				<div className="hub-gsct2026-repeater-field__header">
-					<span className="hub-gsct2026-repeater-field__number-spacer" />
+				<div className="hub-repeater-field__header">
+					<span className="hub-repeater-field__number-spacer" />
 					{ fields.map( ( field ) => (
+						( ! field.showIf || rows.some( ( row ) => fieldVisible( field, row ) ) ) && (
 						<span
 							key={ field.name }
 							className={
 								'image' === field.type || 'file' === field.type
-									? 'hub-gsct2026-repeater-field__header-cell hub-gsct2026-repeater-field__header-cell--image'
-									: 'hub-gsct2026-repeater-field__header-cell'
+									? 'hub-repeater-field__header-cell hub-repeater-field__header-cell--image'
+									: 'hub-repeater-field__header-cell'
 							}
 						>
 							{ field.label }
 						</span>
+						)
 					) ) }
-					<span className="hub-gsct2026-repeater-field__row-actions-spacer" />
+					<span className="hub-repeater-field__row-actions-spacer" />
 				</div>
 			) }
-			<div className="hub-gsct2026-repeater-field__rows">
-			{ rows.map( ( row, index ) => (
-				<div className="hub-gsct2026-repeater-field__row" key={ index }>
-					<span className="hub-gsct2026-repeater-field__number">{ index + 1 }</span>
+			<div className="hub-repeater-field__rows">
+			{ /* key is row.id, not index: on a move/reorder the array positions
+			    swap but the row *objects* (and their ids) travel with the
+			    move, so a stable id-based key correctly follows each row's
+			    actual identity through that swap. An index-based key instead
+			    tells React "the thing at position 2 is still the same
+			    component," even though its data just changed underneath it —
+			    harmless for plain controlled inputs, but RichText owns real
+			    browser selection/cursor state inside its own DOM node, and
+			    reusing that node across what's actually a different row is
+			    exactly what caused shift+arrow selection to behave oddly
+			    across a reorder. Iterating displayRows (not rows) is what
+			    guarantees that id is there from this very first render — see
+			    the useMemo above. */ }
+			{ displayRows.map( ( row, index ) => (
+				<div className="hub-repeater-field__row" key={ row.id }>
+					<span className="hub-repeater-field__number">{ index + 1 }</span>
 					{ fields.map( ( field ) => {
+						if ( ! fieldVisible( field, row ) ) {
+							return null;
+						}
+
 						if ( 'image' === field.type ) {
 							return (
-								<MediaUploadCheck key={ field.name }>
-									<MediaUpload
-										onSelect={ ( media ) =>
-											updateRow( index, {
-												[ field.name ]: media.id,
-												[ `${ field.name }Url` ]: media.url,
-											} )
-										}
-										allowedTypes={ [ 'image' ] }
-										value={ row[ field.name ] }
-										render={ ( { open } ) => (
-											<div className="hub-gsct2026-repeater-field__image">
-												{ row[ `${ field.name }Url` ] && (
-													<img src={ row[ `${ field.name }Url` ] } alt="" />
-												) }
-												<Button variant="secondary" size="small" onClick={ open }>
-													{ row[ field.name ]
-														? __( 'Replace', 'hub-gsct2026' )
-														: __( 'Select', 'hub-gsct2026' ) }
-												</Button>
-											</div>
-										) }
-									/>
-								</MediaUploadCheck>
+								<RepeaterImageField
+									key={ field.name }
+									field={ field }
+									row={ row }
+									index={ index }
+									updateRow={ updateRow }
+									isColumn={ isColumn }
+								/>
 							);
 						}
 
 						if ( 'link' === field.type ) {
 							return (
-								<div className="hub-gsct2026-repeater-field__link" key={ field.name }>
+								<div className="hub-repeater-field__link" key={ field.name }>
 									<TextControl
 										label={ __( `${ field.label } Title`, 'hub-gsct2026' ) }
 										hideLabelFromVision={ ! isColumn }
@@ -171,9 +323,9 @@ export default function RepeaterField( { label, value, onChange, fields, emptyRo
 										allowedTypes={ field.mimeTypes || [] }
 										value={ row[ field.name ] }
 										render={ ( { open } ) => (
-											<div className="hub-gsct2026-repeater-field__image">
+											<div className="hub-repeater-field__image">
 												{ row[ `${ field.name }Name` ] && (
-													<span className="hub-gsct2026-repeater-field__file-name">
+													<span className="hub-repeater-field__file-name">
 														{ row[ `${ field.name }Name` ] }
 													</span>
 												) }
@@ -202,10 +354,36 @@ export default function RepeaterField( { label, value, onChange, fields, emptyRo
 							);
 						}
 
+						if ( 'richtext' === field.type ) {
+							return (
+								<div className="hub-repeater-field__richtext" key={ field.name }>
+									{ isColumn && <span className="hub-editor-field__label">{ field.label }</span> }
+									{ /* field.multiline: true for real multi-paragraph fields.
+									    Leave unset/false for a single-line-with-<br> field —
+									    matches a plain textarea's own "line breaks only, no
+									    separate paragraphs" semantics, and multiline="p"
+									    would wrongly turn a plain Enter into a new paragraph
+									    instead. */ }
+									<RichText
+										identifier={ `${ row.id }-${ field.name }` }
+										tagName="div"
+										multiline={ field.multiline ? 'p' : undefined }
+										className="hub-editor-field__control"
+										aria-label={ field.label }
+										placeholder={ field.label }
+										value={ toSafeRichTextHtml( row[ field.name ], field.multiline ) }
+										onChange={ ( v ) => updateRow( index, { [ field.name ]: v } ) }
+									/>
+									{ field.help && <p className="hub-editor-field__help">{ field.help }</p> }
+								</div>
+							);
+						}
+
 						if ( 'radio' === field.type ) {
 							return (
 								<RadioControl
 									key={ field.name }
+									className={ field.className }
 									label={ field.label }
 									hideLabelFromVision={ ! isColumn }
 									selected={ row[ field.name ] || '' }
@@ -240,7 +418,7 @@ export default function RepeaterField( { label, value, onChange, fields, emptyRo
 							/>
 						);
 					} ) }
-					<div className="hub-gsct2026-repeater-field__row-actions">
+					<div className="hub-repeater-field__row-actions">
 						<Button
 							size="small"
 							label={ __( 'Move up', 'hub-gsct2026' ) }

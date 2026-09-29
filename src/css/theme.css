@@ -9,3 +9,29 @@
 /* @import "tables.css"; -- uncomment if this project actually needs styled tables */
 /* @import "accordion.css"; -- uncomment if this project actually needs styled accordions */
 @import "blocks.css"; /* generated — concatenation of src/blocks/*.css, see src/build/generate-utilities.js */
+
+
+.has-brand-yellow-background-color {
+    color: var(--col-black);
+    h2 {
+        color: var(--col-brand-purple);
+    }
+}
+
+.has-brand-purple-background-color {
+    color: var(--col-white);
+}
+
+.has-black-background-color {
+    color: var(--col-white);
+    h2 {
+        color: var(--col-brand-yellow);
+    }
+}
+
+.has-brand-red-background-color {
+    color: var(--col-black);
+    h2 {
+        color: var(--col-white);
+    }
+}

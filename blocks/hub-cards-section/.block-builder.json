@@ -1,0 +1,93 @@
+{
+	"title": "HUB Cards Section",
+	"color_support": false,
+	"fields": [
+		{
+			"label": "Background",
+			"type": "image",
+			"help": "",
+			"width": 100,
+			"options": "",
+			"textarea_style": "paragraph",
+			"link_target": false,
+			"name": "background",
+			"snake": "background",
+			"sub_fields": [],
+			"repeater_layout": "row",
+			"post_type_slug": "",
+			"field_key": "field_m8ckay3a",
+			"conditional_logic": [],
+			"allowed_extensions": ""
+		},
+		{
+			"label": "Title",
+			"type": "text",
+			"help": "",
+			"width": 100,
+			"options": "",
+			"textarea_style": "paragraph",
+			"link_target": false,
+			"name": "title",
+			"snake": "title",
+			"sub_fields": [],
+			"repeater_layout": "row",
+			"post_type_slug": "",
+			"field_key": "field_pwyghql1",
+			"conditional_logic": [],
+			"allowed_extensions": ""
+		},
+		{
+			"label": "Cards",
+			"type": "repeater",
+			"help": "",
+			"width": 100,
+			"options": "",
+			"textarea_style": "paragraph",
+			"link_target": false,
+			"name": "cards",
+			"snake": "cards",
+			"sub_fields": [
+				{
+					"label": "Card Title",
+					"type": "text",
+					"mime_types": "",
+					"link_target": false,
+					"options": "",
+					"name": "cardTitle",
+					"snake": "card_title"
+				},
+				{
+					"label": "Card Content",
+					"type": "textarea",
+					"mime_types": "",
+					"link_target": false,
+					"options": "",
+					"name": "cardContent",
+					"snake": "card_content"
+				}
+			],
+			"repeater_layout": "row",
+			"post_type_slug": "",
+			"field_key": "field_f8crjha8",
+			"conditional_logic": [],
+			"allowed_extensions": ""
+		},
+		{
+			"label": "Link",
+			"type": "url",
+			"help": "",
+			"width": 100,
+			"options": "",
+			"textarea_style": "paragraph",
+			"link_target": false,
+			"name": "link",
+			"snake": "link",
+			"sub_fields": [],
+			"repeater_layout": "row",
+			"post_type_slug": "",
+			"field_key": "field_uu275dsf",
+			"conditional_logic": [],
+			"allowed_extensions": ""
+		}
+	]
+}

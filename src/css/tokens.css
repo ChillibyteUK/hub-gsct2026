@@ -11,15 +11,28 @@
   /* Colour palette — rename/replace per project, keep the slug shape */
   --col-white: #ffffff;
   --col-black: #000000;
+  --col-grey-100: #f5f5f5;
+  --col-grey-200: #e0e0e0;
+  --col-grey-300: #c6c6c6;
+  --col-grey-400: #9e9e9e;
+  --col-grey-500: #757575;
+  --col-grey-600: #616161;
+  --col-grey-700: #424242;
+  --col-grey-800: #212121;
 
+  --col-light-grey: hsla(0, 0%, 89%, 1);
 
   /* Brand colours — not used yet. Named by hue; the three blues slot into
      the existing numeric ramp under --col-blue-700. */
   --col-brand-red: #f74333;
   --col-brand-purple: #7628d4;
+  --col-brand-purple-x90: #7628d4e6;
   --col-brand-blue-500: #307eff;
+  --col-brand-blue-500-x90: #307effe6;
   --col-brand-yellow: #fff039;
+  --col-brand-yellow-x90: #fff039e6;
   --col-brand-blue-300: #90bffa;
+  --col-brand-blue-300-x90: #90bffae6;
   --col-brand-blue-100: #c6e0ff;
   --col-brand-pink: #ffaaeb;
 

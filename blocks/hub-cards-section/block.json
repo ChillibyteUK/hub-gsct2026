@@ -1,0 +1,45 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "hub-gsct2026/hub-cards-section",
+	"title": "HUB Cards Section",
+	"category": "hub-gsct2026",
+	"icon": "cover-image",
+	"attributes": {
+		"backgroundId": {
+			"type": "number",
+			"default": 0
+		},
+		"backgroundUrl": {
+			"type": "string",
+			"default": ""
+		},
+		"backgroundAlt": {
+			"type": "string",
+			"default": ""
+		},
+		"title": {
+			"type": "string",
+			"default": ""
+		},
+		"cards": {
+			"type": "array",
+			"default": []
+		},
+		"linkText": {
+			"type": "string",
+			"default": ""
+		},
+		"linkUrl": {
+			"type": "string",
+			"default": ""
+		}
+	},
+	"supports": {
+		"anchor": true,
+		"className": true,
+		"align": true
+	},
+	"editorScript": "file:./build/index.js",
+	"render": "file:./render.php"
+}

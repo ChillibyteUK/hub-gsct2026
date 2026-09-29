@@ -220,21 +220,21 @@ function hub_gsct2026_settings_page_assets( $hook_suffix ) {
 
 	wp_enqueue_media();
 	wp_enqueue_script(
-		'hub-gsct2026-gallery-field',
+		'hub-gallery-field',
 		get_stylesheet_directory_uri() . '/js/gallery-field.js',
 		array( 'jquery' ),
 		wp_get_theme()->get( 'Version' ),
 		true
 	);
 	wp_enqueue_script(
-		'hub-gsct2026-settings-repeater',
+		'hub-settings-repeater',
 		get_stylesheet_directory_uri() . '/js/repeater-field.js',
 		array( 'jquery' ),
 		wp_get_theme()->get( 'Version' ),
 		true
 	);
 	wp_enqueue_script(
-		'hub-gsct2026-tabs',
+		'hub-tabs',
 		get_stylesheet_directory_uri() . '/js/tabs.js',
 		array(),
 		wp_get_theme()->get( 'Version' ),
@@ -381,14 +381,14 @@ function hub_gsct2026_render_checkbox_field( $args ) {
 function hub_gsct2026_render_gallery_field( $args ) {
 	$ids = array_filter( array_map( 'absint', explode( ',', hub_gsct2026_get_setting( $args['key'] ) ) ) );
 	?>
-	<div class="hub-gsct2026-gallery-field">
+	<div class="hub-gallery-field">
 		<input
 			type="hidden"
 			id="<?php echo esc_attr( $args['key'] ); ?>"
 			name="<?php echo esc_attr( HUB_GSCT2026_SETTINGS_OPTION ); ?>[<?php echo esc_attr( $args['key'] ); ?>]"
 			value="<?php echo esc_attr( implode( ',', $ids ) ); ?>"
 		>
-		<ul class="hub-gsct2026-gallery-field__preview" style="display: flex; flex-wrap: wrap; gap: 8px; padding: 0; margin: 0 0 8px; list-style: none;">
+		<ul class="hub-gallery-field__preview" style="display: flex; flex-wrap: wrap; gap: 8px; padding: 0; margin: 0 0 8px; list-style: none;">
 			<?php
 			foreach ( $ids as $id ) {
 				$thumb = wp_get_attachment_image_src( $id, 'thumbnail' );
@@ -402,8 +402,8 @@ function hub_gsct2026_render_gallery_field( $args ) {
 			?>
 		</ul>
 		<p>
-			<button type="button" class="button hub-gsct2026-gallery-field__select">Select Images</button>
-			<button type="button" class="button hub-gsct2026-gallery-field__clear">Clear</button>
+			<button type="button" class="button hub-gallery-field__select">Select Images</button>
+			<button type="button" class="button hub-gallery-field__clear">Clear</button>
 		</p>
 	</div>
 	<?php
@@ -433,7 +433,7 @@ function hub_gsct2026_render_repeater_field( $args ) {
 	$sub_fields = $args['sub_fields'];
 	$rows       = hub_gsct2026_get_repeater_setting( $key );
 	?>
-	<div class="hub-gsct2026-settings-repeater" data-repeater-key="<?php echo esc_attr( $key ); ?>">
+	<div class="hub-settings-repeater" data-repeater-key="<?php echo esc_attr( $key ); ?>">
 		<div style="display: flex; align-items: center; gap: 12px; padding: 0 12px; margin-bottom: 4px;">
 			<span style="flex: none; width: 22px;"></span>
 			<?php
@@ -446,7 +446,7 @@ function hub_gsct2026_render_repeater_field( $args ) {
 			?>
 			<span style="flex: none; width: 92px;"></span>
 		</div>
-		<div class="hub-gsct2026-settings-repeater__rows">
+		<div class="hub-settings-repeater__rows">
 			<?php
 			$number = 0;
 			foreach ( $rows as $index => $row ) {
@@ -455,11 +455,11 @@ function hub_gsct2026_render_repeater_field( $args ) {
 			}
 			?>
 		</div>
-		<template class="hub-gsct2026-settings-repeater__template">
+		<template class="hub-settings-repeater__template">
 			<?php echo hub_gsct2026_render_repeater_row( $key, '__INDEX__', $sub_fields, array(), 0 ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- escaped internally. ?>
 		</template>
 		<p>
-			<button type="button" class="button button-primary hub-gsct2026-settings-repeater__add-row">Add row</button>
+			<button type="button" class="button button-primary hub-settings-repeater__add-row">Add row</button>
 		</p>
 	</div>
 	<?php
@@ -486,9 +486,9 @@ function hub_gsct2026_render_repeater_field( $args ) {
 function hub_gsct2026_render_repeater_row( $key, $index, $sub_fields, $row, $number ) {
 	ob_start();
 	?>
-	<div class="hub-gsct2026-settings-repeater__row" style="display: flex; align-items: flex-end; gap: 12px; border: 1px solid #ccc; padding: 12px; margin-bottom: 8px;">
+	<div class="hub-settings-repeater__row" style="display: flex; align-items: flex-end; gap: 12px; border: 1px solid #ccc; padding: 12px; margin-bottom: 8px;">
 		<span
-			class="hub-gsct2026-settings-repeater__number"
+			class="hub-settings-repeater__number"
 			style="flex: none; align-self: center; display: flex; align-items: center; justify-content: center; width: 22px; height: 22px; border-radius: 50%; background: #f0f0f1; font-size: 12px; font-weight: 600; color: #50575e;"
 		><?php echo (int) $number; ?></span>
 		<?php
@@ -500,7 +500,7 @@ function hub_gsct2026_render_repeater_row( $key, $index, $sub_fields, $row, $num
 				$thumb = $value ? wp_get_attachment_image_src( absint( $value ), 'thumbnail' ) : false;
 				?>
 			<div
-				class="hub-gsct2026-settings-repeater__image"
+				class="hub-settings-repeater__image"
 				style="flex: none; position: relative; width: 64px; height: 64px; background: #fff; border: 1px solid #ccc;"
 			>
 				<img
@@ -510,21 +510,21 @@ function hub_gsct2026_render_repeater_row( $key, $index, $sub_fields, $row, $num
 				>
 				<input
 					type="hidden"
-					class="hub-gsct2026-settings-repeater__image-input"
+					class="hub-settings-repeater__image-input"
 					name="<?php echo esc_attr( $name ); ?>"
 					value="<?php echo esc_attr( $value ); ?>"
 				>
 				<div style="position: absolute; inset: auto 0 0 0; display: flex; background: rgba(0, 0, 0, 0.6);">
 					<button
 						type="button"
-						class="hub-gsct2026-settings-repeater__select-image"
+						class="hub-settings-repeater__select-image"
 						data-select-label="Select <?php echo esc_attr( $sub_field['label'] ); ?>"
 						title="<?php echo esc_attr( ( $thumb ? 'Replace ' : 'Select ' ) . $sub_field['label'] ); ?>"
 						style="flex: 1; background: none; border: none; color: #fff; cursor: pointer; padding: 2px 0; font-size: 11px; line-height: 1;"
 					>&#9998;</button>
 					<button
 						type="button"
-						class="hub-gsct2026-settings-repeater__clear-image"
+						class="hub-settings-repeater__clear-image"
 						title="Clear"
 						style="flex: 1; background: none; border: none; color: #fff; cursor: pointer; padding: 2px 0; font-size: 13px; line-height: 1; <?php echo $thumb ? '' : 'display: none;'; ?>"
 					>&times;</button>
@@ -545,10 +545,10 @@ function hub_gsct2026_render_repeater_row( $key, $index, $sub_fields, $row, $num
 			}
 		}
 		?>
-		<div class="hub-gsct2026-settings-repeater__row-actions" style="flex: none; display: flex; gap: 4px;">
-			<button type="button" class="button hub-gsct2026-settings-repeater__move-up" title="Move up">&#9650;</button>
-			<button type="button" class="button hub-gsct2026-settings-repeater__move-down" title="Move down">&#9660;</button>
-			<button type="button" class="button hub-gsct2026-settings-repeater__remove-row" title="Remove">&times;</button>
+		<div class="hub-settings-repeater__row-actions" style="flex: none; display: flex; gap: 4px;">
+			<button type="button" class="button hub-settings-repeater__move-up" title="Move up">&#9650;</button>
+			<button type="button" class="button hub-settings-repeater__move-down" title="Move down">&#9660;</button>
+			<button type="button" class="button hub-settings-repeater__remove-row" title="Remove">&times;</button>
 		</div>
 	</div>
 	<?php
@@ -577,7 +577,7 @@ function hub_gsct2026_render_settings_page() {
 		<h1>Site-Wide Settings</h1>
 		<form action="options.php" method="post">
 			<?php settings_fields( 'hub_gsct2026_settings' ); ?>
-			<div class="hub-gsct2026-tabs" data-tabs>
+			<div class="hub-tabs" data-tabs>
 				<h2 class="nav-tab-wrapper" data-tabs-nav>
 					<?php
 					$is_first = true;
@@ -594,7 +594,7 @@ function hub_gsct2026_render_settings_page() {
 				$is_first = true;
 				foreach ( $sections as $section_id => $section ) {
 					?>
-				<div class="hub-gsct2026-tabs__panel" data-tabs-panel="<?php echo esc_attr( $section_id ); ?>" style="padding-top: 20px;" <?php echo $is_first ? '' : 'hidden'; ?>>
+				<div class="hub-tabs__panel" data-tabs-panel="<?php echo esc_attr( $section_id ); ?>" style="padding-top: 20px;" <?php echo $is_first ? '' : 'hidden'; ?>>
 					<?php
 					if ( is_callable( $section['callback'] ) ) {
 						call_user_func( $section['callback'], $section );

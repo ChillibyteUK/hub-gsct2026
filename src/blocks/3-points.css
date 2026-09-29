@@ -1,0 +1,124 @@
+.hub-3-points {
+
+    .number {
+        background-color: var(--col-brand-red);
+        color: var(--col-white);
+        border-radius: 50%;
+        width: 3rem;
+        height: 3rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: var(--space-2);
+    }
+    
+    h2 {
+        padding-bottom: var(--space-2);
+        border-bottom: 1px solid var(--col-light-grey);
+    }
+
+    .hub-3-points__intro {
+        max-width: 600px;
+    }
+}
+
+/* Popover — trigger words marked [popover]…[/popover] in a row's content
+   open a native popover card. The trigger is a span so it wraps inline
+   mid-sentence (a button stays atomic); keyboard activation is bridged in
+   src/js/popover.js, everything else is native (Esc/outside-click/×
+   dismiss free). UA popover styles centre the card as a top-layer
+   overlay; this just skins it. */
+.hub-popover-trigger {
+    display: inline;
+    font: inherit;
+    text-align: inherit;
+    color: inherit;
+    background: none;
+    border: 0;
+    padding: 0;
+    cursor: pointer;
+}
+
+.hub-popover {
+    width: min(24rem, calc(100vw - 2rem));
+    padding: var(--space-4);
+    border: 0;
+    border-radius: var(--radius-sm);
+    background: var(--col-body-bg);
+    color: var(--col-body);
+    box-shadow: var(--shadow-lg);
+}
+
+.hub-popover::backdrop {
+    background: rgb(0 0 0 / 0.5);
+    @media (min-width:768px) {
+        background: transparent;
+    }
+}
+
+.hub-popover__top {
+    display: flex;
+    column-gap: 0.5rem;
+}
+
+.hub-popover__close {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    padding: 0;
+    background: var(--col-body-bg);
+    color: var(--col-body);
+    font-size: 1.25rem;
+    line-height: 1;
+    cursor: pointer;
+}
+
+.hub-popover__image {
+    display: block;
+    width: 100%;
+    max-width: 3rem;
+    height: auto;
+    margin-bottom: var(--space-3);
+    border-radius: var(--radius-sm);
+}
+
+.hub-popover__title {
+    margin: 0 0 var(--space-2);
+    padding-right: 2.5rem;
+}
+
+.hub-popover__content > *:last-child {
+    margin-bottom: 0;
+}
+
+/* Anchored callout — desktop only, and only where the browser supports
+   the full anchor trio. Every trigger shares one anchor name, scoped per
+   point (hub-3-points__point) so each card attaches to its own trigger
+   words; flip-block drops the card above when there's no room below.
+   Anything else — no anchor support, or below md — keeps the centred
+   modal card above. */
+@supports (anchor-name: --hub-pop) and (position-anchor: --hub-pop) and (anchor-scope: --hub-pop) {
+    @media (min-width: 768px) {
+        .hub-3-points__point {
+            anchor-scope: --hub-pop;
+        }
+        .hub-popover-trigger {
+            anchor-name: --hub-pop;
+        }
+        .hub-popover {
+            position-anchor: --hub-pop;
+            top: anchor(bottom);
+            bottom: auto;
+            left: anchor(left);
+            right: auto;
+            margin: 0.5rem 0 0;
+            max-height: calc(100dvh - 2rem);
+            overflow: auto;
+            position-try-fallbacks: flip-block;
+        }
+    }
+}

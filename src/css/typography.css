@@ -232,6 +232,7 @@
   ==================================================================*/
 
 /* H2 · Data L — 28px → 36px */
+h2,
 .h2-data-l {
 	font-family: var(--font-family-base);
 	font-weight: var(--fw-bold);
@@ -241,6 +242,7 @@
 }
 
 /* H3 · Data M — 20px → 24px. Cap / Baseline trim on mobile only. */
+h3,
 .h3-data-m {
 	font-family: var(--font-family-base);
 	font-weight: var(--fw-bold);

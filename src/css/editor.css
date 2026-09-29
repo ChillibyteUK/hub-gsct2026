@@ -54,7 +54,7 @@
  * problem for <table>; there's no standalone CSS property for it outside a
  * table, so grid+gap+background is the standard substitute.
  */
-.hub-gsct2026-editor-block {
+.hub-editor-block {
 	display: grid;
 	gap: 1px;
 	background: #ccc;
@@ -63,6 +63,19 @@
 	   own padding-inline is meant for frontend page width, not this editor
 	   chrome — every field already provides its own inset via its own padding. */
 	padding-inline: 0;
+}
+
+/*
+ * Blocks with Gutenberg background-colour support get has-background (plus
+ * a preset class) or an inline background style on their useBlockProps
+ * wrapper — which in this theme wraps the editor FIELDS, never a frontend
+ * preview, so the section colour ends up painting the 1px dividers between
+ * fields instead. Never wanted: force the chrome grey back. The !important
+ * is for the inline-style case, which beats any plain declaration.
+ */
+.hub-editor-block.has-background,
+.hub-editor-block[style*="background"] {
+	background-color: #ccc !important;
 }
 
 /*
@@ -77,20 +90,20 @@
  * without this it was quietly revealing the grey grid-gap background behind
  * it despite the paragraph itself being set to white.
  */
-.hub-gsct2026-editor-block > * {
+.hub-editor-block > * {
 	margin: 0;
 	background: #fff;
 }
 
-.hub-gsct2026-editor-block__content > * {
+.hub-editor-block__content > * {
 	margin: 0;
 	background: #fff;
 }
 
 /* A block's own plain descriptive text (e.g. "Cards are pulled live from
    the Application post type...") reads as help text, not body copy. */
-.hub-gsct2026-editor-block > p,
-.hub-gsct2026-editor-block__content > p {
+.hub-editor-block > p,
+.hub-editor-block__content > p {
 	font-size: 0.8125rem;
 	color: #757575;
 }
@@ -100,17 +113,17 @@
  * inside a parent's InnerBlocks area — the full 2rem padding/title treatment
  * is sized for whole sections, not a two-field row.
  */
-.hub-gsct2026-editor-block--item {
+.hub-editor-block--item {
 	padding: 1rem;
 }
 
-.hub-gsct2026-editor-block__marquee-items {
+.hub-editor-block__marquee-items {
 	display: flex;
 	flex-direction: column;
 	gap: 12px;
 }
 
-.hub-gsct2026-editor-block__title {
+.hub-editor-block__title {
 	display: flex;
 	align-items: center;
 	justify-content: space-between;
@@ -127,7 +140,7 @@
 	color: #555;
 }
 
-.hub-gsct2026-editor-block__toggle {
+.hub-editor-block__toggle {
 	display: inline-flex;
 	align-items: center;
 	justify-content: center;
@@ -148,19 +161,19 @@
 		color 150ms ease;
 }
 
-.hub-gsct2026-editor-block__toggle:hover,
-.hub-gsct2026-editor-block__toggle:focus-visible {
+.hub-editor-block__toggle:hover,
+.hub-editor-block__toggle:focus-visible {
 	border-color: #8c8f94;
 	background: #f0f0f1;
 	color: #1e1e1e;
 	outline: none;
 }
 
-.hub-gsct2026-editor-block__content {
+.hub-editor-block__content {
 	display: contents;
 }
 
-.hub-gsct2026-editor-block__content[hidden] {
+.hub-editor-block__content[hidden] {
 	display: none;
 }
 
@@ -169,24 +182,24 @@
  * TextareaControl, SelectControl, ToggleControl — anything built on
  * @wordpress/components' BaseControl, which always renders behind a stable
  * `.components-base-control` class regardless of its runtime CSS-in-JS
- * styling). Each is a grid item of .hub-gsct2026-editor-block above — its
+ * styling). Each is a grid item of .hub-editor-block above — its
  * own white background is what produces the 1px divider, not a border on
  * this element. Scoped to top-level block fields only — reset back to
  * unpadded inside a repeater row below, since the row itself already
  * provides the padding.
  */
-.hub-gsct2026-editor-block .components-base-control {
+.hub-editor-block .components-base-control {
 	padding: 0.75rem 1rem;
 	background: #fff;
 }
 
-.hub-gsct2026-repeater-field__row .components-base-control {
+.hub-repeater-field__row .components-base-control {
 	padding: 0;
 }
 
 /*
  * RichText and MediaUpload don't render their own visible label the way
- * TextControl/SelectControl/etc. do — .hub-gsct2026-editor-field supplies
+ * TextControl/SelectControl/etc. do — .hub-editor-field supplies
  * one, plus a border around the control itself so the editable area reads
  * as a distinct field like the others.
  *
@@ -197,12 +210,12 @@
  * runtime as generated CSS-in-JS classes tied to that specific component
  * instance — the plain class name alone carries no styling to borrow.
  */
-.hub-gsct2026-editor-field {
+.hub-editor-field {
 	padding: 0.75rem 1rem;
 	background: #fff;
 }
 
-.hub-gsct2026-editor-field__label {
+.hub-editor-field__label {
 	display: block;
 	margin-bottom: 0.5rem;
 	font-size: 0.6875rem;
@@ -213,16 +226,16 @@
 /*
  * A block occasionally reuses this label class standalone as a plain
  * section sub-header (e.g. cb-steps' "Step Bodies"), rather than paired
- * with a .hub-gsct2026-editor-field control below it. Its own
+ * with a .hub-editor-field control below it. Its own
  * margin-bottom above is needed in that normal pairing, but as a direct
  * grid child here it would re-open the same margin-revealing-the-grey-gap
  * bug the block-level catch-all already fixes for everything else.
  */
-.hub-gsct2026-editor-block > .hub-gsct2026-editor-field__label {
+.hub-editor-block > .hub-editor-field__label {
 	margin-bottom: 0;
 }
 
-.hub-gsct2026-editor-field__control {
+.hub-editor-field__control {
 	border: 1px solid #ccc;
 	padding: 0.75rem;
 }
@@ -232,7 +245,7 @@
  * MediaUpload fields — which don't get the `help` prop TextControl/etc. use —
  * read consistently with the rest of a block's fields.
  */
-.hub-gsct2026-editor-field__help {
+.hub-editor-field__help {
 	margin: 0.5rem 0 0;
 	font-size: 0.8125rem;
 	color: #757575;
@@ -251,7 +264,7 @@
  * stretched to an equal share of the row (the uneven, right-drifting gaps
  * this replaces).
  */
-.hub-gsct2026-radio-horizontal.components-radio-control {
+.hub-radio-horizontal.components-radio-control {
 	margin: 0 !important;
 	padding: 0.75rem 1rem !important;
 	border: 0 !important;
@@ -268,13 +281,13 @@
  * drops the radio row below the now-floated label instead of wrapping
  * beside it.
  */
-.hub-gsct2026-radio-horizontal .components-base-control__label {
+.hub-radio-horizontal .components-base-control__label {
 	float: left;
 	clear: both;
 	margin-bottom: 0.5rem;
 }
 
-.hub-gsct2026-radio-horizontal.components-radio-control .components-radio-control__group-wrapper {
+.hub-radio-horizontal.components-radio-control .components-radio-control__group-wrapper {
 	clear: both;
 	display: flex !important;
 	flex-direction: row !important;
@@ -284,7 +297,7 @@
 	gap: 0.375rem 1.5rem !important;
 }
 
-.hub-gsct2026-radio-horizontal .components-radio-control__option {
+.hub-radio-horizontal .components-radio-control__option {
 	flex: 0 0 auto !important;
 	width: auto !important;
 	margin: 0 !important;
@@ -293,7 +306,7 @@
 	gap: 0.375rem;
 }
 
-.hub-gsct2026-radio-horizontal .components-radio-control__input {
+.hub-radio-horizontal .components-radio-control__input {
 	margin: 0;
 }
 
@@ -301,9 +314,9 @@
  * Each option's own label ("Home", "Standard", ...) — WP core leaves this
  * at browser-default label styling (no font-size/color rule of its own),
  * which reads noticeably smaller/lighter than the rest of this editor's
- * field text. Matches .hub-gsct2026-editor-field__control's body copy size.
+ * field text. Matches .hub-editor-field__control's body copy size.
  */
-.hub-gsct2026-radio-horizontal .components-radio-control__label {
+.hub-radio-horizontal .components-radio-control__label {
 	margin: 0;
 	font-size: 0.8125rem;
 	color: #1e1e1e;
@@ -316,7 +329,7 @@
  * repeater-shaped block's edit.js in place of the old InnerBlocks-based
  * item-block pattern.
  */
-.hub-gsct2026-repeater-field__header {
+.hub-repeater-field__header {
 	display: flex;
 	align-items: center;
 	gap: 0.75rem;
@@ -324,43 +337,43 @@
 	margin-bottom: 0.25rem;
 }
 
-.hub-gsct2026-repeater-field__number-spacer {
+.hub-repeater-field__number-spacer {
 	flex: none;
 	width: 22px;
 }
 
-.hub-gsct2026-repeater-field__header-cell {
+.hub-repeater-field__header-cell {
 	flex: 1 1 0%;
 	min-width: 0;
 	font-size: 0.75rem;
 	font-weight: 600;
 }
 
-.hub-gsct2026-repeater-field__header-cell--image {
+.hub-repeater-field__header-cell--image {
 	flex: none;
 	width: 60px;
 }
 
-.hub-gsct2026-repeater-field__row-actions-spacer {
+.hub-repeater-field__row-actions-spacer {
 	flex: none;
 	width: 88px;
 }
 
 /*
  * Grid + 1px gap + shared grey background — same technique as
- * .hub-gsct2026-editor-block above, applied to the list of rows
+ * .hub-editor-block above, applied to the list of rows
  * (blocks/_shared/RepeaterField.js wraps rows.map() in this element
  * specifically so it can be its own grid, separate from the header/
  * "Add row" button around it).
  */
-.hub-gsct2026-repeater-field__rows {
+.hub-repeater-field__rows {
 	display: grid;
 	gap: 1px;
 	background: #ccc;
 	border: 1px solid #ccc;
 }
 
-.hub-gsct2026-repeater-field__row {
+.hub-repeater-field__row {
 	display: flex;
 	align-items: flex-start;
 	gap: 0.75rem;
@@ -373,7 +386,7 @@
 	}
 }
 
-.hub-gsct2026-repeater-field--column .hub-gsct2026-repeater-field__row {
+.hub-repeater-field--column .hub-repeater-field__row {
 	flex-direction: column;
 	align-items: stretch;
 
@@ -384,13 +397,13 @@
 
 	/* The row-number badge is a direct child too, but should stay a fixed-size
 	   circle rather than stretching full-width like the actual fields. */
-	& > .hub-gsct2026-repeater-field__number {
+	& > .hub-repeater-field__number {
 		align-self: flex-start;
 		width: 22px;
 	}
 }
 
-.hub-gsct2026-repeater-field--column .hub-gsct2026-repeater-field__row-actions {
+.hub-repeater-field--column .hub-repeater-field__row-actions {
 	flex-direction: row;
 	align-self: flex-end;
 }
@@ -404,7 +417,7 @@
  * row slightly instead of forcing every row artificially taller to fit it
  * exactly.
  */
-.hub-gsct2026-repeater-field__row-actions {
+.hub-repeater-field__row-actions {
 	display: flex;
 	flex-direction: column;
 	align-self: stretch;
@@ -413,7 +426,7 @@
 	flex: none;
 }
 
-.hub-gsct2026-repeater-field__row-actions .components-button {
+.hub-repeater-field__row-actions .components-button {
 	min-width: 20px;
 	width: 20px;
 	height: 20px;
@@ -424,7 +437,7 @@
 	justify-content: center;
 }
 
-.hub-gsct2026-repeater-field__number {
+.hub-repeater-field__number {
 	flex: none;
 	align-self: center;
 	display: flex;
@@ -439,18 +452,18 @@
 	color: #50575e;
 }
 
-.hub-gsct2026-repeater-field__image {
+.hub-repeater-field__image {
 	flex: none;
 }
 
-.hub-gsct2026-repeater-field__link {
+.hub-repeater-field__link {
 	display: flex;
 	flex-direction: column;
 	gap: 0;
 	min-width: 0;
 }
 
-.hub-gsct2026-repeater-field__image img {
+.hub-repeater-field__image img {
 	display: block;
 	max-width: 60px;
 	max-height: 60px;
@@ -459,7 +472,7 @@
 	border: 1px solid #ccc;
 }
 
-.hub-gsct2026-repeater-field__file-name {
+.hub-repeater-field__file-name {
 	display: block;
 	max-width: 100px;
 	margin-bottom: 4px;
@@ -472,7 +485,7 @@
 
 /* The "Add row" button is a direct child of the repeater wrapper itself —
    distinct from the small icon buttons nested inside each row's actions. */
-.hub-gsct2026-repeater-field > .components-button {
+.hub-repeater-field > .components-button {
 	margin-top: 0.75rem;
 	margin-bottom: 1.5rem;
 }

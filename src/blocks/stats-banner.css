@@ -1,0 +1,23 @@
+.hub-stats-banner {
+    background-color: var(--col-brand-yellow);
+    padding-block: var(--space-5);
+    .container {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+}
+
+/* Mobile: eyebrow spans the full row, stats fall into two columns beneath
+   it — grid-column: 1 / -1 on the eyebrow, everything else auto-places
+   one per cell. Desktop keeps the flex row above. */
+@media (max-width: 767px) {
+    .hub-stats-banner .container {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: var(--space-3);
+    }
+    .hub-stats-banner .text-eyebrow {
+        grid-column: 1 / -1;
+    }
+}

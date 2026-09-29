@@ -29,14 +29,14 @@
    applies the real cover geometry (scaled image size and offset) as inline
    width/height/left/top instead of trusting object-fit/position alone. */
 
-.hub-gsct2026-primary-hero {
+.hub-primary-hero {
 	position: relative;
 	display: flex;
 	flex-direction: column;
 	justify-content: flex-end;
 }
 
-.hub-gsct2026-primary-hero__media {
+.hub-primary-hero__media {
 	--target-x: var(--focal-x);
 	position: absolute;
 	inset: 0;
@@ -44,7 +44,7 @@
 	z-index: 0;
 }
 
-.hub-gsct2026-primary-hero__background {
+.hub-primary-hero__background {
 	display: block;
 	position: absolute;
 	/* Sane pre-JS default (also the no-JS fallback) — src/js/primary-hero.js
@@ -58,14 +58,14 @@
 	object-position: calc(var(--focal-x) * 100%) calc(var(--focal-y) * 100%);
 }
 
-.hub-gsct2026-primary-hero__overlay {
+.hub-primary-hero__overlay {
 	position: absolute;
 	inset: 0;
 	background: hsla(0 0 0 / .25);
 	pointer-events: none;
 }
 
-.hub-gsct2026-primary-hero__crosshair {
+.hub-primary-hero__crosshair {
 	position: absolute;
 	top: calc(var(--focal-y) * 100%);
 	left: calc(var(--target-x) * 100%);
@@ -75,7 +75,7 @@
 	pointer-events: none;
 }
 
-.hub-gsct2026-primary-hero__content {
+.hub-primary-hero__content {
 	position: relative;
 	z-index: 1;
 	display: flex;
@@ -87,16 +87,16 @@
 	color: #fff;
 }
 
-.hub-gsct2026-primary-hero__heading,
-.hub-gsct2026-primary-hero__intro {
+.hub-primary-hero__heading,
+.hub-primary-hero__intro {
 	margin: 0;
 }
 
-.hub-gsct2026-primary-hero__intro {
+.hub-primary-hero__intro {
 	max-width: 530px;
 }
 
-.hub-gsct2026-primary-hero__ctas {
+.hub-primary-hero__ctas {
 	display: flex;
 	flex-wrap: wrap;
 	gap: 1rem;
@@ -104,37 +104,34 @@
 
 /* Video modal — the secondary CTA is a <button> (not a link) opening a
    native <dialog> with the Vimeo embed (see render.php, wired by
-   src/js/dialog.js via data-dialog-target). font: inherit because .btn
-   doesn't set one and a <button> would otherwise render in the UA's own
-   button face. The iframe carries data-src only until open, so there is
-   nothing to size before then — the 16:9 wrapper holds the shape. */
-.hub-gsct2026-primary-hero__video-trigger {
-	font: inherit;
-}
-
-.hub-gsct2026-primary-hero__video-dialog {
+   src/js/dialog.js via data-dialog-target). No font handling here: .btn
+   sets its own type styles and forms.css already resets button elements,
+   so the trigger inherits the designed button type like any .btn. The
+   iframe carries data-src only until open, so there is nothing to size
+   before then — the 16:9 wrapper holds the shape. */
+.hub-primary-hero__video-dialog {
 	width: min(60rem, calc(100vw - 2rem));
 	padding: 0;
 	border: 0;
 	background: #000;
 }
 
-.hub-gsct2026-primary-hero__video-dialog::backdrop {
+.hub-primary-hero__video-dialog::backdrop {
 	background: rgb(0 0 0 / 0.7);
 }
 
-.hub-gsct2026-primary-hero__video {
+.hub-primary-hero__video {
 	aspect-ratio: 16 / 9;
 }
 
-.hub-gsct2026-primary-hero__video iframe {
+.hub-primary-hero__video iframe {
 	display: block;
 	width: 100%;
 	height: 100%;
 	border: 0;
 }
 
-.hub-gsct2026-primary-hero__video-close {
+.hub-primary-hero__video-close {
 	position: absolute;
 	top: 0.5rem;
 	right: 0.5rem;
@@ -159,7 +156,7 @@
    heading/intro/buttons stacked underneath (src/js/primary-hero.js reads this
    same breakpoint and pans the image so the true focal point still lands
    exactly there). The section's height here is just the content's own
-   height (.hub-gsct2026-primary-hero__media is an absolute backdrop, so it
+   height (.hub-primary-hero__media is an absolute backdrop, so it
    doesn't contribute) — the crosshair (6rem down, min(300px, 90vw) wide at
    its native ~2.19:1 ratio, so up to ~8.6rem tall, centred on that 6rem
    mark) would otherwise overlap whatever's at the top of the content, so
@@ -167,28 +164,28 @@
    section ends up exactly "crosshair space + content + a bit of padding"
    tall, never more. */
 @media (max-width: 767px) {
-	.hub-gsct2026-primary-hero__media {
+	.hub-primary-hero__media {
 		--target-x: 0.5;
 	}
 
-	.hub-gsct2026-primary-hero__crosshair {
+	.hub-primary-hero__crosshair {
 		top: 6rem;
 	}
 
-	.hub-gsct2026-primary-hero__content {
+	.hub-primary-hero__content {
 		padding-top: 11rem;
 	}
 }
 
 @media (min-width: 768px) {
-	.hub-gsct2026-primary-hero {
+	.hub-primary-hero {
 		flex-direction: row;
 		align-items: center;
 		justify-content: flex-end;
 		min-height: max(70vh, 550px);
 	}
 
-	.hub-gsct2026-primary-hero__content {
+	.hub-primary-hero__content {
 		width: auto;
 		max-width: 45%;
 	}
