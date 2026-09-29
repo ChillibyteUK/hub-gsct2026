@@ -17,17 +17,17 @@
 	'use strict';
 
 	function renumberRows( $rowsWrap ) {
-		$rowsWrap.find( '.hub-gsct2026-settings-repeater__row' ).each( function ( i ) {
-			$( this ).find( '.hub-gsct2026-settings-repeater__number' ).text( i + 1 );
+		$rowsWrap.find( '.hub-settings-repeater__row' ).each( function ( i ) {
+			$( this ).find( '.hub-settings-repeater__number' ).text( i + 1 );
 		} );
 	}
 
 	function bindImagePicker( $row ) {
-		$row.find( '.hub-gsct2026-settings-repeater__select-image' ).on( 'click', function ( event ) {
+		$row.find( '.hub-settings-repeater__select-image' ).on( 'click', function ( event ) {
 			event.preventDefault();
 
 			var $button = $( this );
-			var $wrap = $button.closest( '.hub-gsct2026-settings-repeater__image' );
+			var $wrap = $button.closest( '.hub-settings-repeater__image' );
 
 			var frame = wp.media( {
 				title: $button.data( 'select-label' ),
@@ -41,45 +41,45 @@
 					? attachment.sizes.thumbnail.url
 					: attachment.url;
 
-				$wrap.find( '.hub-gsct2026-settings-repeater__image-input' ).val( attachment.id );
+				$wrap.find( '.hub-settings-repeater__image-input' ).val( attachment.id );
 				$wrap.find( 'img' ).attr( 'src', src ).show();
-				$wrap.find( '.hub-gsct2026-settings-repeater__clear-image' ).show();
+				$wrap.find( '.hub-settings-repeater__clear-image' ).show();
 			} );
 
 			frame.open();
 		} );
 
-		$row.find( '.hub-gsct2026-settings-repeater__clear-image' ).on( 'click', function ( event ) {
+		$row.find( '.hub-settings-repeater__clear-image' ).on( 'click', function ( event ) {
 			event.preventDefault();
 
 			var $button = $( this );
-			var $wrap = $button.closest( '.hub-gsct2026-settings-repeater__image' );
+			var $wrap = $button.closest( '.hub-settings-repeater__image' );
 
-			$wrap.find( '.hub-gsct2026-settings-repeater__image-input' ).val( '' );
+			$wrap.find( '.hub-settings-repeater__image-input' ).val( '' );
 			$wrap.find( 'img' ).attr( 'src', '' ).hide();
 			$button.hide();
 		} );
 	}
 
 	function bindRowActions( $row, $rowsWrap ) {
-		$row.find( '.hub-gsct2026-settings-repeater__remove-row' ).on( 'click', function ( event ) {
+		$row.find( '.hub-settings-repeater__remove-row' ).on( 'click', function ( event ) {
 			event.preventDefault();
 			$row.remove();
 			renumberRows( $rowsWrap );
 		} );
 
-		$row.find( '.hub-gsct2026-settings-repeater__move-up' ).on( 'click', function ( event ) {
+		$row.find( '.hub-settings-repeater__move-up' ).on( 'click', function ( event ) {
 			event.preventDefault();
-			var $prev = $row.prev( '.hub-gsct2026-settings-repeater__row' );
+			var $prev = $row.prev( '.hub-settings-repeater__row' );
 			if ( $prev.length ) {
 				$row.insertBefore( $prev );
 				renumberRows( $rowsWrap );
 			}
 		} );
 
-		$row.find( '.hub-gsct2026-settings-repeater__move-down' ).on( 'click', function ( event ) {
+		$row.find( '.hub-settings-repeater__move-down' ).on( 'click', function ( event ) {
 			event.preventDefault();
-			var $next = $row.next( '.hub-gsct2026-settings-repeater__row' );
+			var $next = $row.next( '.hub-settings-repeater__row' );
 			if ( $next.length ) {
 				$row.insertAfter( $next );
 				renumberRows( $rowsWrap );
@@ -90,17 +90,17 @@
 	}
 
 	$( function () {
-		$( '.hub-gsct2026-settings-repeater' ).each( function () {
+		$( '.hub-settings-repeater' ).each( function () {
 			var $field = $( this );
-			var $rowsWrap = $field.find( '.hub-gsct2026-settings-repeater__rows' );
+			var $rowsWrap = $field.find( '.hub-settings-repeater__rows' );
 			var templateHtml = $field.find( 'template' )[ 0 ].innerHTML;
 			var rowCounter = 0;
 
-			$rowsWrap.find( '.hub-gsct2026-settings-repeater__row' ).each( function () {
+			$rowsWrap.find( '.hub-settings-repeater__row' ).each( function () {
 				bindRowActions( $( this ), $rowsWrap );
 			} );
 
-			$field.find( '.hub-gsct2026-settings-repeater__add-row' ).on( 'click', function ( event ) {
+			$field.find( '.hub-settings-repeater__add-row' ).on( 'click', function ( event ) {
 				event.preventDefault();
 				rowCounter += 1;
 				var index = 'new_' + Date.now() + '_' + rowCounter;

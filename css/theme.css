@@ -21,6 +21,7 @@
   --col-grey-800: #212121;
 
   --col-light-grey: hsla(0, 0%, 89%, 1);
+  --col-dark-grey: hsla(0, 0%, 20%, 1);
 
   /* Brand colours — not used yet. Named by hue; the three blues slot into
      the existing numeric ramp under --col-blue-700. */
@@ -808,6 +809,28 @@ h3,
 	}
 }
 
+
+.footer-nav {
+	list-style: none;
+	padding-inline-start: 0;
+	columns: 2;
+}
+
+
+.footer-nav li {
+		padding-bottom: 1rem;
+	}
+
+
+@media (min-width: 992px) {
+
+
+.footer-nav {
+		columns: 1;
+}
+	}
+
+
 footer {
     background-color: var(--col-black);
     color: var(--col-white);
@@ -815,17 +838,41 @@ footer {
     padding-block: 2rem;
 }
 
+
 footer img {
         width: 234px;
         height: 65px;
     }
 
+
+footer .colophon {
+        border-top: 1px solid var(--col-light-grey);
+        margin-top: 2rem;
+        padding-top: 1rem;
+    }
+
+
+/* Vertical dividers between the tagline/nav/button columns — lg and
+       up only, where the row actually splits; stacked below that, so no
+       lines. Same light-grey as the colophon rule above. */
+
+
+@media (min-width: 992px) {
+        footer .hub-footer-divided > *:not(:first-child) {
+            border-inline-start: 1px solid var(--col-light-grey);
+            padding-inline-start: var(--space-4);
+        }
+    }
+
+
 @media (min-width: 768px) {
+
 
 footer {
         padding-block: 5rem;
 }
     }
+
 
 /* Minimal, deliberately unopinionated form base — expected to be overridden per project. */
 
@@ -2263,6 +2310,49 @@ select {
 .hub-content-block__corner--br {
     bottom: -8px;
     right: -8px;
+}
+
+/* --- src/blocks/how-to-invest.css --- */
+.hub-how-to-invest .intro {
+        max-width: 600px;
+    }
+.hub-how-to-invest .risk-text {
+        color: var(--col-dark-grey);
+        max-width: 780px;
+    }
+.hub-how-to-invest .logos__logo {
+        background-color: var(--col-white);
+        border-radius: var(--radius-lg);
+        box-shadow: var(--shadow-sm);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 1rem;
+    }
+:is(.hub-how-to-invest .logos__logo) img {
+            max-width: 160px;
+            max-height: 70px;
+            width: auto;
+            height: auto;
+        }
+
+/* Section link mirrors the cards-section arrow link (flex row, right
+   aligned, gap, underline-proof arrow) — colour is inherited, so on the
+   default background it renders black. */
+.hub-how-to-invest__link {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 0.5em;
+}
+
+.hub-how-to-invest__link-arrow {
+    flex: none;
+}
+
+.hub-how-to-invest__link-text {
+    color: var(--col-black);
+    text-decoration: underline;
 }
 
 /* --- src/blocks/primary-hero.css --- */

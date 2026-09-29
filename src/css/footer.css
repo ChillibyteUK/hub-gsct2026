@@ -9,6 +9,22 @@ footer {
         height: 65px;
     }
 
+    .colophon {
+        border-top: 1px solid var(--col-light-grey);
+        margin-top: 2rem;
+        padding-top: 1rem;
+    }
+
+    /* Vertical dividers between the tagline/nav/button columns — lg and
+       up only, where the row actually splits; stacked below that, so no
+       lines. Same light-grey as the colophon rule above. */
+    @media (min-width: 992px) {
+        .hub-footer-divided > *:not(:first-child) {
+            border-inline-start: 1px solid var(--col-light-grey);
+            padding-inline-start: var(--space-4);
+        }
+    }
+
     @media (min-width: 768px) {
         padding-block: 5rem;
     }

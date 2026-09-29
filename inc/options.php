@@ -70,6 +70,8 @@ function hub_gsct2026_register_settings_page() {
 	add_settings_section( 'hub_gsct2026_scripts', 'Scripts', '__return_false', 'theme-general-settings' );
 	add_settings_section( 'hub_gsct2026_gallery', 'Gallery', '__return_false', 'theme-general-settings' );
 	add_settings_section( 'hub_gsct2026_repeater', 'Repeater', '__return_false', 'theme-general-settings' );
+	add_settings_section( 'hub_gsct2026_how_to_invest', 'How to Invest', '__return_false', 'theme-general-settings' );
+	add_settings_section( 'hub_gsct2026_footer', 'Footer', '__return_false', 'theme-general-settings' );
 
 	$fields = array(
 		'email'                     => array(
@@ -158,7 +160,7 @@ function hub_gsct2026_register_settings_page() {
 			'label'       => 'Example Gallery',
 			'type'        => 'gallery',
 			'section'     => 'hub_gsct2026_gallery',
-			'description' => 'A fixed multi-image list — e.g. accreditation badges, a logo strip. Read with hub_gsct2026_get_repeater_setting-style helper of your own, mirroring hub_gsct2026_get_footer_accreditation_ids() in the cb-hts-js-2026 sibling theme.',
+			'description' => 'A fixed multi-image list — e.g. accreditation badges, a logo strip. Read with hub_gsct2026_get_gallery_setting( \'example_gallery\' ).',
 		),
 		'example_repeater'          => array(
 			'label'       => 'Example Repeater',
@@ -175,6 +177,59 @@ function hub_gsct2026_register_settings_page() {
 				),
 			),
 			'description' => 'Genuinely repeating structured rows — e.g. a client-logo list. Read with hub_gsct2026_get_repeater_setting( \'example_repeater\' ).',
+		),
+		'how_to_invest_title'       => array(
+			'label'   => 'Title',
+			'type'    => 'text',
+			'section' => 'hub_gsct2026_how_to_invest',
+		),
+		'how_to_invest_intro'       => array(
+			'label'   => 'Intro',
+			'type'    => 'textarea',
+			'section' => 'hub_gsct2026_how_to_invest',
+		),
+		'how_to_invest_logos'       => array(
+			'label'       => 'Logos',
+			'type'        => 'gallery',
+			'section'     => 'hub_gsct2026_how_to_invest',
+			'description' => 'Platform/provider logos, shown in selection order — drag thumbnails to reorder. Read with hub_gsct2026_get_gallery_setting( \'how_to_invest_logos\' ).',
+		),
+		'how_to_invest_link_text'   => array(
+			'label'   => 'Link Text',
+			'type'    => 'text',
+			'section' => 'hub_gsct2026_how_to_invest',
+		),
+		'how_to_invest_link_url'    => array(
+			'label'       => 'Link URL',
+			'type'        => 'text',
+			'section'     => 'hub_gsct2026_how_to_invest',
+			'placeholder' => '/how-to-invest/',
+			'description' => 'Relative (e.g. /how-to-invest/) or absolute URL — kept as text so relative paths validate.',
+		),
+		'how_to_invest_risk_title'  => array(
+			'label'   => 'Risk Title',
+			'type'    => 'text',
+			'section' => 'hub_gsct2026_how_to_invest',
+		),
+		'how_to_invest_risk_wording' => array(
+			'label'   => 'Risk Wording',
+			'type'    => 'textarea',
+			'section' => 'hub_gsct2026_how_to_invest',
+		),
+		'footer_tagline'            => array(
+			'label'   => 'Tagline',
+			'type'    => 'text',
+			'section' => 'hub_gsct2026_footer',
+		),
+		'footer_colophon'           => array(
+			'label'   => 'Colophon',
+			'type'    => 'textarea',
+			'section' => 'hub_gsct2026_footer',
+		),
+		'footer_disclaimers'        => array(
+			'label'   => 'Disclaimers',
+			'type'    => 'richtext',
+			'section' => 'hub_gsct2026_footer',
 		),
 	);
 
@@ -205,6 +260,20 @@ add_action( 'admin_menu', 'hub_gsct2026_register_settings_page' );
 function hub_gsct2026_get_repeater_setting( $key ) {
 	$rows = hub_gsct2026_get_setting( $key, array() );
 	return is_array( $rows ) ? $rows : array();
+}
+
+/**
+ * Read a `gallery`-type setting as an array of attachment IDs.
+ *
+ * Stored as a CSV string (see hub_gsct2026_render_gallery_field()) — order
+ * is the display order.
+ *
+ * @param string $key Setting key, e.g. 'how_to_invest_logos'.
+ * @return int[]
+ */
+function hub_gsct2026_get_gallery_setting( $key ) {
+	$ids = array_filter( array_map( 'absint', explode( ',', hub_gsct2026_get_setting( $key ) ) ) );
+	return array_values( $ids );
 }
 
 /**
@@ -245,7 +314,7 @@ add_action( 'admin_enqueue_scripts', 'hub_gsct2026_settings_page_assets' );
 
 /**
  * Render a single settings field — text/email/url input, a textarea, a
- * gallery picker, or a generic repeater.
+ * richtext classic editor, a gallery picker, or a generic repeater.
  *
  * @param array $args Field args: key, type, placeholder, description.
  * @return void
@@ -258,6 +327,11 @@ function hub_gsct2026_render_settings_field( $args ) {
 
 	if ( 'repeater' === $args['type'] ) {
 		hub_gsct2026_render_repeater_field( $args );
+		return;
+	}
+
+	if ( 'richtext' === $args['type'] ) {
+		hub_gsct2026_render_richtext_field( $args );
 		return;
 	}
 
@@ -330,6 +404,32 @@ function hub_gsct2026_render_textarea_field( $args ) {
 }
 
 /**
+ * Render a `richtext`-type field — a full classic editor (wp_editor) for
+ * values that need real formatting rather than plain paragraphs. Stored as
+ * HTML like anything else; escape with wp_kses_post() on output.
+ *
+ * @param array $args Field args: key, rows, description.
+ * @return void
+ */
+function hub_gsct2026_render_richtext_field( $args ) {
+	$value = hub_gsct2026_get_setting( $args['key'] );
+	wp_editor(
+		$value,
+		'hub_gsct2026_' . $args['key'],
+		array(
+			'textarea_name' => sprintf( '%s[%s]', HUB_GSCT2026_SETTINGS_OPTION, $args['key'] ),
+			'textarea_rows' => $args['rows'] ?? 8,
+			'media_buttons' => false,
+		)
+	);
+	if ( ! empty( $args['description'] ) ) {
+		?>
+		<p class="description"><?php echo esc_html( $args['description'] ); ?></p>
+		<?php
+	}
+}
+
+/**
  * Render a `checkbox`-type field.
  *
  * An unticked checkbox posts nothing at all, which is indistinguishable from
@@ -370,16 +470,19 @@ function hub_gsct2026_render_checkbox_field( $args ) {
 
 /**
  * Render a `gallery`-type field — a hidden CSV-of-IDs input plus a
- * thumbnail strip, driven by the core media modal in multi-select mode.
- * Selection order is preserved as the display order; there's no drag
- * reordering, since re-opening the picker and re-selecting in the wanted
- * order covers it without extra JS.
+ * thumbnail strip, driven by core's native "Edit Gallery" frame
+ * (wp.media.gallery.edit — the same UI as a Gallery block: hover-remove,
+ * in-modal drag reorder, Add to Gallery panel).
+ * Initial order is the media-modal selection order; after that, each
+ * thumbnail is HTML5-draggable (see js/gallery-field.js) to reorder without
+ * reopening the picker — dragging updates both the DOM order and the
+ * hidden input's CSV value.
  *
  * @param array $args Field args: key, description.
  * @return void
  */
 function hub_gsct2026_render_gallery_field( $args ) {
-	$ids = array_filter( array_map( 'absint', explode( ',', hub_gsct2026_get_setting( $args['key'] ) ) ) );
+	$ids = hub_gsct2026_get_gallery_setting( $args['key'] );
 	?>
 	<div class="hub-gallery-field">
 		<input
@@ -396,13 +499,16 @@ function hub_gsct2026_render_gallery_field( $args ) {
 					continue;
 				}
 				?>
-				<li><img src="<?php echo esc_url( $thumb[0] ); ?>" alt="" style="width: 80px; height: 80px; object-fit: contain; background: #fff; border: 1px solid #ccc;"></li>
+				<li draggable="true" data-id="<?php echo esc_attr( $id ); ?>" style="cursor: grab;"><img src="<?php echo esc_url( $thumb[0] ); ?>" alt="" style="width: 80px; height: 80px; object-fit: contain; background: #fff; border: 1px solid #ccc; pointer-events: none;"></li>
 				<?php
 			}
 			?>
 		</ul>
+		<?php if ( ! empty( $ids ) ) : ?>
+			<p class="description" style="margin-top: -4px;"><?php esc_html_e( 'Drag thumbnails to reorder.', 'hub-gsct2026' ); ?></p>
+		<?php endif; ?>
 		<p>
-			<button type="button" class="button hub-gallery-field__select">Select Images</button>
+			<button type="button" class="button hub-gallery-field__select">Edit Gallery</button>
 			<button type="button" class="button hub-gallery-field__clear">Clear</button>
 		</p>
 	</div>

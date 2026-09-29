@@ -21,6 +21,7 @@
   --col-grey-800: #212121;
 
   --col-light-grey: hsla(0, 0%, 89%, 1);
+  --col-dark-grey: hsla(0, 0%, 20%, 1);
 
   /* Brand colours — not used yet. Named by hue; the three blues slot into
      the existing numeric ramp under --col-blue-700. */

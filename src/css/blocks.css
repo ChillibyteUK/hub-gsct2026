@@ -314,6 +314,53 @@
     right: -8px;
 }
 
+/* --- src/blocks/how-to-invest.css --- */
+.hub-how-to-invest {
+    .intro {
+        max-width: 600px;
+    }
+
+    .risk-text {
+        color: var(--col-dark-grey);
+        max-width: 780px;
+    }
+
+    .logos__logo {
+        background-color: var(--col-white);
+        border-radius: var(--radius-lg);
+        box-shadow: var(--shadow-sm);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 1rem;
+        img {
+            max-width: 160px;
+            max-height: 70px;
+            width: auto;
+            height: auto;
+        }
+    }
+}
+
+/* Section link mirrors the cards-section arrow link (flex row, right
+   aligned, gap, underline-proof arrow) — colour is inherited, so on the
+   default background it renders black. */
+.hub-how-to-invest__link {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 0.5em;
+}
+
+.hub-how-to-invest__link-arrow {
+    flex: none;
+}
+
+.hub-how-to-invest__link-text {
+    color: var(--col-black);
+    text-decoration: underline;
+}
+
 /* --- src/blocks/primary-hero.css --- */
 /* Practice block: responsive crosshair over an image background, positioned
    via the block's FocalPointPicker attribute. --focal-x/--focal-y (set

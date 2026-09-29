@@ -72,6 +72,12 @@
           "origin": "theme"
         },
         {
+          "name": "dark-grey",
+          "slug": "dark-grey",
+          "color": "hsla(0, 0%, 20%, 1)",
+          "origin": "theme"
+        },
+        {
           "name": "brand-red",
           "slug": "brand-red",
           "color": "#f74333",
