@@ -23,17 +23,57 @@ function hub_gsct2026_enqueue_styles() {
 add_action( 'wp_enqueue_scripts', 'hub_gsct2026_enqueue_styles' );
 
 /**
+ * Enqueue a file from js/vendor/, filemtime-versioned like everything else.
+ *
+ * Third-party libraries a project needs should be vendored into js/vendor/
+ * and committed, the same convention the compiled css/ and js/ output
+ * already follows, rather than loaded from a CDN — that avoids extra DNS/TLS
+ * handshakes and keeps a vendored stylesheet off a third-party origin. Note
+ * the file the upstream version came from in a comment near the call site
+ * (e.g. gsap.min.js 3.12.7 cdn.jsdelivr.net/npm/gsap) since it's vendored by
+ * hand rather than tracked in package.json.
+ *
+ * @param string $handle Handle to register under.
+ * @param string $file   Filename within js/vendor/.
+ * @param bool   $is_css True to enqueue as a stylesheet rather than a script.
+ * @return void
+ */
+function hub_gsct2026_enqueue_vendor( $handle, $file, $is_css = false ) {
+	$rel = '/js/vendor/' . $file;
+	$abs = get_stylesheet_directory() . $rel;
+	if ( ! file_exists( $abs ) ) {
+		return;
+	}
+	$url = get_stylesheet_directory_uri() . $rel;
+	if ( $is_css ) {
+		wp_enqueue_style( $handle, $url, array(), filemtime( $abs ) );
+	} else {
+		wp_enqueue_script( $handle, $url, array(), filemtime( $abs ), true );
+	}
+}
+
+/**
+ * Enqueue Adobe Fonts (Typekit) — frontend and block editor alike, so the
+ * editor iframe renders the same faces as the frontend.
+ *
+ * @return void
+ */
+function hub_gsct2026_enqueue_fonts() {
+	wp_enqueue_style( 'hub-gsct2026-typekit', 'https://use.typekit.net/aar3vhl.css', array(), null );
+}
+add_action( 'wp_enqueue_scripts', 'hub_gsct2026_enqueue_fonts' );
+add_action( 'enqueue_block_editor_assets', 'hub_gsct2026_enqueue_fonts' );
+
+/**
  * Enqueue theme.min.js.
  *
  * @return void
  */
 function hub_gsct2026_enqueue_scripts() {
 
-	// wp_enqueue_script( 'gsap', 'https://cdn.jsdelivr.net/npm/gsap@3.12.7/dist/gsap.min.js', array(), '3.12.7', true );
-	// wp_enqueue_script( 'gsap-scrolltrigger', 'https://cdn.jsdelivr.net/npm/gsap@3.12.7/dist/ScrollTrigger.min.js', array( 'gsap' ), '3.12.7', true );
-
-	// wp_enqueue_style( 'lenis-style', 'https://unpkg.com/lenis@1.3.11/dist/lenis.css', array() );
-	// wp_enqueue_script( 'lenis', 'https://unpkg.com/lenis@1.3.11/dist/lenis.min.js', array(), '1.3.11', true );
+	// hub_gsct2026_enqueue_vendor( 'gsap', 'gsap.min.js' );
+	// hub_gsct2026_enqueue_vendor( 'lenis-style', 'lenis.css', true );
+	// hub_gsct2026_enqueue_vendor( 'lenis', 'lenis.min.js' );
 
 	$rel = '/js/theme.min.js';
 	$abs = get_stylesheet_directory() . $rel;

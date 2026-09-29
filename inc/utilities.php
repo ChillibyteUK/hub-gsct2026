@@ -189,3 +189,145 @@ function estimate_reading_time_in_minutes( $content = '', $words_per_minute = 30
 
 	return $minutes;
 }
+
+/**
+ * Build breadcrumb items for the current singular view.
+ *
+ * @param int $post_id Current post ID.
+ * @return array<int, array{label: string, url: string}>
+ */
+function hub_gsct2026_get_breadcrumbs( $post_id = 0 ) {
+	$post_id     = $post_id ? (int) $post_id : get_the_ID();
+	$breadcrumbs = array(
+		array(
+			'label' => __( 'Home', 'hub-gsct2026' ),
+			'url'   => home_url( '/' ),
+		),
+	);
+
+	if ( ! $post_id ) {
+		return $breadcrumbs;
+	}
+
+	if ( 'post' === get_post_type( $post_id ) ) {
+		$blog_page_id = (int) get_option( 'page_for_posts' );
+
+		if ( ! $blog_page_id ) {
+			$blog_page    = get_page_by_path( 'blog' );
+			$blog_page_id = $blog_page ? (int) $blog_page->ID : 0;
+		}
+
+		if ( $blog_page_id ) {
+			$breadcrumbs[] = array(
+				'label' => get_the_title( $blog_page_id ),
+				'url'   => get_permalink( $blog_page_id ),
+			);
+		}
+	} elseif ( is_page( $post_id ) || 'page' === get_post_type( $post_id ) ) {
+		$ancestor_ids = array_reverse( get_post_ancestors( $post_id ) );
+
+		foreach ( $ancestor_ids as $ancestor_id ) {
+			$breadcrumbs[] = array(
+				'label' => get_the_title( $ancestor_id ),
+				'url'   => get_permalink( $ancestor_id ),
+			);
+		}
+	}
+
+	$breadcrumbs[] = array(
+		'label' => get_the_title( $post_id ),
+		'url'   => '',
+	);
+
+	return $breadcrumbs;
+}
+
+/**
+ * Build a Vimeo player embed URL from any Vimeo link.
+ *
+ * Accepts plain (vimeo.com/123456789), channel/group
+ * (vimeo.com/channels/staffpicks/123456789), player
+ * (player.vimeo.com/video/123456789), and unlisted links carrying the
+ * private hash either in the path (vimeo.com/123456789/abcdef1234) or as
+ * ?h=abcdef1234. Anything that isn't a Vimeo URL, or has no numeric video
+ * ID, returns an empty string — callers use that to fall back to a plain
+ * link instead of a modal player.
+ *
+ * @param string $url URL as entered.
+ * @return string Embed URL (autoplay + dnt), or '' if not a Vimeo video link.
+ */
+function hub_gsct2026_get_vimeo_embed_url( $url ) {
+	if ( ! is_string( $url ) || '' === trim( $url ) ) {
+		return '';
+	}
+
+	$parts = wp_parse_url( $url );
+
+	if ( ! is_array( $parts ) || empty( $parts['host'] ) ) {
+		return '';
+	}
+
+	$host = strtolower( preg_replace( '/^www\./', '', $parts['host'] ) );
+
+	if ( ! in_array( $host, array( 'vimeo.com', 'player.vimeo.com' ), true ) ) {
+		return '';
+	}
+
+	if ( empty( $parts['path'] ) || ! preg_match_all( '#/(\d+)#', $parts['path'], $matches ) ) {
+		return '';
+	}
+
+	$video_id = end( $matches[1] );
+	$hash     = '';
+
+	if ( preg_match( '#/' . $video_id . '/([a-f0-9]+)#i', $parts['path'], $hash_match ) ) {
+		$hash = $hash_match[1];
+	}
+
+	if ( ! $hash && ! empty( $parts['query'] ) ) {
+		parse_str( $parts['query'], $query );
+
+		if ( ! empty( $query['h'] ) && is_string( $query['h'] ) && preg_match( '/^[a-f0-9]+$/i', $query['h'] ) ) {
+			$hash = $query['h'];
+		}
+	}
+
+	$embed_url = 'https://player.vimeo.com/video/' . $video_id . '?autoplay=1&dnt=1';
+
+	if ( $hash ) {
+		$embed_url .= '&h=' . $hash;
+	}
+
+	return $embed_url;
+}
+
+/**
+ * Render breadcrumb markup with schema metadata.
+ *
+ * @param array  $breadcrumbs Breadcrumb items.
+ * @param string $class_name  Wrapper class name.
+ * @return void
+ */
+function hub_gsct2026_render_breadcrumbs( $breadcrumbs, $class_name = 'cb-breadcrumbs' ) {
+	if ( empty( $breadcrumbs ) || ! is_array( $breadcrumbs ) || is_front_page() ) {
+		return;
+	}
+	?>
+	<nav class="<?php echo esc_attr( $class_name ); ?>" aria-label="Breadcrumb" itemscope itemtype="https://schema.org/BreadcrumbList">
+		<div class="container">
+			<ol class="cb-breadcrumbs__list">
+				<?php foreach ( $breadcrumbs as $index => $breadcrumb ) { ?>
+					<li class="cb-breadcrumbs__item" itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+						<?php if ( ! empty( $breadcrumb['url'] ) ) { ?>
+							<a href="<?php echo esc_url( $breadcrumb['url'] ); ?>" itemprop="item"><span itemprop="name"><?php echo esc_html( $breadcrumb['label'] ); ?></span></a>
+						<?php } else { ?>
+							<span itemprop="name" aria-current="page"><?php echo esc_html( $breadcrumb['label'] ); ?></span>
+						<?php } ?>
+						<meta itemprop="position" content="<?php echo esc_attr( $index + 1 ); ?>">
+					</li>
+				<?php } ?>
+			</ol>
+		</div>
+	</nav>
+	<?php
+}

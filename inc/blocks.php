@@ -22,6 +22,26 @@ function hub_gsct2026_register_blocks() {
 add_action( 'init', 'hub_gsct2026_register_blocks' );
 
 /**
+ * Localize the primary-hero block's editor script with its hardcoded test
+ * image URL, so the FocalPointPicker preview matches the image render.php
+ * outputs on the front end without duplicating the theme URL as a
+ * build-time JS constant.
+ *
+ * @return void
+ */
+function hub_gsct2026_localize_primary_hero_editor_script() {
+	wp_localize_script(
+		'hub-gsct2026-primary-hero-editor-script',
+		'hubGsct2026PrimaryHero',
+		array(
+			'backgroundUrl' => get_template_directory_uri() . '/blocks/primary-hero/assets/background.avif',
+			'crosshairUrl'  => get_template_directory_uri() . '/blocks/primary-hero/assets/crosshair.svg',
+		)
+	);
+}
+add_action( 'enqueue_block_editor_assets', 'hub_gsct2026_localize_primary_hero_editor_script' );
+
+/**
  * Tweak block registration for non-theme blocks.
  *
  * Plain-text core blocks get a render_callback that wraps their output in

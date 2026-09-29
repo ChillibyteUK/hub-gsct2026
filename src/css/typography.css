@@ -1,0 +1,311 @@
+/* Figma type styles — class names match the Figma design supplied.
+   Tokens (--font-family-*, --fs-*, --fw-*) live in tokens.css; this file is
+   just the classes that consume them. Loaded on the frontend via theme.css
+   and in the editor iframe via add_editor_style() (theme.min.css), so both
+   stay in sync with no separate editor copy. */
+
+/*==================================================================
+  BUTTONS AND LABELS
+  ==================================================================*/
+
+.text-button {
+	font-family: var(--font-family-base);
+	font-size: var(--fs-400);
+	font-weight: var(--fw-bold);
+	line-height: normal;
+	text-transform: uppercase;
+	text-box-trim: trim-both;
+	text-box-edge: cap alphabetic;
+}
+
+.text-eyebrow {
+	font-family: var(--font-family-base);
+	font-size: var(--fs-400);
+	font-weight: var(--fw-bold);
+	line-height: 24px;
+	text-transform: uppercase;
+}
+
+.text-attribution {
+	font-family: var(--font-family-base);
+	font-size: var(--fs-400);
+	font-weight: var(--fw-bold);
+	line-height: 24px;
+	text-transform: uppercase;
+	text-box-trim: trim-both;
+	text-box-edge: cap alphabetic;
+}
+
+.text-filter,
+.text-tag,
+.text-nav-link,
+.nav-link {
+	font-family: var(--font-family-base);
+	font-size: var(--fs-400);
+	font-weight: var(--fw-bold);
+	line-height: normal;
+	text-box-trim: trim-both;
+	text-box-edge: cap alphabetic;
+}
+
+.text-number-label {
+	font-family: var(--font-family-base);
+	font-size: var(--fs-600);
+	font-weight: var(--fw-bold);
+	line-height: 28px;
+	text-box-trim: trim-both;
+	text-box-edge: cap alphabetic;
+}
+
+.text-input,
+.text-table-label {
+	font-family: var(--font-family-base);
+	font-size: var(--fs-400);
+	font-weight: var(--fw-regular);
+	line-height: normal;
+	text-box-trim: trim-both;
+	text-box-edge: cap alphabetic;
+}
+
+/*==================================================================
+  BODY
+  ==================================================================*/
+
+.text-body-xl {
+	font-family: var(--font-family-base);
+	font-size: var(--fs-600);
+	font-weight: var(--fw-regular);
+	line-height: 28px;
+}
+
+.text-body-l {
+	font-family: var(--font-family-base);
+	font-size: var(--fs-500);
+	font-weight: var(--fw-regular);
+	line-height: 27px;
+}
+
+.text-body-l-medium {
+	font-family: var(--font-family-base);
+	font-size: var(--fs-500);
+	font-weight: var(--fw-medium);
+	line-height: 27px;
+}
+
+.text-body {
+	font-family: var(--font-family-base);
+	font-size: var(--fs-400);
+	font-weight: var(--fw-regular);
+	line-height: 24px;
+}
+
+.text-body-medium {
+	font-family: var(--font-family-base);
+	font-size: var(--fs-400);
+	font-weight: var(--fw-medium);
+	line-height: 24px;
+}
+
+.text-body-bold {
+	font-family: var(--font-family-base);
+	font-size: var(--fs-400);
+	font-weight: var(--fw-bold);
+	line-height: 24px;
+}
+
+.text-body-link {
+	font-family: var(--font-family-base);
+	font-size: var(--fs-400);
+	font-weight: var(--fw-bold);
+	line-height: 24px;
+	text-decoration: underline;
+}
+
+.text-body-dotted-link {
+	font-family: var(--font-family-base);
+	font-size: var(--fs-400);
+	font-weight: var(--fw-regular);
+	line-height: 24px;
+	text-decoration: dotted underline;
+}
+
+/*==================================================================
+  DISPLAY
+  ==================================================================*/
+
+/* Decorative Numeral — desktop only */
+.decorative-numeral {
+	font-family: var(--font-family-heading);
+	font-weight: var(--fw-regular);
+	font-size: 120px;
+	line-height: 30px;
+}
+
+/* Display XXL — 56px → 92px */
+.display-xxl {
+	font-family: var(--font-family-heading);
+	font-weight: var(--fw-regular);
+	font-size: clamp(56px, calc(43.32px + 3.38vw), 92px);
+	line-height: clamp(60px, calc(38.87px + 4vw), 98px);
+	letter-spacing: 0;
+	text-wrap: balance;
+}
+
+/* Display XL — 52px → 76px */
+.display-xl {
+	font-family: var(--font-family-heading);
+	font-weight: var(--fw-regular);
+	font-size: clamp(52px, calc(43.53px + 2.25vw), 76px);
+	line-height: clamp(56px, calc(46.86px + 2.36vw), 82px);
+	letter-spacing: 0;
+}
+
+/* Display L — 40px → 64px */
+.display-l {
+	font-family: var(--font-family-heading);
+	font-weight: var(--fw-regular);
+	font-size: clamp(40px, calc(31.53px + 3.01vw), 64px);
+	line-height: clamp(46px, calc(35.41px + 3.03vw), 76px);
+	letter-spacing: 0;
+}
+
+/* Display M — 32px → 48px */
+.display-m {
+	font-family: var(--font-family-heading);
+	font-weight: var(--fw-regular);
+	font-size: clamp(32px, calc(26.36px + 2.04vw), 48px);
+	line-height: clamp(38px, calc(31.65px + 2.3vw), 56px);
+	letter-spacing: 0;
+}
+
+/*==================================================================
+  EDITORIAL / QUOTES
+  ==================================================================*/
+
+/* Editorial L — 36px → 48px */
+.editorial-l {
+	font-family: var(--font-family-base);
+	font-weight: var(--fw-medium);
+	font-size: clamp(36px, calc(31.76px + 1.13vw), 48px);
+	line-height: clamp(40px, calc(33.65px + 1.7vw), 58px);
+	letter-spacing: -0.03em;
+}
+
+/* Editorial M — 24px → 36px */
+.editorial-m {
+	font-family: var(--font-family-base);
+	font-weight: var(--fw-medium);
+	font-size: clamp(24px, calc(19.76px + 1.13vw), 36px);
+	line-height: clamp(28px, calc(23.06px + 1.51vw), 42px);
+	letter-spacing: -0.03em;
+}
+
+/* Editorial S — 20px → 24px */
+.editorial-s {
+	font-family: var(--font-family-base);
+	font-weight: var(--fw-medium);
+	font-size: clamp(20px, calc(18.59px + 0.38vw), 24px);
+	line-height: clamp(24px, calc(21.18px + 0.75vw), 32px);
+	letter-spacing: -0.03em;
+}
+
+/* Pullquote L — desktop only */
+.pullquote-l {
+	font-family: var(--font-family-base);
+	font-weight: var(--fw-medium);
+	font-size: 56px;
+	line-height: 64px;
+	letter-spacing: -0.03em;
+}
+
+/* Pullquote M — 32px → 40px */
+.pullquote-m {
+	font-family: var(--font-family-base);
+	font-weight: var(--fw-medium);
+	font-size: clamp(32px, calc(28.24px + 0.75vw), 40px);
+	line-height: clamp(38px, calc(33.76px + 0.75vw), 46px);
+	letter-spacing: -0.03em;
+}
+
+/*==================================================================
+  HEADINGS
+  ==================================================================*/
+
+/* H2 · Data L — 28px → 36px */
+.h2-data-l {
+	font-family: var(--font-family-base);
+	font-weight: var(--fw-bold);
+	font-size: clamp(28px, calc(25.18px + 0.75vw), 36px);
+	line-height: clamp(32px, calc(28.47px + 0.94vw), 42px);
+	letter-spacing: 0;
+}
+
+/* H3 · Data M — 20px → 24px. Cap / Baseline trim on mobile only. */
+.h3-data-m {
+	font-family: var(--font-family-base);
+	font-weight: var(--fw-bold);
+	font-size: clamp(20px, calc(18.59px + 0.38vw), 24px);
+	line-height: clamp(24px, calc(21.18px + 0.75vw), 32px);
+	letter-spacing: 0;
+	text-box-trim: trim-both;
+	text-box-edge: cap alphabetic;
+}
+
+@media (min-width: 768px) {
+	.h3-data-m {
+		text-box-trim: none;
+		text-box-edge: auto;
+	}
+}
+
+/*==================================================================
+  UI
+  ==================================================================*/
+
+/* Label — 14px → 16px */
+.text-label {
+	font-family: var(--font-family-base);
+	font-weight: var(--fw-medium);
+	font-size: clamp(14px, calc(12.59px + 0.38vw), 16px);
+	line-height: clamp(20px, calc(18.59px + 0.38vw), 24px);
+	letter-spacing: 0;
+}
+
+/* Small Button — mobile only */
+.text-small-button {
+	font-family: var(--font-family-base);
+	font-size: 13px;
+	font-weight: var(--fw-bold);
+	line-height: normal;
+	letter-spacing: 0;
+	text-transform: uppercase;
+	text-box-trim: trim-both;
+	text-box-edge: cap alphabetic;
+}
+
+/* Chart Axis Label — mobile only */
+.text-chart-axis-label {
+	font-family: var(--font-family-base);
+	font-size: 13px;
+	font-weight: var(--fw-regular);
+	line-height: 24px;
+	letter-spacing: 0;
+}
+
+/* Link Text — 16px → 18px. Cap / Baseline trim on desktop only. */
+.text-link {
+	font-family: var(--font-family-base);
+	font-size: clamp(16px, calc(15.29px + 0.19vw), 18px);
+	font-weight: var(--fw-bold);
+	line-height: 24px;
+	letter-spacing: 0;
+	text-box-trim: none;
+	text-box-edge: auto;
+}
+
+@media (min-width: 768px) {
+	.text-link {
+		text-box-trim: trim-both;
+		text-box-edge: cap alphabetic;
+	}
+}

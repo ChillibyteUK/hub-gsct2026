@@ -1,7 +1,17 @@
+<?php
+/**
+ * The template for displaying the footer
+ *
+ * @package hub-gsct2026
+ */
+
+defined( 'ABSPATH' ) || exit;
+?>
 </main>
 
 <footer id="footer">
 	<div class="container">
+		<div><img src="<?= esc_url( get_template_directory_uri() . '/img/gsct-logo-wo.svg' ); ?>" alt="<?php bloginfo( 'name' ); ?>"></div>
 		<?php
 		wp_nav_menu(
 			array(

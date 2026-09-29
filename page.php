@@ -9,16 +9,10 @@
  */
 
 get_header();
-?>
 
-<div class="container">
-	<?php
-	while ( have_posts() ) {
-		the_post();
-		the_content();
-	}
-	?>
-</div>
+while ( have_posts() ) {
+	the_post();
+	the_content();
+}
 
-<?php
 get_footer();

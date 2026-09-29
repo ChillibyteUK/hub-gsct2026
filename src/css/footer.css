@@ -1,0 +1,15 @@
+footer {
+    background-color: var(--col-black);
+    color: var(--col-white);
+
+    padding-block: 2rem;
+
+    img {
+        width: 234px;
+        height: 65px;
+    }
+
+    @media (min-width: 768px) {
+        padding-block: 5rem;
+    }
+}

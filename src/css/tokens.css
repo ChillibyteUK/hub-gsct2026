@@ -11,17 +11,36 @@
   /* Colour palette — rename/replace per project, keep the slug shape */
   --col-white: #ffffff;
   --col-black: #000000;
-  --col-grey-100: #f5f5f5;
-  --col-grey-300: #d9d9d9;
-  --col-grey-700: #4a4a4a;
-  --col-blue-700: #1d4ed8;
+
+
+  /* Brand colours — not used yet. Named by hue; the three blues slot into
+     the existing numeric ramp under --col-blue-700. */
+  --col-brand-red: #f74333;
+  --col-brand-purple: #7628d4;
+  --col-brand-blue-500: #307eff;
+  --col-brand-yellow: #fff039;
+  --col-brand-blue-300: #90bffa;
+  --col-brand-blue-100: #c6e0ff;
+  --col-brand-pink: #ffaaeb;
 
   --col-primary: var(--col-blue-700);
   --col-body: var(--col-black);
   --col-body-bg: var(--col-white);
 
-  /* Type scale */
-  --font-family-base: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  /* Type scale — Figma type styles. --fs-400/500/600 + --fs-button and
+     --fw-regular/medium/bold are the Figma names; --fs-base/--fs-h1..h6 and
+     --fw-400/500/700 are the skeleton's original scale (still used by
+     base.css element defaults) — keep both until headings are migrated. */
+  --font-family-base: "helvetica-neue-lt-pro", system-ui, -apple-system, "Arial", Roboto, sans-serif;
+
+  --font-family-heading: "ivypresto-display", serif;
+
+  --fs-button: 16px;
+
+  --fs-400: 16px;
+  --fs-500: 18px;
+  --fs-600: 20px;
+
   --fs-base: 1rem;
   --fs-h1: clamp(2rem, 1.6rem + 2vw, 3rem);
   --fs-h2: clamp(1.6rem, 1.35rem + 1.25vw, 2.25rem);
@@ -31,15 +50,17 @@
   --fs-h6: 1rem;
   --fs-small: 0.875rem;
   --fw-400: 400;
-  --fw-600: 600;
+  --fw-500: 500;
   --fw-700: 700;
 
   /* Semantic aliases — generate-utilities.js emits a matching .fw-* class
 	   for every custom property here, so these are free utility classes too
-	   (.fw-normal, .fw-semibold, .fw-bold), not just tokens for use in CSS. */
+	   (.fw-normal, .fw-semibold, .fw-bold), not just tokens for use in CSS.
+	   --fw-regular/medium/bold are the Figma names for the same weights. */
   --fw-normal: var(--fw-400);
-  --fw-semibold: var(--fw-600);
+  --fw-medium: var(--fw-500);
   --fw-bold: var(--fw-700);
+  --fw-regular: var(--fw-400);
 
   --line-height-base: 1.5;
   --line-height-heading: 1.2;
@@ -51,6 +72,7 @@
   --space-3: 1rem;
   --space-4: 1.5rem;
   --space-5: 3rem;
+  --space-6: 5rem;
 
   /* Radii / shadows / motion */
   --radius-sm: 0.25rem;

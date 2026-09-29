@@ -40,16 +40,55 @@ select {
 
 .btn {
 	display: inline-block;
-	padding: var(--space-2) var(--space-3);
+	padding: var(--space-3) var(--space-4);
 	border: 1px solid var(--col-primary);
-	border-radius: var(--radius-sm);
+	border-radius: 100vw;
 	background-color: var(--col-primary);
 	color: var(--col-white);
 	text-decoration: none;
 	cursor: pointer;
 
+	font-family: var(--font-family-base);
+	font-size: var(--fs-400);
+	font-weight: var(--fw-bold);
+	line-height: normal;
+	text-transform: uppercase;
+	text-box-trim: trim-both;
+	text-box-edge: cap alphabetic;
+
+	transition: all 0.3s ease;
+
 	&:focus-visible {
 		outline: 2px solid var(--col-primary);
 		outline-offset: 2px;
 	}
+}
+
+
+.btn.btn-yellow {
+	background-color: var(--col-brand-yellow);
+	border-color: var(--col-brand-yellow);
+	color: var(--col-black);
+}
+.btn.btn-yellow:hover, .btn.btn-yellow:focus-visible {
+	background-color: var(--col-brand-purple);
+	color: var(--col-brand-yellow);
+	box-shadow: 0 4px 0 var(--col-brand-yellow);
+	transform: translateY(-4px);
+}
+.btn.btn-yellow:active {
+	background-color: var(--col-brand-purple);
+	color: var(--col-brand-yellow);
+}
+
+.btn.btn-yellow-outline {
+	background-color: transparent;
+	border-color: var(--col-brand-yellow);
+	color: var(--col-brand-yellow);
+}
+.btn.btn-yellow-outline:hover, .btn.btn-yellow-outline:focus-visible {
+	background-color: var(--col-brand-yellow);
+	color: var(--col-black);
+	box-shadow: 0 4px 0 var(--col-brand-purple);
+	transform: translateY(-4px);
 }

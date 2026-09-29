@@ -1,0 +1,58 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "hub-gsct2026/primary-hero",
+	"title": "Primary Hero",
+	"category": "hub-gsct2026",
+	"icon": "cover-image",
+	"description": "Practice block for a responsive crosshair over an image background, positioned with the focal point picker.",
+	"attributes": {
+		"focalPoint": {
+			"type": "object",
+			"default": { "x": 0.5, "y": 0.5 }
+		},
+		"backgroundId": {
+			"type": "number",
+			"default": 0
+		},
+		"backgroundUrl": {
+			"type": "string",
+			"default": ""
+		},
+		"backgroundAlt": {
+			"type": "string",
+			"default": ""
+		},
+		"heading": {
+			"type": "string",
+			"default": ""
+		},
+		"introText": {
+			"type": "string",
+			"default": ""
+		},
+		"primaryCtaText": {
+			"type": "string",
+			"default": ""
+		},
+		"primaryCtaUrl": {
+			"type": "string",
+			"default": ""
+		},
+		"secondaryCtaText": {
+			"type": "string",
+			"default": ""
+		},
+		"secondaryCtaUrl": {
+			"type": "string",
+			"default": ""
+		}
+	},
+	"supports": {
+		"anchor": true,
+		"className": true,
+		"align": true
+	},
+	"editorScript": "file:./build/index.js",
+	"render": "file:./render.php"
+}

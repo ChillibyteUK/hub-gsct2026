@@ -18,33 +18,71 @@
           "origin": "theme"
         },
         {
-          "name": "grey-100",
-          "slug": "grey-100",
-          "color": "#f5f5f5",
+          "name": "brand-red",
+          "slug": "brand-red",
+          "color": "#f74333",
           "origin": "theme"
         },
         {
-          "name": "grey-300",
-          "slug": "grey-300",
-          "color": "#d9d9d9",
+          "name": "brand-purple",
+          "slug": "brand-purple",
+          "color": "#7628d4",
           "origin": "theme"
         },
         {
-          "name": "grey-700",
-          "slug": "grey-700",
-          "color": "#4a4a4a",
+          "name": "brand-blue-500",
+          "slug": "brand-blue-500",
+          "color": "#307eff",
           "origin": "theme"
         },
         {
-          "name": "blue-700",
-          "slug": "blue-700",
-          "color": "#1d4ed8",
+          "name": "brand-yellow",
+          "slug": "brand-yellow",
+          "color": "#fff039",
+          "origin": "theme"
+        },
+        {
+          "name": "brand-blue-300",
+          "slug": "brand-blue-300",
+          "color": "#90bffa",
+          "origin": "theme"
+        },
+        {
+          "name": "brand-blue-100",
+          "slug": "brand-blue-100",
+          "color": "#c6e0ff",
+          "origin": "theme"
+        },
+        {
+          "name": "brand-pink",
+          "slug": "brand-pink",
+          "color": "#ffaaeb",
           "origin": "theme"
         }
       ]
     },
     "typography": {
       "fontSizes": [
+        {
+          "name": "button",
+          "slug": "button",
+          "size": "16px"
+        },
+        {
+          "name": "400",
+          "slug": "400",
+          "size": "16px"
+        },
+        {
+          "name": "500",
+          "slug": "500",
+          "size": "18px"
+        },
+        {
+          "name": "600",
+          "slug": "600",
+          "size": "20px"
+        },
         {
           "name": "base",
           "slug": "base",

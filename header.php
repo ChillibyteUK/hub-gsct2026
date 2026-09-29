@@ -10,7 +10,7 @@
 <head>
 	<meta charset="<?php bloginfo( 'charset' ); ?>">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<?php wp_head(); ?>
+		<?php wp_head(); ?>
 </head>
 
 <body <?php body_class(); ?>>
@@ -21,7 +21,7 @@
 <header id="masthead">
 	<nav class="navbar container" aria-label="Primary navigation">
 		<a href="<?php echo esc_url( home_url( '/' ) ); ?>" class="navbar-brand">
-			<?php bloginfo( 'name' ); ?>
+			<img src="<?php echo esc_url( get_stylesheet_directory_uri() . '/img/gsct-logo.svg' ); ?>" alt="<?php echo esc_attr( get_bloginfo( 'name' ) ); ?>" width="173" height="48">
 		</a>
 
 		<button class="navbar-toggler" type="button" aria-expanded="false" aria-controls="primary-menu" aria-label="Toggle navigation">

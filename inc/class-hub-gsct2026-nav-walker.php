@@ -1,4 +1,4 @@
-<?php
+<?php // phpcs:ignore WordPress.Files.FileName.InvalidClassFileName
 /**
  * Lightweight nav walker. Outputs nav-link/dropdown-menu class names (kept
  * for familiarity) but has none of Bootstrap's navwalker complexity — no
