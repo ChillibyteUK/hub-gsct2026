@@ -32,8 +32,9 @@ $wrapper_attributes = get_block_wrapper_attributes( array( 'class' => 'hub-3-poi
 			<?php
 		}
 		if ( $btitle ) {
+			$title_class = 'Black' === ( $attributes['titleColour'] ?? '' ) ? 'has-black-color' : 'has-brand-red-color';
 			?>
-			<h2 class="h2-data-l has-brand-red-color"><?= esc_html( $btitle ); ?></h2>
+			<h2 class="h2-data-l <?= esc_attr( $title_class ); ?>"><?= esc_html( $btitle ); ?></h2>
 			<?php
 		}
 		if ( $intro ) {
