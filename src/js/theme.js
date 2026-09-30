@@ -6,6 +6,7 @@ import { initVideoFacades } from './video-facade';
 import { initLenis } from './lenis-init';
 import { initPrimaryHero } from './primary-hero';
 import { initSecondaryHero } from './secondary-hero';
+import { initTimelines } from './timeline';
 
 document.addEventListener('DOMContentLoaded', () => {
 	initLenis();
@@ -16,4 +17,5 @@ document.addEventListener('DOMContentLoaded', () => {
 	initVideoFacades();
 	initPrimaryHero();
 	initSecondaryHero();
+	initTimelines();
 });

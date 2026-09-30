@@ -49,7 +49,6 @@ $wrapper_attributes = get_block_wrapper_attributes( array( 'class' => 'hub-3-poi
 				foreach ( $points as $item ) {
 					?>
 					<div class="col-12 col-md-4 hub-3-points__point">
-						<div class="number text-number-label"><?= esc_html( $loop_index + 1 ); ?></div>
 						<?php
 						$big_stat = $item['bigStat'] ?? '';
 						if ( $big_stat ) {
@@ -57,6 +56,10 @@ $wrapper_attributes = get_block_wrapper_attributes( array( 'class' => 'hub-3-poi
 							<div class="display-xl has-brand-red-color mb-2">
 								<?= esc_html( $big_stat ); ?>
 							</div>
+							<?php
+						} else {
+							?>
+							<div class="number text-number-label"><?= esc_html( $loop_index + 1 ); ?></div>
 							<?php
 						}
 						$subtitle = $item['subtitle'] ?? '';

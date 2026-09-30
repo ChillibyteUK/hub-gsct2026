@@ -714,3 +714,206 @@
     }
 }
 
+/* --- src/blocks/timeline.css --- */
+/* Purple band, white text throughout (inherits onto children). */
+.hub-timeline {
+    background: var(--col-brand-purple);
+    color: var(--col-white);
+    padding-block: var(--space-5);
+    overflow: hidden;
+}
+
+.hub-timeline__intro {
+    max-width: 60rem;
+    margin-bottom: var(--space-5);
+}
+
+.hub-timeline__footnote {
+    margin-top: var(--space-4);
+    margin-bottom: 0;
+}
+
+/* Track: horizontal scroll-snap row starting at the container content
+   edge while the scrollable overflow runs past the viewport's right edge
+   (left in container, right bleeding). The left inset is a margin, not
+   padding, deliberately: scrolled content stays visible through padding
+   zones, so a padding inset would let cards slide out past the container
+   edge — margin is outside the scroll area, a hard wall. data-lenis-prevent
+   in the markup keeps Lenis from swallowing wheel input over the track. */
+.hub-timeline__track-wrap {
+    position: relative;
+}
+
+.hub-timeline__track {
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: min(22rem, 80vw);
+    overflow-x: auto;
+    /* proximity, not mandatory: mandatory re-snaps on load when late
+       assets shift card widths, jumping the track off its inset. */
+    scroll-snap-type: x proximity;
+    scroll-padding-inline-end: max(var(--container-padding), calc((100% - var(--container-max-width)) / 2 + var(--container-padding)));
+    padding-inline-start: var(--container-padding);
+    /* End padding mirrors the start inset below: at maximum scroll the
+       last card lands fully inside the container instead of kissing the
+       viewport edge. */
+    padding-inline-end: max(var(--container-padding), calc((100% - var(--container-max-width)) / 2 + var(--container-padding)));
+}
+
+@media (min-width: 768px) {
+    .hub-timeline__track {
+        margin-inline-start: max(var(--container-padding), calc((100% - var(--container-max-width)) / 2 + var(--container-padding)));
+        padding-inline-start: 0;
+    }
+}
+
+.hub-timeline__track::-webkit-scrollbar {
+    display: none;
+}
+
+.hub-timeline__slide {
+    position: relative;
+    scroll-snap-align: start;
+    padding: 0 var(--space-4) 0 0;
+}
+
+/* Rail: one segment per slide so it scrolls with the content — segments
+   tile seamlessly (zero grid gap; spacing comes from slide padding).
+   First segment starts at its dot, last ends at its dot. */
+.hub-timeline__slide::before {
+    content: "";
+    position: absolute;
+    top: 5px;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: var(--col-brand-yellow);
+}
+
+.hub-timeline__slide:first-child::before {
+    left: 6px;
+}
+
+.hub-timeline__slide:last-child::before {
+    right: calc(100% - 6px);
+}
+
+.hub-timeline__dot {
+    position: relative;
+    z-index: 1;
+    display: block;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: var(--col-brand-blue-300);
+    margin-bottom: var(--space-3);
+}
+
+.hub-timeline__slide:nth-child(even) .hub-timeline__dot {
+    background: var(--col-brand-pink);
+}
+
+.hub-timeline__slide:nth-child(4n) .hub-timeline__dot {
+    background: var(--col-brand-red);
+}
+
+.hub-timeline__year {
+    margin-bottom: var(--space-2);
+}
+
+.hub-timeline__title {
+    margin-top: 0;
+    margin-bottom: var(--space-2);
+}
+
+.hub-timeline__content > *:last-child {
+    margin-bottom: 0;
+}
+
+/* Arrows float over the row, vertically centred. Hidden below md where
+   the track becomes a plain stack. */
+.hub-timeline__prev,
+.hub-timeline__next {
+    position: absolute;
+    top: 50%;
+    translate: 0 -50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 3rem;
+    height: 3rem;
+    border: 0;
+    border-radius: 50%;
+    padding: 0;
+    cursor: pointer;
+    background: var(--col-black);
+    color: var(--col-white);
+    z-index: 2;
+}
+
+.hub-timeline__prev:disabled,
+.hub-timeline__next:disabled {
+    opacity: 0.35;
+    cursor: default;
+}
+
+.hub-timeline__prev {
+    left: max(var(--container-padding), calc((100% - var(--container-max-width)) / 2 + var(--container-padding)));
+}
+
+.hub-timeline__next {
+    right: max(var(--container-padding), calc((100% - var(--container-max-width)) / 2 + var(--container-padding)));
+}
+
+/* Mobile: plain vertical stack with its own rail. No arrows, no snap. */
+@media (max-width: 767px) {
+    .hub-timeline__track {
+        display: block;
+        overflow: visible;
+    }
+
+    .hub-timeline__prev,
+    .hub-timeline__next {
+        display: none;
+    }
+
+    .hub-timeline__slide {
+        display: grid;
+        grid-template-columns: 12px 1fr;
+        column-gap: var(--space-3);
+        padding: 0 0 var(--space-4);
+    }
+
+    .hub-timeline__slide::before {
+        top: 0;
+        bottom: 0;
+        left: 5px;
+        right: auto;
+        width: 2px;
+        height: auto;
+    }
+
+    .hub-timeline__slide:first-child::before {
+        left: 5px;
+    }
+
+    .hub-timeline__slide:last-child::before {
+        bottom: calc(100% - 6px);
+    }
+
+    .hub-timeline__dot {
+        margin: 6px 0 0;
+    }
+
+    .hub-timeline__year,
+    .hub-timeline__title,
+    .hub-timeline__content {
+        grid-column: 2;
+    }
+
+    .hub-timeline__dot {
+        grid-column: 1;
+        grid-row: 1 / span 3;
+    }
+}
+
