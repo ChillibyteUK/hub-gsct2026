@@ -1,0 +1,85 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "hub-gsct2026/hub-how-to-invest-full",
+	"title": "HUB How To Invest Full",
+	"category": "hub-gsct2026",
+	"icon": "cover-image",
+	"attributes": {
+		"title": {
+			"type": "string",
+			"default": ""
+		},
+		"intro": {
+			"type": "string",
+			"default": ""
+		},
+		"platformsTitle": {
+			"type": "string",
+			"default": ""
+		},
+		"platformsIntro": {
+			"type": "string",
+			"default": ""
+		},
+		"platforms": {
+			"type": "array",
+			"default": []
+		},
+		"platformsFooter": {
+			"type": "string",
+			"default": ""
+		},
+		"vehiclesTitle": {
+			"type": "string",
+			"default": ""
+		},
+		"vehicle1Title": {
+			"type": "string",
+			"default": ""
+		},
+		"vehicle1Content": {
+			"type": "string",
+			"default": ""
+		},
+		"vehicle2Title": {
+			"type": "string",
+			"default": ""
+		},
+		"vehicle2Content": {
+			"type": "string",
+			"default": ""
+		},
+		"vehicle3Title": {
+			"type": "string",
+			"default": ""
+		},
+		"vehicle3Content": {
+			"type": "string",
+			"default": ""
+		},
+		"listingTitle": {
+			"type": "string",
+			"default": ""
+		},
+		"listingIntro": {
+			"type": "string",
+			"default": ""
+		},
+		"riskTitle": {
+			"type": "string",
+			"default": ""
+		},
+		"riskWording": {
+			"type": "string",
+			"default": ""
+		}
+	},
+	"supports": {
+		"anchor": true,
+		"className": true,
+		"align": true
+	},
+	"editorScript": "file:./build/index.js",
+	"render": "file:./render.php"
+}

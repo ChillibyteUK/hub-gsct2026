@@ -16,6 +16,10 @@
         margin-bottom: var(--space-2);
     }
     
+    h1 {
+        padding-bottom: var(--space-3);
+        border-bottom: 1px solid var(--col-light-grey);
+    }
     h2 {
         padding-bottom: var(--space-2);
         border-bottom: 1px solid var(--col-light-grey);
@@ -24,6 +28,7 @@
     .hub-3-points__intro {
         max-width: 600px;
     }
+
 }
 
 /* Gap decorations: fine rules in the gutters, no border hacks — columns
