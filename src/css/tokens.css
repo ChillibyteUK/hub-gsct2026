@@ -89,8 +89,8 @@
   --space-6: 5rem;
 
   /* Radii / shadows / motion */
-  --radius-sm: 0.25rem;
-  --radius-lg: 0.5rem;
+  --radius-sm: 0.5rem;
+  --radius-lg: 1rem;
   --shadow-sm: 0 1px 2px rgb(0 0 0 / 0.08);
   --shadow-lg: 0 8px 24px rgb(0 0 0 / 0.12);
   --transition: 150ms ease-in-out;

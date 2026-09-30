@@ -1,0 +1,81 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "hub-gsct2026/hub-secondary-hero",
+	"title": "HUB Secondary Hero",
+	"category": "hub-gsct2026",
+	"icon": "cover-image",
+	"attributes": {
+		"title": {
+			"type": "string",
+			"default": ""
+		},
+		"image1Id": {
+			"type": "number",
+			"default": 0
+		},
+		"image1Url": {
+			"type": "string",
+			"default": ""
+		},
+		"image1Alt": {
+			"type": "string",
+			"default": ""
+		},
+		"image2Id": {
+			"type": "number",
+			"default": 0
+		},
+		"image2Url": {
+			"type": "string",
+			"default": ""
+		},
+		"image2Alt": {
+			"type": "string",
+			"default": ""
+		},
+		"image3Id": {
+			"type": "number",
+			"default": 0
+		},
+		"image3Url": {
+			"type": "string",
+			"default": ""
+		},
+		"image3Alt": {
+			"type": "string",
+			"default": ""
+		},
+		"image4Id": {
+			"type": "number",
+			"default": 0
+		},
+		"image4Url": {
+			"type": "string",
+			"default": ""
+		},
+		"image4Alt": {
+			"type": "string",
+			"default": ""
+		},
+		"image5Id": {
+			"type": "number",
+			"default": 0
+		},
+		"image5Url": {
+			"type": "string",
+			"default": ""
+		},
+		"image5Alt": {
+			"type": "string",
+			"default": ""
+		}
+	},
+	"supports": {
+		"anchor": true,
+		"className": true,
+		"align": true
+	},
+	"editorScript": "file:./build/index.js",
+	"render": "file:./render.php"
+}

@@ -89,8 +89,8 @@
   --space-6: 5rem;
 
   /* Radii / shadows / motion */
-  --radius-sm: 0.25rem;
-  --radius-lg: 0.5rem;
+  --radius-sm: 0.5rem;
+  --radius-lg: 1rem;
   --shadow-sm: 0 1px 2px rgb(0 0 0 / 0.08);
   --shadow-lg: 0 8px 24px rgb(0 0 0 / 0.12);
   --transition: 150ms ease-in-out;
@@ -2592,6 +2592,95 @@ select {
     height: auto;
     transform: translate(-50%, -50%);
     pointer-events: none;
+}
+
+/* --- src/blocks/secondary-hero.css --- */
+/* Cover-flow row: fixed portrait heights (widths follow from 2/3),
+   spread across the container with space-between. Side images tilt in 3D
+   (left pair positive, right pair negative); the primary faces forward and
+   layers above the rest. */
+.hub-secondary-hero {
+    background: radial-gradient(120% 120% at 50% 100%, #fff036 0%, #cbe1f2 90%);
+    padding-block: var(--space-5);
+}
+
+.hub-secondary-hero__title {
+    text-align: center;
+    margin-top: var(--space-5);
+    max-width: 650px;
+    margin-inline: auto;
+}
+
+.hub-secondary-hero__media {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    perspective: 1200px;
+}
+
+.hub-secondary-hero__image {
+    aspect-ratio: 2 / 3;
+    object-fit: cover;
+    border-radius: var(--radius-lg);
+}
+
+.hub-secondary-hero__image--1,
+.hub-secondary-hero__image--5 {
+    height: 300px;
+}
+
+.hub-secondary-hero__image--2,
+.hub-secondary-hero__image--4 {
+    height: 240px;
+}
+
+.hub-secondary-hero__image--primary {
+    height: 345px;
+    z-index: 3;
+}
+
+.hub-secondary-hero__image--1,
+.hub-secondary-hero__image--5 {
+    z-index: 1;
+}
+
+.hub-secondary-hero__image--2,
+.hub-secondary-hero__image--4 {
+    z-index: 2;
+}
+
+.hub-secondary-hero__image--1,
+.hub-secondary-hero__image--2 {
+    transform: rotateY(30deg);
+}
+
+.hub-secondary-hero__image--4,
+.hub-secondary-hero__image--5 {
+    transform: rotateY(-30deg);
+}
+
+/* Mobile: outer two drop away, keeping the middle three, sized by width
+   again (fixed heights would overflow narrow screens). The chained
+   selectors only match when all five are present — fewer images degrade
+   to showing everything. */
+@media (max-width: 991px) {
+    .hub-secondary-hero__media {
+        justify-content: center;
+    }
+
+    .hub-secondary-hero__image {
+        height: auto;
+        width: 27%;
+    }
+
+    .hub-secondary-hero__image--primary {
+        width: 33%;
+    }
+
+    .hub-secondary-hero__image:first-child:nth-last-child(5),
+    .hub-secondary-hero__image:first-child:nth-last-child(5) ~ .hub-secondary-hero__image:last-child {
+        display: none;
+    }
 }
 
 /* --- src/blocks/stats-banner.css --- */
