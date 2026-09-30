@@ -65,6 +65,18 @@
 		"aspectRatio": {
 			"type": "string",
 			"default": "16/9"
+		},
+		"fullBleed": {
+			"type": "boolean",
+			"default": false
+		},
+		"quote": {
+			"type": "string",
+			"default": ""
+		},
+		"attribution": {
+			"type": "string",
+			"default": ""
 		}
 	},
 	"supports": {

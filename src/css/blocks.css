@@ -230,6 +230,48 @@
     order: -1;
 }
 
+/* --bleed-offset lives on the base section (with overflow containment
+   for the overshoot) so any full-bleed child — image or quote — can use
+   it; the offset itself is only ever consumed under a bleed modifier. */
+.hub-content-block {
+    overflow: clip;
+    --bleed-offset: max(var(--container-padding), calc((100vw - var(--container-max-width)) / 2 + var(--container-padding)));
+}
+
+.hub-content-block__media--bleed-left .hub-content-block__image,
+.hub-content-block__media--bleed-right .hub-content-block__image {
+    max-width: none;
+    width: calc(100% + var(--bleed-offset));
+}
+
+.hub-content-block__media--bleed-left .hub-content-block__image {
+    margin-inline-start: calc(-1 * var(--bleed-offset));
+}
+
+.hub-content-block__media--bleed-right .hub-content-block__image {
+    margin-inline-end: calc(-1 * var(--bleed-offset));
+}
+
+/* Quote variant: same breakout as the image, but the column itself carries
+   a solid background with the text padded back to container alignment.
+   Colours ride on Gutenberg utilities in the markup (white quote, black
+   attribution, pullquote type scale). */
+.hub-content-block__quote--left,
+.hub-content-block__quote--right {
+    background-color: var(--col-brand-red);
+    padding-block: var(--space-5);
+}
+
+.hub-content-block__quote--left {
+    margin-inline-start: calc(-1 * var(--bleed-offset));
+    padding-inline-start: var(--bleed-offset);
+}
+
+.hub-content-block__quote--right {
+    margin-inline-end: calc(-1 * var(--bleed-offset));
+    padding-inline-end: var(--bleed-offset);
+}
+
 .hub-content-block__image {
     display: block;
     width: 100%;
@@ -359,6 +401,27 @@
 .hub-how-to-invest__link-text {
     color: var(--col-black);
     text-decoration: underline;
+}
+
+/* --- src/blocks/people-cards.css --- */
+.hub-people-cards {
+    .hub-people-cards__intro {
+        padding-bottom: var(--space-3);
+        margin-bottom: var(--space-5);
+        border-bottom: 1px solid var(--col-light-grey);
+    }
+
+    .hub-people-cards__intro div {
+        max-width: 600px;
+    }
+
+    .hub-people-cards__card {
+        img {
+            aspect-ratio: 9 / 5;
+            object-fit: cover;
+            margin-bottom: var(--space-4);
+        }
+    }
 }
 
 /* --- src/blocks/primary-hero.css --- */

@@ -17,10 +17,10 @@ $intro    = $attributes['intro'] ?? '';
 $years    = $attributes['years'] ?? array();
 $footnote = $attributes['footnote'] ?? '';
 
-$wrapper_attributes = get_block_wrapper_attributes( array( 'class' => 'hub-timeline' ) );
+$wrapper_attributes = get_block_wrapper_attributes( array( 'class' => 'hub-timeline py-6' ) );
 ?>
 <section <?= $wrapper_attributes; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- get_block_wrapper_attributes() already escapes. ?>>
-	<div class="container">
+	<div class="container pt-6 pb-5">
 		<?php
 		if ( $intro ) {
 			?>
@@ -36,21 +36,21 @@ $wrapper_attributes = get_block_wrapper_attributes( array( 'class' => 'hub-timel
 			<div class="hub-timeline__track" tabindex="0" role="region" aria-label="<?= esc_attr__( 'Company history timeline', 'hub-gsct2026' ); ?>" data-lenis-prevent>
 				<?php
 				foreach ( $years as $item ) {
-					$year    = $item['year'] ?? '';
-					$title   = $item['title'] ?? '';
+					$tyear   = $item['year'] ?? '';
+					$ttitle  = $item['title'] ?? '';
 					$content = $item['content'] ?? '';
 					?>
 					<article class="hub-timeline__slide">
 						<span class="hub-timeline__dot" aria-hidden="true"></span>
 						<?php
-						if ( $year ) {
+						if ( $tyear ) {
 							?>
-							<div class="hub-timeline__year display-l"><?= esc_html( $year ); ?></div>
+							<div class="hub-timeline__year display-l"><?= esc_html( $tyear ); ?></div>
 							<?php
 						}
-						if ( $title ) {
+						if ( $ttitle ) {
 							?>
-							<h3 class="hub-timeline__title text-body-l-medium"><?= esc_html( $title ); ?></h3>
+							<h3 class="hub-timeline__title text-body-l-medium"><?= esc_html( $ttitle ); ?></h3>
 							<?php
 						}
 						if ( $content ) {
@@ -75,7 +75,7 @@ $wrapper_attributes = get_block_wrapper_attributes( array( 'class' => 'hub-timel
 	}
 	if ( $footnote ) {
 		?>
-		<div class="container">
+		<div class="container pb-6">
 			<p class="hub-timeline__footnote text-body"><?= esc_html( $footnote ); ?></p>
 		</div>
 		<?php

@@ -1,0 +1,40 @@
+{
+	"title": "HUB People Cards",
+	"color_support": false,
+	"fields": [
+		{
+			"label": "Title",
+			"type": "text",
+			"help": "",
+			"width": 100,
+			"options": "",
+			"textarea_style": "paragraph",
+			"link_target": false,
+			"name": "title",
+			"snake": "title",
+			"sub_fields": [],
+			"repeater_layout": "row",
+			"post_type_slug": "",
+			"field_key": "field_uxpgnvmq",
+			"conditional_logic": [],
+			"allowed_extensions": ""
+		},
+		{
+			"label": "Intro",
+			"type": "textarea",
+			"help": "",
+			"width": 100,
+			"options": "",
+			"textarea_style": "paragraph",
+			"link_target": false,
+			"name": "intro",
+			"snake": "intro",
+			"sub_fields": [],
+			"repeater_layout": "row",
+			"post_type_slug": "",
+			"field_key": "field_hxygwydi",
+			"conditional_logic": [],
+			"allowed_extensions": ""
+		}
+	]
+}

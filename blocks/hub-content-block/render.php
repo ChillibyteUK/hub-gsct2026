@@ -27,14 +27,22 @@ $aspect      = $attributes['aspectRatio'] ?? '16/9';
 $video_embed = hub_gsct2026_get_vimeo_embed_url( $attributes['videoUrl'] ?? '' );
 
 $media_first = 'media-text' === $order;
+$full_bleed  = ! empty( $attributes['fullBleed'] ) && 'image' === $media_type && $image_url;
+$is_quote    = 'quote' === $media_type;
 $media_class = 'col-12 col-lg-6 hub-content-block__media' . ( $media_first ? ' hub-content-block__media--first' : '' );
+if ( $full_bleed ) {
+	$media_class .= $media_first ? ' hub-content-block__media--bleed-left' : ' hub-content-block__media--bleed-right';
+}
+if ( $is_quote ) {
+	$media_class .= $media_first ? ' hub-content-block__quote--left' : ' hub-content-block__quote--right';
+}
 
 $wrapper_attributes = get_block_wrapper_attributes( array( 'class' => 'hub-content-block' ) );
 ?>
 <section <?= $wrapper_attributes; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- get_block_wrapper_attributes() already escapes. ?>>
 	<div class="container py-5">
 		<div class="row gap-6">
-			<div class="col-12 col-lg-6 hub-content-block__text">
+			<div class="col-12 col-lg-6 hub-content-block__text my-auto">
 				<?php
 				if ( $eyebrow ) {
 					?>
@@ -43,7 +51,7 @@ $wrapper_attributes = get_block_wrapper_attributes( array( 'class' => 'hub-conte
 				}
 				if ( $btitle ) {
 					?>
-					<h2 class="h2-data-l"><?= esc_html( $btitle ); ?></h2>
+					<h2 class="editorial-m"><?= esc_html( $btitle ); ?></h2>
 					<?php
 				}
 				if ( $content ) {
@@ -52,7 +60,7 @@ $wrapper_attributes = get_block_wrapper_attributes( array( 'class' => 'hub-conte
 					<?php
 				}
 				if ( $cta_url ) {
-					$btns = array(
+					$btns      = array(
 						'white'        => 'btn-black-outline',
 						'brand-yellow' => 'btn-purple-outline',
 					);
@@ -93,6 +101,26 @@ $wrapper_attributes = get_block_wrapper_attributes( array( 'class' => 'hub-conte
 						</div>
 						<?php
 					}
+				}
+				$quote_text = $attributes['quote'] ?? '';
+				$quote_attr = $attributes['attribution'] ?? '';
+				if ( 'quote' === $media_type && ( $quote_text || $quote_attr ) ) {
+					?>
+					<div class="hub-content-block__quote py-6 px-5 d-flex flex-column justify-content-center" style="height: 600px;">
+						<?php
+						if ( $quote_text ) {
+							?>
+							<div class="pullquote-m has-white-color mb-4"><?= wp_kses_post( $quote_text ); ?></div>
+							<?php
+						}
+						if ( $quote_attr ) {
+							?>
+							<div class="text-attribution has-black-color"><?= esc_html( $quote_attr ); ?></div>
+							<?php
+						}
+						?>
+					</div>
+					<?php
 				}
 				?>
 			</div>

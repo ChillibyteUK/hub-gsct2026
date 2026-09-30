@@ -1,0 +1,19 @@
+.hub-people-cards {
+    .hub-people-cards__intro {
+        padding-bottom: var(--space-3);
+        margin-bottom: var(--space-5);
+        border-bottom: 1px solid var(--col-light-grey);
+    }
+
+    .hub-people-cards__intro div {
+        max-width: 600px;
+    }
+
+    .hub-people-cards__card {
+        img {
+            aspect-ratio: 9 / 5;
+            object-fit: cover;
+            margin-bottom: var(--space-4);
+        }
+    }
+}

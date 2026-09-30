@@ -1,6 +1,6 @@
 import { __ } from '@wordpress/i18n';
 import { useBlockProps, MediaUpload, MediaUploadCheck, RichText } from '@wordpress/block-editor';
-import { TextControl, RadioControl, SelectControl, Button } from '@wordpress/components';
+import { TextControl, RadioControl, SelectControl, ToggleControl, TextareaControl, Button } from '@wordpress/components';
 import EditorBlockShell from '../../_shared/EditorBlockShell';
 
 export default function Edit( { attributes, setAttributes, clientId } ) {
@@ -20,9 +20,13 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 		videoThumbnailUrl,
 		videoThumbnailAlt,
 		aspectRatio,
+		fullBleed,
+		quote,
+		attribution,
 	} = attributes;
 	const blockProps = useBlockProps( { className: 'container hub-editor-block' } );
 	const isImage = 'image' === mediaType;
+	const isQuote = 'quote' === mediaType;
 
 	return (
 		<EditorBlockShell blockProps={ blockProps } clientId={ clientId } classPrefix="hub" textDomain="hub-gsct2026" title="HUB Content Block">
@@ -81,6 +85,7 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 				options={ [
 					{ label: __( 'Image', 'hub-gsct2026' ), value: 'image' },
 					{ label: __( 'Video', 'hub-gsct2026' ), value: 'video' },
+					{ label: __( 'Quote', 'hub-gsct2026' ), value: 'quote' },
 				] }
 				onChange={ ( value ) => setAttributes( { mediaType: value } ) }
 			/>
@@ -129,7 +134,15 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 					onChange={ ( value ) => setAttributes( { aspectRatio: value } ) }
 				/>
 			) }
-			{ ! isImage && (
+			{ isImage && (
+				<ToggleControl
+					label={ __( 'Full-bleed image', 'hub-gsct2026' ) }
+					checked={ !! fullBleed }
+					onChange={ ( value ) => setAttributes( { fullBleed: value } ) }
+					help={ __( 'Extends the image to the viewport edge on its side.', 'hub-gsct2026' ) }
+				/>
+			) }
+			{ ! isImage && ! isQuote && (
 				<>
 					<TextControl
 						type="url"
@@ -168,6 +181,20 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 							/>
 						</MediaUploadCheck>
 					</div>
+				</>
+			) }
+			{ isQuote && (
+				<>
+					<TextareaControl
+						label={ __( 'Quote', 'hub-gsct2026' ) }
+						value={ quote }
+						onChange={ ( value ) => setAttributes( { quote: value } ) }
+					/>
+					<TextControl
+						label={ __( 'Attribution', 'hub-gsct2026' ) }
+						value={ attribution }
+						onChange={ ( value ) => setAttributes( { attribution: value } ) }
+					/>
 				</>
 			) }
 		</EditorBlockShell>

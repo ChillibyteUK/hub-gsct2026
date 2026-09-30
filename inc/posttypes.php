@@ -17,41 +17,72 @@ defined( 'ABSPATH' ) || exit;
  */
 function hub_gsct2026_register_post_types() {
 
-	/*
 	register_post_type(
-		'case_study',
+		'person',
 		array(
 			'labels'          => array(
-				'name'               => 'Case Studies',
-				'singular_name'      => 'Case Study',
-				'add_new_item'       => 'Add New Case Study',
-				'edit_item'          => 'Edit Case Study',
-				'new_item'           => 'New Case Study',
-				'view_item'          => 'View Case Study',
-				'search_items'       => 'Search Case Studies',
-				'not_found'          => 'No case studies found',
-				'not_found_in_trash' => 'No case studies in trash',
+				'name'               => 'People',
+				'singular_name'      => 'Person',
+				'add_new_item'       => 'Add New Person',
+				'edit_item'          => 'Edit Person',
+				'new_item'           => 'New Person',
+				'view_item'          => 'View Person',
+				'search_items'       => 'Search People',
+				'not_found'          => 'No people found',
+				'not_found_in_trash' => 'No people in trash',
 			),
 			'has_archive'     => false,
-			'public'          => true,
+			'public'          => false,
 			'show_ui'         => true,
 			'show_in_menu'    => true,
 			'show_in_rest'    => true,
 			'menu_position'   => 26,
-			'menu_icon'       => 'dashicons-portfolio',
-			'supports'        => array( 'title', 'editor', 'thumbnail' ),
+			'menu_icon'       => 'dashicons-groups',
+			'supports'        => array( 'title', 'editor', 'thumbnail', 'custom-fields' ),
 			'capability_type' => 'post',
 			'map_meta_cap'    => true,
-			'rewrite'         => array(
-				'slug'       => 'case-studies',
-				'with_front' => false,
-			),
+			'rewrite'         => false,
 		)
 	);
-	*/
 
+	register_post_meta(
+		'person',
+		'role',
+		array(
+			'show_in_rest'  => true,
+			'single'        => true,
+			'type'          => 'string',
+			'auth_callback' => function () {
+				return current_user_can( 'edit_posts' );
+			},
+		)
+	);
 }
 add_action( 'init', 'hub_gsct2026_register_post_types' );
+
+/**
+ * Remove the classic "Custom Fields" meta box from the Person edit screen.
+ *
+ * 'custom-fields' support is kept in register_post_type() above because
+ * WordPress requires it for a custom post type's REST schema to expose the
+ * `meta` field at all (see WP_REST_Posts_Controller::get_item_schema()) —
+ * the Person Details sidebar panel (blocks/_person-panel) depends on that.
+ * But the same support flag also registers the legacy postcustom meta box,
+ * which the block editor still submits as a compatibility form field
+ * alongside its REST save; that stale, page-load snapshot of postmeta then
+ * overwrites the REST save moments later, wiping out fields like `role`
+ * immediately after saving. Removing just the meta box (not the support
+ * flag) keeps REST meta working while eliminating that duplicate save path.
+ *
+ * @return void
+ */
+function hub_gsct2026_remove_person_custom_fields_metabox() {
+	remove_meta_box( 'postcustom', 'person', 'normal' );
+}
+add_action( 'add_meta_boxes_person', 'hub_gsct2026_remove_person_custom_fields_metabox' );
+
+
+
 
 /**
  * Serve page.php for singular views of any custom post type that has no
