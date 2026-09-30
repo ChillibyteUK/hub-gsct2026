@@ -1,0 +1,25 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "hub-gsct2026/hub-definition-list",
+	"title": "HUB Definition List",
+	"category": "hub-gsct2026",
+	"icon": "cover-image",
+	"attributes": {
+		"title": {
+			"type": "string",
+			"default": ""
+		},
+		"terms": {
+			"type": "array",
+			"default": []
+		}
+	},
+	"supports": {
+		"anchor": true,
+		"className": true,
+		"align": true
+	},
+	"editorScript": "file:./build/index.js",
+	"render": "file:./render.php"
+}

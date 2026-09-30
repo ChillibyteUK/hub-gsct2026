@@ -22,6 +22,26 @@
     }
 }
 
+/* Gap decorations: fine rules in the gutters, no border hacks — columns
+   on desktop, rows stacked on mobile. Chromium-only for now (149+), other
+   engines show the gaps bare until they ship gap decorations. */
+@media (min-width: 768px) {
+    .hub-3-points__points {
+        grid-template-columns: repeat(3, 1fr);
+        column-rule: 1px solid var(--col-light-grey);
+    }
+
+    .hub-3-points__points > * {
+        grid-column: auto;
+    }
+}
+
+@media (max-width: 767px) {
+    .hub-3-points__points {
+        row-rule: 1px solid var(--col-light-grey);
+    }
+}
+
 /* Popover — trigger words marked [popover]…[/popover] in a row's content
    open a native popover card. The trigger is a span so it wraps inline
    mid-sentence (a button stays atomic); keyboard activation is bridged in

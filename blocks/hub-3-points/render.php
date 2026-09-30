@@ -43,7 +43,7 @@ $wrapper_attributes = get_block_wrapper_attributes( array( 'class' => 'hub-3-poi
 		}
 		if ( $points ) {
 			?>
-			<div class="row gap-5">
+			<div class="row gap-5 hub-3-points__points">
 				<?php
 				$loop_index = 0;
 				foreach ( $points as $item ) {

@@ -2010,6 +2010,26 @@ select {
         max-width: 600px;
     }
 
+/* Gap decorations: fine rules in the gutters, no border hacks — columns
+   on desktop, rows stacked on mobile. Chromium-only for now (149+), other
+   engines show the gaps bare until they ship gap decorations. */
+@media (min-width: 768px) {
+    .hub-3-points__points {
+        grid-template-columns: repeat(3, 1fr);
+        column-rule: 1px solid var(--col-light-grey);
+    }
+
+    .hub-3-points__points > * {
+        grid-column: auto;
+    }
+}
+
+@media (max-width: 767px) {
+    .hub-3-points__points {
+        row-rule: 1px solid var(--col-light-grey);
+    }
+}
+
 /* Popover — trigger words marked [popover]…[/popover] in a row's content
    open a native popover card. The trigger is a span so it wraps inline
    mid-sentence (a button stays atomic); keyboard activation is bridged in
@@ -2352,6 +2372,68 @@ select {
 .hub-content-block__corner--br {
     bottom: -8px;
     right: -8px;
+}
+
+/* --- src/blocks/definition-list.css --- */
+/* Facts render in order, pairing consecutive rows on desktop and
+   stacking the same sequence on mobile — no reordering CSS anywhere. The
+   centre divider is a grid column-rule sitting in a 4rem gutter (space
+   either side, no padding hacks) — Chromium-only for now (149+), other
+   engines simply show no divider until they ship gap decorations.
+   Hairlines tile through adjoining fact edges; breathing room comes from
+   fact padding. */
+.hub-definition-list__title {
+    border-bottom: 1px solid var(--col-light-grey);
+    padding-bottom: var(--space-3);
+    margin-bottom: var(--space-4);
+}
+
+.hub-definition-list__facts {
+    position: relative;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    column-gap: 4rem;
+    column-rule: 1px solid var(--col-light-grey);
+}
+
+.hub-definition-list__fact {
+    display: flex;
+    gap: var(--space-3);
+    align-items: start;
+    padding-block: var(--space-2);
+    border-bottom: 1px solid var(--col-light-grey);
+}
+
+.hub-definition-list__fact:nth-child(even) {
+    padding-inline-start: var(--space-4);
+}
+
+.hub-definition-list__term {
+    flex: 0 0 40%;
+    margin: 0;
+}
+
+.hub-definition-list__definition > *:last-child {
+    margin-bottom: 0;
+}
+
+/* Mobile: single column — term above description, divider off. */
+@media (max-width: 767px) {
+    .hub-definition-list__facts {
+        grid-template-columns: 1fr;
+    }
+
+    .hub-definition-list__facts::before {
+        display: none;
+    }
+
+    .hub-definition-list__fact {
+        display: block;
+    }
+
+    .hub-definition-list__fact:nth-child(even) {
+        padding-inline-start: 0;
+    }
 }
 
 /* --- src/blocks/how-to-invest.css --- */

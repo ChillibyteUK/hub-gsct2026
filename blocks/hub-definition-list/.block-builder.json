@@ -1,0 +1,59 @@
+{
+	"title": "HUB Definition List",
+	"color_support": false,
+	"fields": [
+		{
+			"label": "Title",
+			"type": "text",
+			"help": "",
+			"width": 100,
+			"options": "",
+			"textarea_style": "paragraph",
+			"link_target": false,
+			"name": "title",
+			"snake": "title",
+			"sub_fields": [],
+			"repeater_layout": "row",
+			"post_type_slug": "",
+			"field_key": "field_95ktvtcq",
+			"conditional_logic": [],
+			"allowed_extensions": ""
+		},
+		{
+			"label": "Terms",
+			"type": "repeater",
+			"help": "",
+			"width": 100,
+			"options": "",
+			"textarea_style": "paragraph",
+			"link_target": false,
+			"name": "terms",
+			"snake": "terms",
+			"sub_fields": [
+				{
+					"label": "Term",
+					"type": "text",
+					"mime_types": "",
+					"link_target": false,
+					"options": "",
+					"name": "term",
+					"snake": "term"
+				},
+				{
+					"label": "Definition",
+					"type": "textarea",
+					"mime_types": "",
+					"link_target": false,
+					"options": "",
+					"name": "definition",
+					"snake": "definition"
+				}
+			],
+			"repeater_layout": "row",
+			"post_type_slug": "",
+			"field_key": "field_i38gpg7r",
+			"conditional_logic": [],
+			"allowed_extensions": ""
+		}
+	]
+}

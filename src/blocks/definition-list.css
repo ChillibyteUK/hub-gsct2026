@@ -1,0 +1,60 @@
+/* Facts render in order, pairing consecutive rows on desktop and
+   stacking the same sequence on mobile — no reordering CSS anywhere. The
+   centre divider is a grid column-rule sitting in a 4rem gutter (space
+   either side, no padding hacks) — Chromium-only for now (149+), other
+   engines simply show no divider until they ship gap decorations.
+   Hairlines tile through adjoining fact edges; breathing room comes from
+   fact padding. */
+.hub-definition-list__title {
+    border-bottom: 1px solid var(--col-light-grey);
+    padding-bottom: var(--space-3);
+    margin-bottom: var(--space-4);
+}
+
+.hub-definition-list__facts {
+    position: relative;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    column-gap: 4rem;
+    column-rule: 1px solid var(--col-light-grey);
+}
+
+.hub-definition-list__fact {
+    display: flex;
+    gap: var(--space-3);
+    align-items: start;
+    padding-block: var(--space-2);
+    border-bottom: 1px solid var(--col-light-grey);
+}
+
+.hub-definition-list__fact:nth-child(even) {
+    padding-inline-start: var(--space-4);
+}
+
+.hub-definition-list__term {
+    flex: 0 0 40%;
+    margin: 0;
+}
+
+.hub-definition-list__definition > *:last-child {
+    margin-bottom: 0;
+}
+
+/* Mobile: single column — term above description, divider off. */
+@media (max-width: 767px) {
+    .hub-definition-list__facts {
+        grid-template-columns: 1fr;
+    }
+
+    .hub-definition-list__facts::before {
+        display: none;
+    }
+
+    .hub-definition-list__fact {
+        display: block;
+    }
+
+    .hub-definition-list__fact:nth-child(even) {
+        padding-inline-start: 0;
+    }
+}
