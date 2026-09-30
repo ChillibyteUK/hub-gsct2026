@@ -7,7 +7,7 @@
 @import "forms.css";
 @import "utilities.css"; /* generated — see src/build/generate-utilities.js, run `npm run css-generate` */
 /* @import "tables.css"; -- uncomment if this project actually needs styled tables */
-/* @import "accordion.css"; -- uncomment if this project actually needs styled accordions */
+@import "accordion.css";
 @import "blocks.css"; /* generated — concatenation of src/blocks/*.css, see src/build/generate-utilities.js */
 
 

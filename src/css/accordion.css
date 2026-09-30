@@ -11,6 +11,8 @@
 .accordion {
   display: flex;
   flex-direction: column;
+  max-width: 720px;
+  margin-inline: auto;
 }
 
 .accordion-item {
@@ -26,10 +28,9 @@
   align-items: center;
   justify-content: space-between;
   gap: var(--space-3);
-  padding-block: var(--space-3);
+  padding-block: var(--space-4);
   list-style: none;
   cursor: pointer;
-  font-weight: var(--fw-700);
 }
 
 .accordion-header::-webkit-details-marker {
@@ -39,16 +40,36 @@
 .accordion-icon {
   flex-shrink: 0;
   display: block;
-  width: 1rem;
-  height: 1rem;
+  width: 1.5rem;
+  height: 1.5rem;
   transition: transform var(--transition);
 }
 
 .accordion-item[open] .accordion-icon {
-  transform: rotate(45deg);
+  transform: rotate(180deg);
 }
 
 .accordion-body {
   padding-bottom: var(--space-3);
   color: var(--col-black);
+}
+
+/* Section link mirrors the cards-section arrow link (flex row, right
+   aligned, gap, underline-proof arrow) — colour is inherited, so on the
+   default background it renders black. */
+.hub-faqs__link {
+    margin-top: var(--space-4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5em;
+}
+
+.hub-faqs__link-arrow {
+    flex: none;
+}
+
+.hub-faqs__link-text {
+    color: var(--col-black);
+    text-decoration: underline;
 }
