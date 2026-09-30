@@ -37,6 +37,23 @@
 			"allowed_extensions": ""
 		},
 		{
+			"label": "Title Colour",
+			"type": "radio",
+			"help": "",
+			"width": 25,
+			"options": "[Red], Black",
+			"textarea_style": "paragraph",
+			"link_target": false,
+			"name": "titleColour",
+			"snake": "title_colour",
+			"sub_fields": [],
+			"repeater_layout": "row",
+			"post_type_slug": "",
+			"field_key": "field_ksecghmv",
+			"conditional_logic": [],
+			"allowed_extensions": ""
+		},
+		{
 			"label": "Intro",
 			"type": "textarea",
 			"help": "",

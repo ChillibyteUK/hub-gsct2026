@@ -1,0 +1,79 @@
+.hub-how-to-invest-full {
+    background-color: var(--col-brand-purple);
+    color: var(--col-white);
+    padding-block: var(--space-6);
+
+    h2 {
+        max-width: 555px;
+        text-wrap: balance;
+        margin-block-end: var(--space-4);
+    }
+    .hub-how-to-invest-full__intro,
+    .hub-how-to-invest-full__listing-intro {
+        max-width: 900px;
+        text-wrap: pretty;
+        margin-block-end: var(--space-5);
+    }
+
+    .hub-how-to-invest-full__platforms-footer {
+        max-width: 900px;
+        text-wrap: pretty;
+        margin-block-end: var(--space-6);
+    }
+
+    .hub-how-to-invest-full__vehicle {
+        background-color: var(--col-white);
+        border-radius: var(--radius-lg);
+        box-shadow: var(--shadow-sm);
+        padding: var(--space-5) var(--space-4);
+        margin-block-end: var(--space-5);
+        h4 {
+            color: var(--col-black);
+        }
+        .hub-how-to-invest-full__vehicle-content {
+            color: var(--col-medium-grey);
+        }
+    }
+
+    .hub-how-to-invest-full__risk-wording {
+        max-width: 800px;
+        text-wrap: pretty;
+    }
+}
+
+/* Platform cards mirror the how-to-invest .logos__logo treatment; linked
+   cards lift to shadow-lg on hover/focus. */
+.hub-how-to-invest-full__platforms {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-3);
+}
+
+@media (min-width: 992px) {
+    .hub-how-to-invest-full__platforms {
+        grid-template-columns: repeat(4, 1fr);
+    }
+}
+
+.hub-how-to-invest-full__platform {
+    background-color: var(--col-white);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-sm);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+    transition: box-shadow 0.3s ease;
+}
+
+.hub-how-to-invest-full__platform img {
+    max-width: 160px;
+    max-height: 70px;
+    width: auto;
+    height: auto;
+}
+
+a.hub-how-to-invest-full__platform:hover,
+a.hub-how-to-invest-full__platform:focus-visible {
+    box-shadow: var(--shadow-lg);
+}

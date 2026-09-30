@@ -11,9 +11,9 @@
 
 defined( 'ABSPATH' ) || exit;
 
-$btitle  = $attributes['title'] ?? '';
-$intro   = $attributes['intro'] ?? '';
-$points  = $attributes['points'] ?? array();
+$btitle = $attributes['title'] ?? '';
+$intro  = $attributes['intro'] ?? '';
+$points = $attributes['points'] ?? array();
 
 $wrapper_attributes = get_block_wrapper_attributes( array( 'class' => 'hub-3-points' ) );
 ?>

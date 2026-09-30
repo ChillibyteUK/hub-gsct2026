@@ -1,23 +1,19 @@
 import { __ } from '@wordpress/i18n';
 import { useBlockProps } from '@wordpress/block-editor';
-import { TextControl, TextareaControl } from '@wordpress/components';
+import { TextControl, TextareaControl, RadioControl } from '@wordpress/components';
 import RepeaterField from '../../_shared/RepeaterField';
 import EditorBlockShell from '../../_shared/EditorBlockShell';
 
 const pointsFields = [
 	{ name: 'bigStat', label: __( 'Big Stat', 'hub-gsct2026' ), type: 'text' },
 	{ name: 'subtitle', label: __( 'Subtitle', 'hub-gsct2026' ), type: 'text' },
-	{ name: 'content', label: __( 'Content', 'hub-gsct2026' ), type: 'textarea', help: __( 'Wrap popover trigger words like this: [popover]words[/popover]', 'hub-gsct2026' ) },
-	{ name: 'popover', label: __( 'Popover', 'hub-gsct2026' ), type: 'radio', className: 'hub-radio-horizontal', options: [ { label: __( 'None', 'hub-gsct2026' ), value: '' }, { label: __( 'With popover', 'hub-gsct2026' ), value: 'yes' } ] },
-	{ name: 'popoverTitle', label: __( 'Popover title', 'hub-gsct2026' ), type: 'text', showIf: { field: 'popover', value: 'yes' } },
-	{ name: 'popoverContent', label: __( 'Popover content', 'hub-gsct2026' ), type: 'textarea', showIf: { field: 'popover', value: 'yes' } },
-	{ name: 'popoverImage', label: __( 'Popover image', 'hub-gsct2026' ), type: 'image', showIf: { field: 'popover', value: 'yes' } },
+	{ name: 'content', label: __( 'Content', 'hub-gsct2026' ), type: 'textarea' },
 ];
 
-const pointsEmptyRow = { bigStat: '', subtitle: '', content: '', popover: '', popoverTitle: '', popoverContent: '', popoverImage: 0, popoverImageUrl: '' };
+const pointsEmptyRow = { bigStat: '', subtitle: '', content: '' };
 
 export default function Edit( { attributes, setAttributes, clientId } ) {
-	const { eyebrow, title, intro, points } = attributes;
+	const { eyebrow, title, titleColour, intro, points } = attributes;
 	const blockProps = useBlockProps( { className: 'container hub-editor-block' } );
 
 	return (
@@ -27,11 +23,26 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 				value={ eyebrow }
 				onChange={ ( value ) => setAttributes( { eyebrow: value } ) }
 			/>
-			<TextControl
-				label={ __( 'Title', 'hub-gsct2026' ) }
-				value={ title }
-				onChange={ ( value ) => setAttributes( { title: value } ) }
-			/>
+			<div style={ { display: 'flex', flexWrap: 'wrap', gap: '12px' } }>
+				<div style={ { flex: '75 1 0%' } }>
+					<TextControl
+						label={ __( 'Title', 'hub-gsct2026' ) }
+						value={ title }
+						onChange={ ( value ) => setAttributes( { title: value } ) }
+					/>
+				</div>
+				<div style={ { flex: '25 1 0%' } }>
+					<RadioControl
+						label={ __( 'Title Colour', 'hub-gsct2026' ) }
+						selected={ titleColour }
+						options={ [
+							{ label: 'Red', value: 'Red' },
+							{ label: 'Black', value: 'Black' },
+						] }
+						onChange={ ( value ) => setAttributes( { titleColour: value } ) }
+					/>
+				</div>
+			</div>
 			<TextareaControl
 				label={ __( 'Intro', 'hub-gsct2026' ) }
 				value={ intro }
@@ -43,7 +54,6 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 				onChange={ ( value ) => setAttributes( { points: value } ) }
 				fields={ pointsFields }
 				emptyRow={ pointsEmptyRow }
-				layout="column"
 			/>
 		</EditorBlockShell>
 	);
