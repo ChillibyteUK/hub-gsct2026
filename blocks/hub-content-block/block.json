@@ -18,6 +18,10 @@
 			"type": "string",
 			"default": "Black"
 		},
+		"titleWeight": {
+			"type": "string",
+			"default": "medium"
+		},
 		"content": {
 			"type": "string",
 			"default": ""
@@ -87,6 +91,10 @@
 			"default": []
 		},
 		"formShortcode": {
+			"type": "string",
+			"default": ""
+		},
+		"formTitle": {
 			"type": "string",
 			"default": ""
 		}

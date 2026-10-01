@@ -33,7 +33,9 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 		attribution,
 		listItems,
 		titleColour,
+		titleWeight,
 		formShortcode,
+		formTitle,
 	} = attributes;
 	const blockProps = useBlockProps( { className: 'container hub-editor-block' } );
 	const isImage = 'image' === mediaType;
@@ -49,14 +51,14 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 				onChange={ ( value ) => setAttributes( { eyebrow: value } ) }
 			/>
 			<div style={ { display: 'flex', flexWrap: 'wrap', gap: '12px' } }>
-				<div style={ { flex: '75 1 0%' } }>
+				<div style={ { flex: '60 1 0%' } }>
 					<TextControl
 						label={ __( 'Title', 'hub-gsct2026' ) }
 						value={ title }
 						onChange={ ( value ) => setAttributes( { title: value } ) }
 					/>
 				</div>
-				<div style={ { flex: '25 1 0%' } }>
+				<div style={ { flex: '20 1 0%' } }>
 					<RadioControl
 						className="hub-radio-horizontal"
 						label={ __( 'Title Colour', 'hub-gsct2026' ) }
@@ -66,6 +68,18 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 							{ label: __( 'Black', 'hub-gsct2026' ), value: 'Black' },
 						] }
 						onChange={ ( value ) => setAttributes( { titleColour: value } ) }
+					/>
+				</div>
+				<div style={ { flex: '20 1 0%' } }>
+					<RadioControl
+						className="hub-radio-horizontal"
+						label={ __( 'Title Weight', 'hub-gsct2026' ) }
+						selected={ titleWeight }
+						options={ [
+							{ label: __( 'Medium', 'hub-gsct2026' ), value: 'medium' },
+							{ label: __( 'Bold', 'hub-gsct2026' ), value: 'bold' },
+						] }
+						onChange={ ( value ) => setAttributes( { titleWeight: value } ) }
 					/>
 				</div>
 			</div>
@@ -224,12 +238,19 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 				/>
 			) }
 			{ isForm && (
-				<TextControl
-					label={ __( 'Form shortcode', 'hub-gsct2026' ) }
-					value={ formShortcode }
-					onChange={ ( value ) => setAttributes( { formShortcode: value } ) }
-					help={ __( 'e.g. [gravityform id="1"]', 'hub-gsct2026' ) }
-				/>
+				<>
+					<TextControl
+						label={ __( 'Form title', 'hub-gsct2026' ) }
+						value={ formTitle }
+						onChange={ ( value ) => setAttributes( { formTitle: value } ) }
+					/>
+					<TextControl
+						label={ __( 'Form shortcode', 'hub-gsct2026' ) }
+						value={ formShortcode }
+						onChange={ ( value ) => setAttributes( { formShortcode: value } ) }
+						help={ __( 'e.g. [gravityform id="1"]', 'hub-gsct2026' ) }
+					/>
+				</>
 			) }
 			{ isQuote && (
 				<>

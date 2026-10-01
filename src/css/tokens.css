@@ -20,6 +20,7 @@
   --col-grey-700: #424242;
   --col-grey-800: #212121;
 
+  --col-lightest-grey: hsla(0, 0%, 97%, 1);
   --col-light-grey: hsla(0, 0%, 89%, 1);
   --col-medium-grey: hsla(0, 0%, 40%, 1);
   --col-dark-grey: hsla(0, 0%, 20%, 1);

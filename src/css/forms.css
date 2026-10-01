@@ -13,6 +13,26 @@ label {
 	margin-bottom: var(--space-1);
 }
 
+/* Gravity Forms Consent field — checkbox + its acceptance label render as
+   siblings inside .ginput_container_consent (input, space, label), not
+   wrapped together, so this overrides the global block label above to
+   keep both on one line. font matches .text-body rather than duplicating
+   that class on a label we don't control the markup of. */
+.ginput_container_consent {
+	display: flex;
+	align-items: center;
+	gap: var(--space-1);
+}
+
+.ginput_container_consent label {
+	display: inline;
+	margin-bottom: 0;
+	font-family: var(--font-family-base);
+	font-size: var(--fs-400);
+	font-weight: var(--fw-regular);
+	line-height: 24px;
+}
+
 /* Excludes button/checkbox/radio/range/color/file/image input types —
    they're still <input> elements but this block/border/padding treatment
    is meant for text-like fields only. Excluding them from the selector
@@ -38,7 +58,12 @@ select {
 	}
 }
 
-.btn {
+/* Gravity Forms' submit button renders as <input type="submit"
+   class="gform_button">, not something we can add our own .btn class to
+   without a PHP/JS filter (gform_submit_button) — sharing the selector
+   list here gets the identical look with zero extra code. */
+.btn,
+.gform_button {
 	display: inline-block;
 	padding: var(--space-3) var(--space-4);
 	border: 1px solid var(--col-black);
@@ -63,7 +88,8 @@ select {
 		outline-offset: 2px;
 	}
 }
-.btn:hover, .btn:focus-visible {
+.btn:hover, .btn:focus-visible,
+.gform_button:hover, .gform_button:focus-visible {
 	background-color: var(--col-brand-purple);
 	color: var(--col-brand-yellow);
 	box-shadow: 0 4px 0 var(--col-brand-yellow);

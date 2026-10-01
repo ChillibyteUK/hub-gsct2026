@@ -56,9 +56,10 @@ $wrapper_attributes = get_block_wrapper_attributes( array( 'class' => 'hub-conte
 					<?php
 				}
 				if ( $btitle ) {
-					$title_class = 'Red' === ( $attributes['titleColour'] ?? '' ) ? 'has-brand-red-color' : 'has-black-color';
+					$title_class  = 'Red' === ( $attributes['titleColour'] ?? '' ) ? 'has-brand-red-color' : 'has-black-color';
+					$weight_class = 'bold' === ( $attributes['titleWeight'] ?? '' ) ? 'h2-data-l' : 'editorial-m';
 					?>
-					<h2 class="editorial-m <?= esc_attr( $title_class ); ?>"><?= esc_html( $btitle ); ?></h2>
+					<h2 class="<?= esc_attr( $weight_class ); ?> <?= esc_attr( $title_class ); ?>"><?= esc_html( $btitle ); ?></h2>
 					<?php
 				}
 				if ( $content ) {
@@ -87,8 +88,8 @@ $wrapper_attributes = get_block_wrapper_attributes( array( 'class' => 'hub-conte
 				}
 				if ( 'video' === $media_type && $video_embed ) {
 					$video_thumb = $attributes['videoThumbnailUrl'] ?? '';
-					$video_title = $btitle ? $btitle : __( 'Video', 'hub-gsct2026' );
-					$play_label  = $btitle ? sprintf( __( 'Play video: %s', 'hub-gsct2026' ), $btitle ) : __( 'Play video', 'hub-gsct2026' );
+					$video_title = $btitle ? $btitle : 'Video';
+					$play_label  = $btitle ? sprintf( 'Play video: %s', $btitle ) : 'Play video';
 					if ( $video_thumb ) {
 						?>
 						<div class="hub-content-block__video" data-video-facade>
@@ -157,8 +158,18 @@ $wrapper_attributes = get_block_wrapper_attributes( array( 'class' => 'hub-conte
 				}
 				$form_shortcode = $attributes['formShortcode'] ?? '';
 				if ( 'form' === $media_type && $form_shortcode ) {
+					$form_title = $attributes['formTitle'] ?? '';
 					?>
-					<div class="hub-content-block__form"><?= do_shortcode( $form_shortcode ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- shortcode output is trusted editor input, not user-submitted. ?></div>
+					<div class="hub-content-block__form">
+						<?php
+						if ( $form_title ) {
+							?>
+							<div class="hub-content-block__form-title text-body-l-medium"><?= esc_html( $form_title ); ?></h3>
+							<?php
+						}
+						?>
+						<?= do_shortcode( $form_shortcode ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- shortcode output is trusted editor input, not user-submitted. ?>
+					</div>
 					<?php
 				}
 				?>

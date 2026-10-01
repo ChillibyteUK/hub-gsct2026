@@ -66,6 +66,12 @@
           "origin": "theme"
         },
         {
+          "name": "lightest-grey",
+          "slug": "lightest-grey",
+          "color": "hsla(0, 0%, 97%, 1)",
+          "origin": "theme"
+        },
+        {
           "name": "light-grey",
           "slug": "light-grey",
           "color": "hsla(0, 0%, 89%, 1)",

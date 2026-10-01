@@ -157,3 +157,15 @@
 .hub-content-block__list-value {
 	margin: 0;
 }
+
+/* Form variant (mediaType "form") — shortcode output (e.g. Gravity Forms)
+   inside a shaded, padded, rounded container; optional title above it. */
+.hub-content-block__form {
+	background-color: var(--col-lightest-grey);
+	padding: var(--space-4);
+	border-radius: var(--radius-sm);
+}
+
+.hub-content-block__form-title {
+	margin: 0 0 var(--space-3);
+}
