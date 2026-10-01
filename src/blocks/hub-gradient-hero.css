@@ -1,0 +1,35 @@
+/* HUB Gradient Hero — two columns (copy left, circular image right) on a
+   fixed sunrise/sunset gradient set inline by render.php. */
+
+.hub-gradient-hero {
+	padding-block: var(--space-6);
+}
+
+.hub-gradient-hero__eyebrow {
+	margin-block: 0 var(--space-2);
+}
+
+.hub-gradient-hero__title {
+	margin-block: 0 var(--space-3);
+}
+
+.hub-gradient-hero__content {
+	margin-block: 0 var(--space-4);
+	max-width: 34rem;
+}
+
+.hub-gradient-hero__ctas {
+	display: flex;
+	flex-wrap: wrap;
+	gap: var(--space-2);
+}
+
+.hub-gradient-hero__image {
+	display: block;
+	margin-inline: auto;
+	width: 100%;
+	max-width: 360px;
+	aspect-ratio: 1 / 1;
+	object-fit: cover;
+	border-radius: 50%;
+}

@@ -20,8 +20,9 @@ $eyebrow = $attributes['eyebrow'] ?? '';
 $btitle  = $attributes['title'] ?? '';
 $intro   = $attributes['intro'] ?? '';
 $points  = $attributes['points'] ?? array();
+$lines   = $attributes['lines'] ?? 'on';
 
-$wrapper_attributes = get_block_wrapper_attributes( array( 'class' => 'hub-3-points' ) );
+$wrapper_attributes = get_block_wrapper_attributes( array( 'class' => 'hub-3-points' . ( 'off' === $lines ? ' hub-3-points--no-lines' : '' ) ) );
 ?>
 <section <?php echo $wrapper_attributes; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- get_block_wrapper_attributes() already escapes. ?>>
 	<div class="container py-6">

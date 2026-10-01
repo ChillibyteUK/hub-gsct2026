@@ -130,3 +130,30 @@
     bottom: -8px;
     right: -8px;
 }
+
+/* List variant (mediaType "list") — bordered box, dividers between rows,
+   title/value pairs in two columns. Type comes from the text-body-medium /
+   text-body classes in the markup. */
+.hub-content-block__list {
+	margin: 0;
+	border: 1px solid var(--col-light-grey);
+	border-radius: var(--radius-sm);
+	overflow: hidden;
+}
+
+.hub-content-block__list-row {
+	display: grid;
+	grid-template-columns: minmax(0, 2fr) minmax(0, 3fr);
+	gap: var(--space-2);
+	padding: var(--space-2) var(--space-3);
+	border-top: 1px solid var(--col-light-grey);
+}
+
+.hub-content-block__list-row:first-child {
+	border-top: 0;
+}
+
+.hub-content-block__list-title,
+.hub-content-block__list-value {
+	margin: 0;
+}

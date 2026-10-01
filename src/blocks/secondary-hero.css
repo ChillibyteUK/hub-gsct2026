@@ -3,7 +3,7 @@
    (left pair positive, right pair negative); the primary faces forward and
    layers above the rest. */
 .hub-secondary-hero {
-    background: radial-gradient(120% 120% at 50% 100%, #fff036 0%, #cbe1f2 90%);
+    background: radial-gradient(120% 120% at 50% 100%, #fff036 0%, #cbe1f2 60%);
     padding-block: var(--space-5);
 }
 

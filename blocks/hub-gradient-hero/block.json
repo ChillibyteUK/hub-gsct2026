@@ -1,0 +1,62 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "hub-gsct2026/hub-gradient-hero",
+	"title": "HUB Gradient Hero",
+	"category": "hub-gsct2026",
+	"icon": "cover-image",
+	"description": "Two-column hero on a sunrise/sunset gradient: eyebrow, title, content and buttons left, circular image right.",
+	"attributes": {
+		"backgroundChoice": {
+			"type": "string",
+			"default": "sunrise"
+		},
+		"eyebrow": {
+			"type": "string",
+			"default": ""
+		},
+		"title": {
+			"type": "string",
+			"default": ""
+		},
+		"content": {
+			"type": "string",
+			"default": ""
+		},
+		"primaryCtaText": {
+			"type": "string",
+			"default": ""
+		},
+		"primaryCtaUrl": {
+			"type": "string",
+			"default": ""
+		},
+		"secondaryCtaText": {
+			"type": "string",
+			"default": ""
+		},
+		"secondaryCtaUrl": {
+			"type": "string",
+			"default": ""
+		},
+		"imageId": {
+			"type": "number",
+			"default": 0
+		},
+		"imageUrl": {
+			"type": "string",
+			"default": ""
+		},
+		"imageAlt": {
+			"type": "string",
+			"default": ""
+		}
+	},
+	"supports": {
+		"anchor": true,
+		"className": true,
+		"align": true
+	},
+	"editorScript": "file:./build/index.js",
+	"render": "file:./render.php"
+}

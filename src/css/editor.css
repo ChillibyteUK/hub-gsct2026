@@ -325,6 +325,16 @@
 }
 
 /*
+ * Two equal columns for paired fields (e.g. link text + URL) in a block's
+ * edit UI. Plain grid on a wrapper div — no component overrides needed.
+ */
+.hub-fields-50-50 {
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	gap: 0 12px;
+}
+
+/*
  * Generic repeater field (blocks/_shared/RepeaterField.js) — used by any
  * repeater-shaped block's edit.js in place of the old InnerBlocks-based
  * item-block pattern.

@@ -13,16 +13,32 @@ const pointsFields = [
 const pointsEmptyRow = { bigStat: '', subtitle: '', content: '' };
 
 export default function Edit( { attributes, setAttributes, clientId } ) {
-	const { eyebrow, title, titleColour, intro, points } = attributes;
+	const { eyebrow, lines, title, titleColour, intro, points } = attributes;
 	const blockProps = useBlockProps( { className: 'container hub-editor-block' } );
 
 	return (
 		<EditorBlockShell blockProps={ blockProps } clientId={ clientId } classPrefix="hub" textDomain="hub-gsct2026" title="HUB 3 Points">
-			<TextControl
-				label={ __( 'Eyebrow', 'hub-gsct2026' ) }
-				value={ eyebrow }
-				onChange={ ( value ) => setAttributes( { eyebrow: value } ) }
-			/>
+			<div style={ { display: 'flex', flexWrap: 'wrap', gap: '12px' } }>
+				<div style={ { flex: '75 1 0%' } }>
+					<TextControl
+						label={ __( 'Eyebrow', 'hub-gsct2026' ) }
+						value={ eyebrow }
+						onChange={ ( value ) => setAttributes( { eyebrow: value } ) }
+					/>
+				</div>
+				<div style={ { flex: '25 1 0%' } }>
+					<RadioControl
+						className="hub-radio-horizontal"
+						label={ __( 'Lines', 'hub-gsct2026' ) }
+						selected={ lines }
+						options={ [
+							{ label: 'On', value: 'on' },
+							{ label: 'Off', value: 'off' },
+						] }
+						onChange={ ( value ) => setAttributes( { lines: value } ) }
+					/>
+				</div>
+			</div>
 			<div style={ { display: 'flex', flexWrap: 'wrap', gap: '12px' } }>
 				<div style={ { flex: '75 1 0%' } }>
 					<TextControl
@@ -33,6 +49,7 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 				</div>
 				<div style={ { flex: '25 1 0%' } }>
 					<RadioControl
+						className="hub-radio-horizontal"
 						label={ __( 'Title Colour', 'hub-gsct2026' ) }
 						selected={ titleColour }
 						options={ [

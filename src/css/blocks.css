@@ -51,6 +51,22 @@
     }
 }
 
+/* Lines [off] — strips the title's border-bottom and the gap decorations
+   above when the block's "Lines" field is set to Off. */
+.hub-3-points--no-lines {
+
+    h1,
+    h2 {
+        border-bottom: none;
+    }
+
+    .hub-3-points__points {
+        column-rule: none;
+        row-rule: none;
+    }
+
+}
+
 /* Popover — trigger words marked [popover]…[/popover] in a row's content
    open a native popover card. The trigger is a span so it wraps inline
    mid-sentence (a button stays atomic); keyboard activation is bridged in
@@ -381,6 +397,33 @@
     right: -8px;
 }
 
+/* List variant (mediaType "list") — bordered box, dividers between rows,
+   title/value pairs in two columns. Type comes from the text-body-medium /
+   text-body classes in the markup. */
+.hub-content-block__list {
+	margin: 0;
+	border: 1px solid var(--col-light-grey);
+	border-radius: var(--radius-sm);
+	overflow: hidden;
+}
+
+.hub-content-block__list-row {
+	display: grid;
+	grid-template-columns: minmax(0, 2fr) minmax(0, 3fr);
+	gap: var(--space-2);
+	padding: var(--space-2) var(--space-3);
+	border-top: 1px solid var(--col-light-grey);
+}
+
+.hub-content-block__list-row:first-child {
+	border-top: 0;
+}
+
+.hub-content-block__list-title,
+.hub-content-block__list-value {
+	margin: 0;
+}
+
 /* --- src/blocks/definition-list.css --- */
 /* Facts render in order, pairing consecutive rows on desktop and
    stacking the same sequence on mobile — no reordering CSS anywhere. The
@@ -589,6 +632,43 @@ a.hub-how-to-invest-full__platform:focus-visible {
 
 .hub-faqs__static > :last-child {
 	margin-bottom: 0;
+}
+
+/* --- src/blocks/hub-gradient-hero.css --- */
+/* HUB Gradient Hero — two columns (copy left, circular image right) on a
+   fixed sunrise/sunset gradient set inline by render.php. */
+
+.hub-gradient-hero {
+	padding-block: var(--space-6);
+}
+
+.hub-gradient-hero__eyebrow {
+	margin-block: 0 var(--space-2);
+}
+
+.hub-gradient-hero__title {
+	margin-block: 0 var(--space-3);
+}
+
+.hub-gradient-hero__content {
+	margin-block: 0 var(--space-4);
+	max-width: 34rem;
+}
+
+.hub-gradient-hero__ctas {
+	display: flex;
+	flex-wrap: wrap;
+	gap: var(--space-2);
+}
+
+.hub-gradient-hero__image {
+	display: block;
+	margin-inline: auto;
+	width: 100%;
+	max-width: 360px;
+	aspect-ratio: 1 / 1;
+	object-fit: cover;
+	border-radius: 50%;
 }
 
 /* --- src/blocks/hub-related-insights.css --- */
@@ -1012,7 +1092,7 @@ a.hub-how-to-invest-full__platform:focus-visible {
    (left pair positive, right pair negative); the primary faces forward and
    layers above the rest. */
 .hub-secondary-hero {
-    background: radial-gradient(120% 120% at 50% 100%, #fff036 0%, #cbe1f2 90%);
+    background: radial-gradient(120% 120% at 50% 100%, #fff036 0%, #cbe1f2 60%);
     padding-block: var(--space-5);
 }
 

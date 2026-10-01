@@ -47,6 +47,22 @@
     }
 }
 
+/* Lines [off] — strips the title's border-bottom and the gap decorations
+   above when the block's "Lines" field is set to Off. */
+.hub-3-points--no-lines {
+
+    h1,
+    h2 {
+        border-bottom: none;
+    }
+
+    .hub-3-points__points {
+        column-rule: none;
+        row-rule: none;
+    }
+
+}
+
 /* Popover — trigger words marked [popover]…[/popover] in a row's content
    open a native popover card. The trigger is a span so it wraps inline
    mid-sentence (a button stays atomic); keyboard activation is bridged in

@@ -1,7 +1,15 @@
 import { __ } from '@wordpress/i18n';
 import { useBlockProps, MediaUpload, MediaUploadCheck, RichText } from '@wordpress/block-editor';
 import { TextControl, RadioControl, SelectControl, ToggleControl, TextareaControl, Button } from '@wordpress/components';
+import RepeaterField from '../../_shared/RepeaterField';
 import EditorBlockShell from '../../_shared/EditorBlockShell';
+
+const listFields = [
+	{ name: 'title', label: __( 'Title', 'hub-gsct2026' ), type: 'text' },
+	{ name: 'value', label: __( 'Value', 'hub-gsct2026' ), type: 'text' },
+];
+
+const listEmptyRow = { title: '', value: '' };
 
 export default function Edit( { attributes, setAttributes, clientId } ) {
 	const {
@@ -23,10 +31,13 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 		fullBleed,
 		quote,
 		attribution,
+		listItems,
+		titleColour,
 	} = attributes;
 	const blockProps = useBlockProps( { className: 'container hub-editor-block' } );
 	const isImage = 'image' === mediaType;
 	const isQuote = 'quote' === mediaType;
+	const isList = 'list' === mediaType;
 
 	return (
 		<EditorBlockShell blockProps={ blockProps } clientId={ clientId } classPrefix="hub" textDomain="hub-gsct2026" title="HUB Content Block">
@@ -35,11 +46,27 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 				value={ eyebrow }
 				onChange={ ( value ) => setAttributes( { eyebrow: value } ) }
 			/>
-			<TextControl
-				label={ __( 'Title', 'hub-gsct2026' ) }
-				value={ title }
-				onChange={ ( value ) => setAttributes( { title: value } ) }
-			/>
+			<div style={ { display: 'flex', flexWrap: 'wrap', gap: '12px' } }>
+				<div style={ { flex: '75 1 0%' } }>
+					<TextControl
+						label={ __( 'Title', 'hub-gsct2026' ) }
+						value={ title }
+						onChange={ ( value ) => setAttributes( { title: value } ) }
+					/>
+				</div>
+				<div style={ { flex: '25 1 0%' } }>
+					<RadioControl
+						className="hub-radio-horizontal"
+						label={ __( 'Title Colour', 'hub-gsct2026' ) }
+						selected={ titleColour }
+						options={ [
+							{ label: __( 'Red', 'hub-gsct2026' ), value: 'Red' },
+							{ label: __( 'Black', 'hub-gsct2026' ), value: 'Black' },
+						] }
+						onChange={ ( value ) => setAttributes( { titleColour: value } ) }
+					/>
+				</div>
+			</div>
 			<div className="hub-editor-field">
 				<label className="hub-editor-field__label">{ __( 'Content', 'hub-gsct2026' ) }</label>
 				<RichText
@@ -86,6 +113,7 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 					{ label: __( 'Image', 'hub-gsct2026' ), value: 'image' },
 					{ label: __( 'Video', 'hub-gsct2026' ), value: 'video' },
 					{ label: __( 'Quote', 'hub-gsct2026' ), value: 'quote' },
+					{ label: __( 'List', 'hub-gsct2026' ), value: 'list' },
 				] }
 				onChange={ ( value ) => setAttributes( { mediaType: value } ) }
 			/>
@@ -142,7 +170,7 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 					help={ __( 'Extends the image to the viewport edge on its side.', 'hub-gsct2026' ) }
 				/>
 			) }
-			{ ! isImage && ! isQuote && (
+			{ ! isImage && ! isQuote && ! isList && (
 				<>
 					<TextControl
 						type="url"
@@ -182,6 +210,15 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 						</MediaUploadCheck>
 					</div>
 				</>
+			) }
+			{ isList && (
+				<RepeaterField
+					label={ __( 'List items', 'hub-gsct2026' ) }
+					value={ listItems }
+					onChange={ ( value ) => setAttributes( { listItems: value } ) }
+					fields={ listFields }
+					emptyRow={ listEmptyRow }
+				/>
 			) }
 			{ isQuote && (
 				<>
