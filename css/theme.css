@@ -2350,6 +2350,13 @@ article blockquote.wp-block-quote {
 	margin-bottom: 3rem;
 }
 
+article .wp-block-list {
+	font-family: var(--font-family-base);
+	font-size: var(--fs-500);
+	font-weight: var(--fw-regular);
+	line-height: 27px;
+}
+
 /* Default Gutenberg quote (core/quote) — structural reset + citation dash.
    Type comes from typography.css via selector grouping (.editorial-m for the
    quote text, .text-attribution for the citation), so no extra classes are
@@ -3600,13 +3607,16 @@ a.hub-how-to-invest-full__platform:focus-visible {
     margin-bottom: 0;
 }
 
-/* Track: horizontal scroll-snap row starting at the container content
-   edge while the scrollable overflow runs past the viewport's right edge
-   (left in container, right bleeding). The left inset is a margin, not
-   padding, deliberately: scrolled content stays visible through padding
-   zones, so a padding inset would let cards slide out past the container
-   edge — margin is outside the scroll area, a hard wall. data-lenis-prevent
-   in the markup keeps Lenis from swallowing wheel input over the track. */
+/* data-lenis-prevent in the markup keeps Lenis from swallowing wheel input
+   over the track — but Lenis's own stylesheet then forces
+   overscroll-behavior: contain onto every [data-lenis-prevent] element,
+   which traps gestures here instead of chaining them to the page (dead
+   wheel on desktop, stuck swipe on mobile). Undo it: html.lenis
+   out-specifies Lenis's .lenis selector whatever the load order. */
+html.lenis .hub-timeline__track {
+    overscroll-behavior: auto;
+}
+
 .hub-timeline__track-wrap {
     position: relative;
 }

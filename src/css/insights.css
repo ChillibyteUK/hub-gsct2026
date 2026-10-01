@@ -210,3 +210,10 @@ article .wp-block-paragraph:not(blockquote p) {
 article blockquote.wp-block-quote {
 	margin-bottom: 3rem;
 }
+
+article .wp-block-list {
+	font-family: var(--font-family-base);
+	font-size: var(--fs-500);
+	font-weight: var(--fw-regular);
+	line-height: 27px;
+}
