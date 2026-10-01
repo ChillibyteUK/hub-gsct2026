@@ -75,23 +75,38 @@ function generateUtilities() {
 		}
 	}
 
-	// col-{n} / col-{bp}-{n} — grid column span, base + every breakpoint
+	// col-{n} / col-{bp}-{n} — grid column span, base + every breakpoint.
+	//
+	// Deliberately the longhand grid-column-end (not the `grid-column: span
+	// N` shorthand) so this can compose with offset-* below. A single bare
+	// value in the grid-column SHORTHAND is assigned to grid-column-START,
+	// not -end (confirmed via getComputedStyle — easy to assume the other
+	// way around) — so col-N and offset-N, as separate classes on the same
+	// element, would both resolve to the same longhand (grid-column-start)
+	// and the later one in the cascade would silently wipe the other out
+	// entirely (col-6 offset-3 rendered 1 track wide, not 6, because
+	// offset-3's explicit start overwrote col-6's "span 6" start value,
+	// leaving grid-column-end at its default `auto`). Setting col-N's span
+	// on -end only, and offset-N's line number on -start only, makes them
+	// two genuinely independent longhands that compose correctly instead.
 	for (const bp of Object.keys(breakpoints)) {
 		for (let n = 1; n <= gridColumns; n++) {
 			const className = bp ? `col-${bp}-${n}` : `col-${n}`;
-			rulesByBreakpoint[bp].push(`.${className} { grid-column: span ${n}; }`);
+			rulesByBreakpoint[bp].push(`.${className} { grid-column-end: span ${n}; }`);
 		}
 	}
 
-	// offset-{n} / offset-{bp}-{n} — push a column start via margin, the same
-	// technique Bootstrap uses (works the same on a grid item as a flex one).
-	// n goes to gridColumns - 1: offsetting by the full column count would
-	// push a column past the end of its own row.
+	// offset-{n} / offset-{bp}-{n} — push a .row column over by n tracks,
+	// via an explicit grid-column-start line number (1-indexed — line n+1
+	// leaves n empty tracks before the item). Composes with col-N above
+	// because that now sets grid-column-end only; see its comment for why
+	// a plain margin (even a gap-aware one) can't do this at all, and why
+	// col-N can't keep using the single-value `grid-column: span N`
+	// shorthand once offset-N needs to set -start independently.
 	for (const bp of Object.keys(breakpoints)) {
 		for (let n = 1; n < gridColumns; n++) {
 			const className = bp ? `offset-${bp}-${n}` : `offset-${n}`;
-			const percent = (n / gridColumns) * 100;
-			rulesByBreakpoint[bp].push(`.${className} { margin-inline-start: ${percent}%; }`);
+			rulesByBreakpoint[bp].push(`.${className} { grid-column-start: ${n + 1}; }`);
 		}
 	}
 

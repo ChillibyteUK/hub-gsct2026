@@ -29,7 +29,7 @@ if ( ! $author || 'person' !== $author->post_type ) {
 $author_name = get_the_title( $author );
 $title       = isset( $attributes['title'] ) && '' !== $attributes['title']
 	? $attributes['title']
-	: sprintf( __( 'Insights from %s', 'hub-gsct2026' ), $author_name );
+	: sprintf( 'Insights from %s', $author_name );
 
 $hub_query = new WP_Query(
 	array(
@@ -73,7 +73,7 @@ $archive_url        = get_post_type_archive_link( 'post' );
 				}
 
 				$hub_meta = sprintf(
-					__( '%s · Article', 'hub-gsct2026' ),
+					'%s · Article',
 					get_the_date( 'j M Y', $hub_post->ID )
 				);
 				?>

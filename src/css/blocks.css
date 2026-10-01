@@ -29,6 +29,10 @@
         max-width: 600px;
     }
 
+    a {
+        font-weight: var(--fw-500);
+    }
+
 }
 
 /* Gap decorations: fine rules in the gutters, no border hacks — columns
