@@ -10,6 +10,10 @@
 			"type": "string",
 			"default": ""
 		},
+		"lines": {
+			"type": "string",
+			"default": "on"
+		},
 		"intro": {
 			"type": "string",
 			"default": ""

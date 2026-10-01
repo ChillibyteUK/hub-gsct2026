@@ -1,6 +1,6 @@
 import { __ } from '@wordpress/i18n';
 import { useBlockProps } from '@wordpress/block-editor';
-import { TextControl, TextareaControl } from '@wordpress/components';
+import { TextControl, TextareaControl, RadioControl } from '@wordpress/components';
 import RepeaterField from '../../_shared/RepeaterField';
 import EditorBlockShell from '../../_shared/EditorBlockShell';
 
@@ -17,16 +17,32 @@ const pointsFields = [
 const pointsEmptyRow = { bigStat: '', subtitle: '', content: '', popover: '', popoverTitle: '', popoverContent: '', popoverImage: 0, popoverImageUrl: '' };
 
 export default function Edit( { attributes, setAttributes, clientId } ) {
-	const { title, intro, points } = attributes;
+	const { title, lines, intro, points } = attributes;
 	const blockProps = useBlockProps( { className: 'container hub-editor-block' } );
 
 	return (
 		<EditorBlockShell blockProps={ blockProps } clientId={ clientId } classPrefix="hub" textDomain="hub-gsct2026" title="HUB 3 Points Hero">
-			<TextControl
-				label={ __( 'Title', 'hub-gsct2026' ) }
-				value={ title }
-				onChange={ ( value ) => setAttributes( { title: value } ) }
-			/>
+			<div style={ { display: 'flex', flexWrap: 'wrap', gap: '12px' } }>
+				<div style={ { flex: '75 1 0%' } }>
+					<TextControl
+						label={ __( 'Title', 'hub-gsct2026' ) }
+						value={ title }
+						onChange={ ( value ) => setAttributes( { title: value } ) }
+					/>
+				</div>
+				<div style={ { flex: '25 1 0%' } }>
+					<RadioControl
+						className="hub-radio-horizontal"
+						label={ __( 'Lines', 'hub-gsct2026' ) }
+						selected={ lines }
+						options={ [
+							{ label: 'On', value: 'on' },
+							{ label: 'Off', value: 'off' },
+						] }
+						onChange={ ( value ) => setAttributes( { lines: value } ) }
+					/>
+				</div>
+			</div>
 			<TextareaControl
 				label={ __( 'Intro', 'hub-gsct2026' ) }
 				value={ intro }
