@@ -6,7 +6,10 @@
  * `order` attribute — the media column takes `order: -1` when media goes
  * first, so the markup stays in one place. Video embeds inline in a 16/9
  * frame via hub_gsct2026_get_vimeo_embed_url(); without a valid Vimeo URL
- * nothing renders in the media column.
+ * nothing renders in the media column. The Form media type renders a
+ * shortcode (e.g. a Gravity Forms embed) verbatim via do_shortcode() —
+ * trusted editor input, not user-submitted, same trust level as the
+ * Content RichText field above it.
  *
  * @package hub-gsct2026
  */
@@ -150,6 +153,12 @@ $wrapper_attributes = get_block_wrapper_attributes( array( 'class' => 'hub-conte
 						}
 						?>
 					</div>
+					<?php
+				}
+				$form_shortcode = $attributes['formShortcode'] ?? '';
+				if ( 'form' === $media_type && $form_shortcode ) {
+					?>
+					<div class="hub-content-block__form"><?= do_shortcode( $form_shortcode ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- shortcode output is trusted editor input, not user-submitted. ?></div>
 					<?php
 				}
 				?>

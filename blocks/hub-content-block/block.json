@@ -85,6 +85,10 @@
 		"listItems": {
 			"type": "array",
 			"default": []
+		},
+		"formShortcode": {
+			"type": "string",
+			"default": ""
 		}
 	},
 	"supports": {

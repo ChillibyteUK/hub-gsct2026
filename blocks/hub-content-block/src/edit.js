@@ -33,11 +33,13 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 		attribution,
 		listItems,
 		titleColour,
+		formShortcode,
 	} = attributes;
 	const blockProps = useBlockProps( { className: 'container hub-editor-block' } );
 	const isImage = 'image' === mediaType;
 	const isQuote = 'quote' === mediaType;
 	const isList = 'list' === mediaType;
+	const isForm = 'form' === mediaType;
 
 	return (
 		<EditorBlockShell blockProps={ blockProps } clientId={ clientId } classPrefix="hub" textDomain="hub-gsct2026" title="HUB Content Block">
@@ -114,6 +116,7 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 					{ label: __( 'Video', 'hub-gsct2026' ), value: 'video' },
 					{ label: __( 'Quote', 'hub-gsct2026' ), value: 'quote' },
 					{ label: __( 'List', 'hub-gsct2026' ), value: 'list' },
+					{ label: __( 'Form', 'hub-gsct2026' ), value: 'form' },
 				] }
 				onChange={ ( value ) => setAttributes( { mediaType: value } ) }
 			/>
@@ -170,7 +173,7 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 					help={ __( 'Extends the image to the viewport edge on its side.', 'hub-gsct2026' ) }
 				/>
 			) }
-			{ ! isImage && ! isQuote && ! isList && (
+			{ ! isImage && ! isQuote && ! isList && ! isForm && (
 				<>
 					<TextControl
 						type="url"
@@ -218,6 +221,14 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 					onChange={ ( value ) => setAttributes( { listItems: value } ) }
 					fields={ listFields }
 					emptyRow={ listEmptyRow }
+				/>
+			) }
+			{ isForm && (
+				<TextControl
+					label={ __( 'Form shortcode', 'hub-gsct2026' ) }
+					value={ formShortcode }
+					onChange={ ( value ) => setAttributes( { formShortcode: value } ) }
+					help={ __( 'e.g. [gravityform id="1"]', 'hub-gsct2026' ) }
 				/>
 			) }
 			{ isQuote && (
