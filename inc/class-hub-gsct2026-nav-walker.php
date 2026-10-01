@@ -93,6 +93,21 @@ if ( ! class_exists( 'Hub_GSCT_2026_Nav_Walker' ) ) {
 			}
 
 			$is_active      = $is_current || $is_ancestor;
+
+			// The posts page (Insights) is never an ancestor in WordPress's
+			// eyes — single posts have no hierarchical or taxonomy link to
+			// it — so light it manually for everything living under its URL
+			// base (/insights/...): single posts and the category/tag
+			// archives. Date archives live outside that base and stay
+			// unmarked, same as before.
+			if ( ! $is_active && 'page' === $item->object && (int) $item->object_id === (int) get_option( 'page_for_posts' ) ) {
+				$hub_post_context = ( is_single() && 'post' === get_post_type() ) || is_category() || is_tag();
+
+				if ( $hub_post_context ) {
+					$is_active = true;
+				}
+			}
+
 			$custom_classes = array_values( array_unique( array_filter( $item_classes, 'hub_gsct2026_nav_menu_custom_class' ) ) );
 
 			$li_classes = array( 'nav-item' );
@@ -119,7 +134,7 @@ if ( ! class_exists( 'Hub_GSCT_2026_Nav_Walker' ) ) {
 				$output                  .= '</button>';
 			} else {
 				$link_classes = array_merge( array( 'nav-link' ), $custom_classes );
-				if ( $is_current ) {
+				if ( $is_active ) {
 					$link_classes[] = 'active';
 				}
 
