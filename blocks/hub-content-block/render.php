@@ -26,12 +26,12 @@ $image_alt   = $attributes['imageAlt'] ?? '';
 $aspect      = $attributes['aspectRatio'] ?? '16/9';
 $video_embed = hub_gsct2026_get_vimeo_embed_url( $attributes['videoUrl'] ?? '' );
 
-$media_first = 'media-text' === $order;
-$full_bleed  = ! empty( $attributes['fullBleed'] ) && 'image' === $media_type && $image_url;
-$is_quote    = 'quote' === $media_type;
-$is_list     = 'list' === $media_type;
-$text_class  = $is_list ? 'col-12 col-lg-8 hub-content-block__text my-auto' : 'col-12 col-lg-6 hub-content-block__text my-auto';
-$media_class = $is_list ? 'col-12 col-lg-4 hub-content-block__media my-auto' : 'col-12 col-lg-6 hub-content-block__media';
+$media_first  = 'media-text' === $order;
+$full_bleed   = ! empty( $attributes['fullBleed'] ) && 'image' === $media_type && $image_url;
+$is_quote     = 'quote' === $media_type;
+$is_list      = 'list' === $media_type;
+$text_class   = $is_list ? 'col-12 col-lg-8 hub-content-block__text my-auto' : 'col-12 col-lg-6 hub-content-block__text my-auto';
+$media_class  = $is_list ? 'col-12 col-lg-4 hub-content-block__media my-auto' : 'col-12 col-lg-6 hub-content-block__media';
 $media_class .= $media_first ? ' hub-content-block__media--first' : '';
 if ( $full_bleed ) {
 	$media_class .= $media_first ? ' hub-content-block__media--bleed-left' : ' hub-content-block__media--bleed-right';
@@ -134,7 +134,8 @@ $wrapper_attributes = get_block_wrapper_attributes( array( 'class' => 'hub-conte
 				}
 				$quote_text = $attributes['quote'] ?? '';
 				$quote_attr = $attributes['attribution'] ?? '';
-				if ( 'quote' === $media_type && ( $quote_text || $quote_attr ) ) {					?>
+				if ( 'quote' === $media_type && ( $quote_text || $quote_attr ) ) {
+					?>
 					<div class="hub-content-block__quote py-6 px-5 d-flex flex-column justify-content-center" style="height: 600px;">
 						<?php
 						if ( $quote_text ) {

@@ -39,16 +39,16 @@ $wrapper_attributes = get_block_wrapper_attributes( array( 'class' => 'hub-multi
 			<div class="row gap-5 hub-multi-video__videos">
 				<?php
 				foreach ( $videos as $video ) {
-					$video        = (array) $video;
-					$video_embed  = hub_gsct2026_get_vimeo_embed_url( $video['videoUrl'] ?? '' );
+					$video       = (array) $video;
+					$video_embed = hub_gsct2026_get_vimeo_embed_url( $video['videoUrl'] ?? '' );
 					if ( ! $video_embed ) {
 						continue;
 					}
 					$video_title    = $video['videoTitle'] ?? '';
 					$video_subtitle = $video['videoSubtitle'] ?? '';
 					$video_thumb    = $video['videoThumbnailUrl'] ?? '';
-					$frame_title    = $video_title ? $video_title : __( 'Video', 'hub-gsct2026' );
-					$play_label     = $video_title ? sprintf( __( 'Play video: %s', 'hub-gsct2026' ), $video_title ) : __( 'Play video', 'hub-gsct2026' );
+					$frame_title    = $video_title ? $video_title : 'Video';
+					$play_label     = $video_title ? sprintf( 'Play video: %s', $video_title ) : 'Play video';
 					?>
 					<div class="col-12 col-md-6 hub-multi-video__item">
 						<?php
