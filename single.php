@@ -72,9 +72,9 @@ get_header();
 			<div class="article-container">
 			<?php
 			// Auto-ToC, unless the content places [hub_toc] itself.
-			if ( ! has_shortcode( get_post_field( 'post_content', get_the_ID() ), 'hub_toc' ) ) {
-				echo hub_gsct2026_toc(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- hub_gsct2026_toc() escapes its own output.
-			}
+			// if ( ! has_shortcode( get_post_field( 'post_content', get_the_ID() ), 'hub_toc' ) ) {
+			// 	echo hub_gsct2026_toc(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- hub_gsct2026_toc() escapes its own output.
+			// }
 			?>
 			<?php
 			the_content();
