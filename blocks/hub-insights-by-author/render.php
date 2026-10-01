@@ -50,7 +50,7 @@ if ( ! $related ) {
 }
 
 $wrapper_attributes = get_block_wrapper_attributes( array( 'class' => 'hub-related-insights' ) );
-$archive_url         = get_post_type_archive_link( 'post' );
+$archive_url        = get_post_type_archive_link( 'post' );
 ?>
 <section <?= $wrapper_attributes; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- get_block_wrapper_attributes() already escapes. ?>>
 	<div class="container">

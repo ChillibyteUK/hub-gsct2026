@@ -3255,7 +3255,7 @@ a.hub-how-to-invest-full__platform:focus-visible {
 
 .hub-related-insights {
 	background: radial-gradient(120% 120% at 50% 100%, #ff7670 0%, #ffb5ce 50%, #ffd2f7 90%);
-	padding-block: var(--space-5);
+	padding-block: var(--space-6);
 }
 
 .hub-related-insights__title {
