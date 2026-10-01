@@ -24,6 +24,8 @@
 			<img src="<?php echo esc_url( get_stylesheet_directory_uri() . '/img/gsct-logo.svg' ); ?>" alt="<?php echo esc_attr( get_bloginfo( 'name' ) ); ?>" width="173" height="48">
 		</a>
 
+		<a href="/how-to-invest/" class="btn d-lg-none">How to Invest</a>
+
 		<button class="navbar-toggler" type="button" aria-expanded="false" aria-controls="primary-menu" aria-label="Toggle navigation">
 			<svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
 				<path d="M2 5h16M2 10h16M2 15h16" />
@@ -42,7 +44,10 @@
 				)
 			);
 			?>
+		<a href="/how-to-invest/" class="btn d-none d-lg-block ms-4 align-self-center">How to Invest</a>
 		</div>
+
+
 	</nav>
 </header>
 <!-- HEADER-NAV:END -->

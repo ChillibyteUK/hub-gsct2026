@@ -115,3 +115,7 @@ ol {
 	white-space: nowrap !important;
 	border: 0 !important;
 }
+
+.align-self-center {
+	align-self: center !important;
+}

@@ -231,6 +231,10 @@ ol {
 	border: 0 !important;
 }
 
+.align-self-center {
+	align-self: center !important;
+}
+
 /* Figma type styles — class names match the Figma design supplied.
    Tokens (--font-family-*, --fs-*, --fw-*) live in tokens.css; this file is
    just the classes that consume them. Loaded on the frontend via theme.css
