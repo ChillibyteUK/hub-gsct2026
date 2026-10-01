@@ -71,7 +71,28 @@ if ( ! class_exists( 'Hub_GSCT_2026_Nav_Walker' ) ) {
 		public function start_el( &$output, $item, $depth = 0, $args = null, $id = 0 ) {
 			$item_classes   = is_array( $item->classes ) ? $item->classes : array();
 			$has_children   = in_array( 'menu-item-has-children', $item_classes, true );
-			$is_current     = in_array( 'current-menu-item', $item_classes, true );
+			$is_current     = in_array( 'current-menu-item', $item_classes, true ) || in_array( 'current_page_item', $item_classes, true );
+			$is_ancestor    = false;
+
+			// Ancestor state wears both hyphen and underscore spellings
+			// (current-menu-ancestor, current_page_parent, ...). Anything
+			// current* that isn't the item itself counts.
+			foreach ( $item_classes as $item_class ) {
+				if ( ! is_string( $item_class ) ) {
+					continue;
+				}
+
+				if ( 'current-menu-item' === $item_class || 'current_page_item' === $item_class ) {
+					continue;
+				}
+
+				if ( 0 === strpos( $item_class, 'current-' ) || 0 === strpos( $item_class, 'current_' ) ) {
+					$is_ancestor = true;
+					break;
+				}
+			}
+
+			$is_active      = $is_current || $is_ancestor;
 			$custom_classes = array_values( array_unique( array_filter( $item_classes, 'hub_gsct2026_nav_menu_custom_class' ) ) );
 
 			$li_classes = array( 'nav-item' );
@@ -83,8 +104,15 @@ if ( ! class_exists( 'Hub_GSCT_2026_Nav_Walker' ) ) {
 
 			if ( $has_children ) {
 				// Dropdown parents never navigate — the whole item is the toggle.
+				// Ancestor state still surfaces here: WordPress's own
+				// current-* classes never reach the markup (filtered above),
+				// so the toggle carries `active` when this item is current or
+				// an ancestor of the current page.
 				$this->current_submenu_id = 'dropdown-' . $item->ID;
 				$toggle_classes           = array_merge( array( 'nav-link', 'dropdown-toggle' ), $custom_classes );
+				if ( $is_active ) {
+					$toggle_classes[] = 'active';
+				}
 				$output                  .= '<button type="button" class="' . esc_attr( implode( ' ', $toggle_classes ) ) . '" aria-haspopup="true" aria-expanded="false" aria-controls="' . esc_attr( $this->current_submenu_id ) . '">';
 				$output                  .= '<span>' . esc_html( $item->title ) . '</span>';
 				$output                  .= '<svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M2.5 4.5 6 8l3.5-3.5" /></svg>';
@@ -120,7 +148,8 @@ if ( ! class_exists( 'Hub_GSCT_2026_Nav_Walker' ) ) {
 
 /**
  * Keep a menu item's editor-added classes, drop WordPress's own
- * bookkeeping ones (menu-item-*, current-*, page-item-*).
+ * bookkeeping ones (menu-item-*, current-* in both hyphen and underscore
+ * spellings, page-item-*).
  *
  * @param string $class Single class from the menu item's class list.
  * @return bool
@@ -130,7 +159,7 @@ function hub_gsct2026_nav_menu_custom_class( $class ) {
 		return false;
 	}
 
-	foreach ( array( 'menu-item', 'current-', 'page-item', 'page_item' ) as $prefix ) {
+	foreach ( array( 'menu-item', 'current-', 'current_', 'page-item', 'page_item' ) as $prefix ) {
 		if ( 0 === strpos( $class, $prefix ) ) {
 			return false;
 		}

@@ -47,14 +47,6 @@ main {
 	height: var(--nav-height);
 }
  
-.navbar {
-	position: relative;
-	display: flex;
-	align-items: center;
-	justify-content: space-between;
-	padding-block: var(--space-4);
-}
-
 .navbar-brand {
 	font-weight: var(--fw-700);
 	text-decoration: none;
@@ -156,7 +148,8 @@ main {
 
 	.navbar-collapse,
 	.navbar-collapse.is-open {
-		display: block;
+		display: flex;
+		align-self: stretch;
 		position: static;
 		width: auto;
 		max-height: none;
@@ -169,7 +162,34 @@ main {
 
 	.navbar-nav {
 		flex-direction: row;
+		align-items: stretch;
 		margin: 0;
+	}
+
+	/* Full navbar height, so the active bar below can sit flush with the
+	   navbar's bottom edge. Links stay vertically centred text. */
+	.nav-item {
+		display: flex;
+	}
+
+	.nav-link {
+		display: flex;
+		align-items: center;
+		position: relative;
+	}
+
+	.dropdown-toggle {
+		align-items: center;
+	}
+
+	.nav-link.active::after {
+		content: "";
+		position: absolute;
+		left: 0;
+		right: 0;
+		bottom: 0;
+		height: 6px;
+		background-color: var(--col-brand-red);
 	}
 
 	.dropdown {
