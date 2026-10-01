@@ -12,10 +12,15 @@
 
 defined( 'ABSPATH' ) || exit;
 
-$btitle = $attributes['title'] ?? '';
-$faqs   = $attributes['faqs'] ?? array();
+$btitle    = $attributes['title'] ?? '';
+$faqs      = $attributes['faqs'] ?? array();
 $link_text = $attributes['linkText'] ?? '';
 $link_url  = $attributes['linkUrl'] ?? '';
+
+// Single blog posts show FAQs as static content — left-aligned black
+// titles, questions as plain headings, answers always visible. Everywhere
+// else keeps the details/summary accordion below.
+$hub_static = is_singular( 'post' );
 
 $faqs = array_values(
 	array_filter(
@@ -42,18 +47,32 @@ if ( $faqs ) {
 
 $accordion_name = wp_unique_id( 'hub-faqs-' );
 
-$wrapper_attributes = get_block_wrapper_attributes( array( 'class' => 'hub-faqs' ) );
+$wrapper_attributes = get_block_wrapper_attributes( array( 'class' => $hub_static ? 'hub-faqs pb-5' : 'hub-faqs py-6' ) );
 ?>
 <section <?= $wrapper_attributes; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- get_block_wrapper_attributes() already escapes. ?>>
-	<div class="container py-6">
+	<div class="container">
 		<?php
 		if ( $btitle ) {
 			?>
-			<h2 class="has-brand-red-color text-center mb-5"><?= esc_html( $btitle ); ?></h2>
+			<h2 class="<?= $hub_static ? 'mb-4' : 'has-brand-red-color text-center mb-5'; ?>"><?= esc_html( $btitle ); ?></h2>
 			<?php
 		}
 		if ( $faqs ) {
-			?>
+			if ( $hub_static ) {
+				?>
+			<div class="hub-faqs__static">
+				<?php
+				foreach ( $faqs as $item ) {
+					?>
+					<h3 class="hub-faqs__question"><?= esc_html( $item['question'] ); ?></h3>
+					<div class="hub-faqs__answer text-body"><?= wp_kses_post( $item['answer'] ); ?></div>
+					<?php
+				}
+				?>
+			</div>
+				<?php
+			} else {
+				?>
 			<div class="accordion">
 				<?php
 				foreach ( $faqs as $item ) {
@@ -73,7 +92,8 @@ $wrapper_attributes = get_block_wrapper_attributes( array( 'class' => 'hub-faqs'
 				}
 				?>
 			</div>
-			<?php
+				<?php
+			}
 		}
 		if ( $link_url ) {
 			?>

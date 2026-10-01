@@ -24,4 +24,5 @@ require_once HUB_GSCT2026_DIR . '/inc/block-usage.php';
 require_once HUB_GSCT2026_DIR . '/inc/utilities.php';
 require_once HUB_GSCT2026_DIR . '/inc/helpers.php';
 require_once HUB_GSCT2026_DIR . '/inc/posttypes.php';
+require_once HUB_GSCT2026_DIR . '/inc/toc.php';
 require_once HUB_GSCT2026_DIR . '/inc/taxonomies.php';

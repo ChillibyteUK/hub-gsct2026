@@ -1,0 +1,18 @@
+/* Static single-post variant (see render.php): plain black headings with
+   always-visible answers — no accordion lines, toggles, or behaviour. */
+
+.hub-faqs__question {
+	margin-block: var(--space-4) var(--space-2);
+}
+
+.hub-faqs__static > :first-child {
+	margin-top: 0;
+}
+
+.hub-faqs__answer {
+	margin-bottom: var(--space-4);
+}
+
+.hub-faqs__static > :last-child {
+	margin-bottom: 0;
+}

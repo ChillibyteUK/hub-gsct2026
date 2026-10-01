@@ -71,6 +71,12 @@ get_header();
 			<?= get_the_post_thumbnail( get_the_ID(), 'full', array( 'class' => 'single-hero mb-5' ) ); ?>
 			<div class="article-container">
 			<?php
+			// Auto-ToC, unless the content places [hub_toc] itself.
+			if ( ! has_shortcode( get_post_field( 'post_content', get_the_ID() ), 'hub_toc' ) ) {
+				echo hub_gsct2026_toc(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- hub_gsct2026_toc() escapes its own output.
+			}
+			?>
+			<?php
 			the_content();
 			$hub_post_cats = array_filter(
 				(array) get_the_category(),
