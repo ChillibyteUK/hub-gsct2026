@@ -8,6 +8,7 @@ import { initPrimaryHero } from './primary-hero';
 import { initSecondaryHero } from './secondary-hero';
 import { initTimelines } from './timeline';
 import { initShareButtons } from './share';
+import { initRelatedInsights } from './related-insights';
 
 document.addEventListener('DOMContentLoaded', () => {
 	initLenis();
@@ -20,4 +21,5 @@ document.addEventListener('DOMContentLoaded', () => {
 	initSecondaryHero();
 	initTimelines();
 	initShareButtons();
+	initRelatedInsights();
 });

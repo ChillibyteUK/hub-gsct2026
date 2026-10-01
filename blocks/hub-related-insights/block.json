@@ -1,0 +1,22 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "hub-gsct2026/hub-related-insights",
+	"title": "HUB Related Insights",
+	"category": "hub-gsct2026",
+	"icon": "grid",
+	"description": "Related posts: same categories first, topped up with latest. Pink section, three cards, swipe carousel on mobile.",
+	"attributes": {
+		"title": {
+			"type": "string",
+			"default": "Related insights and perspectives"
+		}
+	},
+	"supports": {
+		"anchor": true,
+		"className": true,
+		"align": true
+	},
+	"editorScript": "file:./build/index.js",
+	"render": "file:./render.php"
+}

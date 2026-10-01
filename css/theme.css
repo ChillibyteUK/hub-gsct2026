@@ -3034,6 +3034,161 @@ a.hub-how-to-invest-full__platform:focus-visible {
     text-decoration: underline;
 }
 
+/* --- src/blocks/hub-related-insights.css --- */
+/* HUB Related Insights — pink full-width section, three cards desktop,
+   swipe carousel with dots on mobile. Full width comes from placement
+   (direct child of main / unconstrained parent), never vw units, so this
+   can never introduce horizontal scrolling. */
+
+.hub-related-insights {
+	background: radial-gradient(120% 120% at 50% 100%, #ff7670 0%, #ffb5ce 50%, #ffd2f7 90%);
+	padding-block: var(--space-5);
+}
+
+.hub-related-insights__title {
+	margin-block: 0 var(--space-4);
+	color: var(--col-brand-purple);
+}
+
+.hub-related-insights__track {
+	display: grid;
+	grid-template-columns: repeat(3, 1fr);
+	gap: var(--grid-gutter);
+}
+
+.hub-related-insights__card {
+	display: block;
+	color: inherit;
+	text-decoration: none;
+}
+
+.hub-related-insights__card:hover {
+		color: inherit;
+		text-decoration: none;
+	}
+
+.hub-related-insights__card:focus-visible {
+		outline: 2px solid var(--col-brand-purple);
+		outline-offset: 3px;
+	}
+
+.hub-related-insights__media {
+	position: relative;
+	display: block;
+	overflow: hidden;
+	border-radius: var(--radius-lg);
+	aspect-ratio: 16 / 10;
+	background-color: var(--col-grey-200);
+}
+
+.hub-related-insights__media img {
+		display: block;
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+	}
+
+@media (prefers-reduced-motion: no-preference) {
+		.hub-related-insights__media img {
+			transition: transform 300ms ease;
+		}
+
+		.hub-related-insights__card:hover .hub-related-insights__media img {
+			transform: scale(1.04);
+		}
+	}
+
+.hub-related-insights__card-title {
+	display: block;
+	margin-top: var(--space-2);
+}
+
+.hub-related-insights__meta {
+	display: block;
+	margin-top: var(--space-1);
+	color: var(--col-grey-600);
+	font-size: var(--fs-small);
+}
+
+.hub-related-insights__footer {
+	display: flex;
+	justify-content: flex-end;
+	margin-top: var(--space-4);
+}
+
+.hub-related-insights__link {
+	display: flex;
+	align-items: center;
+	justify-content: flex-end;
+	gap: 0.5em;
+}
+
+.hub-related-insights__link-arrow {
+	flex: none;
+}
+
+.hub-related-insights__link-text {
+	color: var(--col-black);
+	text-decoration: underline;
+}
+
+.hub-related-insights__dots {
+	display: none;
+}
+
+/* Mobile carousel: edge-to-edge swipe track with snap, dots + link share
+   the footer row. 992px is the lg breakpoint — keep in sync with
+   src/build/tokens.config.js. */
+@media (max-width: 991px) {
+	.hub-related-insights__track {
+		display: flex;
+		overflow-x: auto;
+		scroll-snap-type: x mandatory;
+		scrollbar-width: none;
+	}
+
+		.hub-related-insights__track::-webkit-scrollbar {
+			display: none;
+		}
+
+		/* Trailing breathing room: container padding as a real flex item,
+		   because trailing padding on a scroll container isn't reliably
+		   scrollable-to across browsers. */
+		.hub-related-insights__track::after {
+			content: "";
+			flex: 0 0 var(--container-padding);
+		}
+
+	.hub-related-insights__card {
+		flex: 0 0 78%;
+		scroll-snap-align: start;
+	}
+
+	.hub-related-insights__footer {
+		justify-content: space-between;
+		align-items: center;
+	}
+
+	.hub-related-insights__dots {
+		display: flex;
+		gap: var(--space-1);
+	}
+
+	.hub-related-insights__dot {
+		width: 0.625rem;
+		height: 0.625rem;
+		padding: 0;
+		border: 0;
+		border-radius: 50%;
+		background-color: var(--col-black);
+		cursor: pointer;
+	}
+
+		.hub-related-insights__dot.is-active {
+			background-color: var(--col-brand-purple);
+		}
+}
+
 /* --- src/blocks/people-cards.css --- */
 .hub-people-cards .hub-people-cards__intro {
         padding-bottom: var(--space-3);
