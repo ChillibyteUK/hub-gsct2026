@@ -147,6 +147,59 @@ add_action( 'add_meta_boxes_person', 'hub_gsct2026_remove_person_custom_fields_m
 
 
 /**
+ * Replace the default WP-user Author column on the post list with the
+ * attributed person author (author_person_id meta), in the same position.
+ *
+ * @param string[] $columns List-table columns.
+ * @return string[]
+ */
+function hub_gsct2026_post_author_columns( $columns ) {
+	$new      = array();
+	$replaced = false;
+
+	foreach ( $columns as $key => $label ) {
+		if ( 'author' === $key ) {
+			$new['author_person'] = __( 'Author', 'hub-gsct2026' );
+			$replaced             = true;
+			continue;
+		}
+
+		$new[ $key ] = $label;
+	}
+
+	if ( ! $replaced ) {
+		$new['author_person'] = __( 'Author', 'hub-gsct2026' );
+	}
+
+	return $new;
+}
+add_filter( 'manage_post_posts_columns', 'hub_gsct2026_post_author_columns' );
+
+/**
+ * Render the attributed person author cell on the post list.
+ *
+ * @param string $column  Column slug.
+ * @param int    $post_id Post ID.
+ * @return void
+ */
+function hub_gsct2026_post_author_column_content( $column, $post_id ) {
+	if ( 'author_person' !== $column ) {
+		return;
+	}
+
+	$author_id = (int) get_post_meta( $post_id, 'author_person_id', true );
+	$author    = $author_id ? get_post( $author_id ) : null;
+
+	if ( $author && 'person' === $author->post_type ) {
+		echo esc_html( get_the_title( $author ) );
+		return;
+	}
+
+	echo '<span aria-hidden="true">&mdash;</span>';
+}
+add_action( 'manage_post_posts_custom_column', 'hub_gsct2026_post_author_column_content', 10, 2 );
+
+/**
  * Serve page.php for singular views of any custom post type that has no
  * single-{post_type}.php of its own, instead of falling back to the
  * generic single.php. CPT content in this theme is built from the same
