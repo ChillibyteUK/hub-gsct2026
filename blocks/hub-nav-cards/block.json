@@ -1,0 +1,26 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "hub-gsct2026/hub-nav-cards",
+	"title": "HUB Nav Cards",
+	"category": "hub-gsct2026",
+	"icon": "index-card",
+	"description": "Title and three link cards on the sunset gradient background.",
+	"attributes": {
+		"title": {
+			"type": "string",
+			"default": ""
+		},
+		"cards": {
+			"type": "array",
+			"default": []
+		}
+	},
+	"supports": {
+		"anchor": true,
+		"className": true,
+		"align": true
+	},
+	"editorScript": "file:./build/index.js",
+	"render": "file:./render.php"
+}
