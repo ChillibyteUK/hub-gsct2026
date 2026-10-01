@@ -89,7 +89,7 @@ $archive_url        = get_post_type_archive_link( 'post' );
 					?>
 				</span>
 				<span class="hub-related-insights__card-title editorial-s"><?= esc_html( get_the_title( $hub_post->ID ) ); ?></span>
-				<span class="hub-related-insights__meta"><?= esc_html( $hub_meta ); ?></span>
+				<span class="hub-related-insights__meta has-black-color"><?= esc_html( $hub_meta ); ?></span>
 			</a>
 				<?php
 			}
