@@ -1084,7 +1084,8 @@ a.hub-how-to-invest-full__platform:focus-visible {
 
 .hub-timeline__prev:disabled,
 .hub-timeline__next:disabled {
-    opacity: 0.35;
+    /* opacity: 0.35; */
+    opacity: 0;
     cursor: default;
 }
 
