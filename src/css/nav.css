@@ -5,6 +5,10 @@
  * if you change the "lg" breakpoint there, update it here too.
  */
 
+ header {
+	border-bottom: 1px solid var(--col-light-grey);
+ }
+ 
 .navbar {
 	position: relative;
 	display: flex;

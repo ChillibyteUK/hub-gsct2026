@@ -7,6 +7,7 @@ import { initLenis } from './lenis-init';
 import { initPrimaryHero } from './primary-hero';
 import { initSecondaryHero } from './secondary-hero';
 import { initTimelines } from './timeline';
+import { initShareButtons } from './share';
 
 document.addEventListener('DOMContentLoaded', () => {
 	initLenis();
@@ -18,4 +19,5 @@ document.addEventListener('DOMContentLoaded', () => {
 	initPrimaryHero();
 	initSecondaryHero();
 	initTimelines();
+	initShareButtons();
 });

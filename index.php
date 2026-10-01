@@ -67,94 +67,111 @@ if ( $is_filtered ) {
 
 <div class="hub-insights-list">
 	<div class="container">
-		<?php if ( have_posts() ) : ?>
-			<div class="row">
-				<?php
-				$hub_insight_index = 0;
-				while ( have_posts() ) {
-					the_post();
-					++$hub_insight_index;
+		<?php
+		if ( have_posts() ) {
+			?>
+		<div class="row">
+			<?php
+			$hub_insight_index = 0;
+			while ( have_posts() ) {
+				the_post();
+				++$hub_insight_index;
 
-					// First assigned category (skipping Uncategorized) for the badge.
-					$hub_primary_cat = null;
-					foreach ( (array) get_the_category() as $hub_cat ) {
-						if ( 'uncategorized' !== $hub_cat->slug ) {
-							$hub_primary_cat = $hub_cat;
-							break;
-						}
+				// First assigned category (skipping Uncategorized) for the badge.
+				$hub_primary_cat = null;
+				foreach ( (array) get_the_category() as $hub_cat ) {
+					if ( 'uncategorized' !== $hub_cat->slug ) {
+						$hub_primary_cat = $hub_cat;
+						break;
 					}
-					$hub_meta = sprintf(
-						'%s · Article',
-						get_the_date( 'j M Y' )
-					);
+				}
+				$hub_meta = sprintf(
+					'%s · Article',
+					get_the_date( 'j M Y' )
+				);
 
-					$hub_thumb = get_the_post_thumbnail(
-						null,
-						1 === $hub_insight_index ? 'large' : 'medium_large',
-						array( 'alt' => the_title_attribute( array( 'echo' => false ) ) )
-					);
+				$hub_thumb = get_the_post_thumbnail(
+					null,
+					1 === $hub_insight_index ? 'large' : 'large',
+					array( 'alt' => the_title_attribute( array( 'echo' => false ) ) )
+				);
 
-					if ( 1 === $hub_insight_index ) {
-						$hub_span = 'col-12';
-					} elseif ( $hub_insight_index <= 5 ) {
-						$hub_span = 'col-12 col-md-6';
-					} else {
-						$hub_span = 'col-12 col-md-6 col-lg-4';
-					}
-					?>
-					<div class="<?= esc_attr( $hub_span ); ?>">
-						<?php if ( 1 === $hub_insight_index ) : ?>
-							<article <?php post_class( 'hub-insight-card hub-insight-card--featured' ); ?>>
-								<a class="hub-insight-card__media<?= $hub_thumb ? '' : ' hub-insight-card__media--empty'; ?>" href="<?php the_permalink(); ?>" aria-hidden="true" tabindex="-1">
-									<?= $hub_thumb; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
-									<?php if ( $hub_primary_cat ) : ?>
-										<span class="hub-insight-card__badge"><?= esc_html( $hub_primary_cat->name ); ?></span>
-									<?php endif; ?>
-								</a>
-								<p class="hub-insight-card__meta"><?= esc_html( $hub_meta ); ?></p>
-								<div class="row hub-insight-card__body">
-									<h2 class="hub-insight-card__title editorial-m col-12 col-lg-7">
-										<a href="<?php the_permalink(); ?>"><?php the_title(); ?></a>
-									</h2>
-									<?php if ( has_excerpt() ) : ?>
-										<div class="hub-insight-card__excerpt text-body col-12 col-lg-5"><?php the_excerpt(); ?></div>
-									<?php endif; ?>
-								</div>
-							</article>
-						<?php else : ?>
-							<article <?php post_class( 'hub-insight-card' ); ?>>
-								<a class="hub-insight-card__media<?= $hub_thumb ? '' : ' hub-insight-card__media--empty'; ?>" href="<?php the_permalink(); ?>" aria-hidden="true" tabindex="-1">
-									<?= $hub_thumb; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
-									<?php if ( $hub_primary_cat ) : ?>
-										<span class="hub-insight-card__badge"><?= esc_html( $hub_primary_cat->name ); ?></span>
-									<?php endif; ?>
-								</a>
-								<p class="hub-insight-card__meta"><?= esc_html( $hub_meta ); ?></p>
-								<h2 class="hub-insight-card__title h3-data-m">
-									<a href="<?php the_permalink(); ?>"><?php the_title(); ?></a>
-								</h2>
-								<?php if ( has_excerpt() ) : ?>
-									<div class="hub-insight-card__excerpt text-body"><?php the_excerpt(); ?></div>
-								<?php endif; ?>
-							</article>
-						<?php endif; ?>
-					</div>
-					<?php
+				if ( 1 === $hub_insight_index ) {
+					$hub_span = 'col-12';
+				} elseif ( $hub_insight_index <= 5 ) {
+					$hub_span = 'col-12 col-md-6';
+				} else {
+					$hub_span = 'col-12 col-md-6 col-lg-4';
 				}
 				?>
-			</div>
-
-			<?php
-			the_posts_pagination(
-				array(
-					'prev_text' => __( 'Previous', 'hub-gsct2026' ),
-					'next_text' => __( 'Next', 'hub-gsct2026' ),
-				)
-			);
+				<div class="<?= esc_attr( $hub_span ); ?>">
+					<?php
+					if ( 1 === $hub_insight_index ) {
+						?>
+						<a <?php post_class( 'hub-insight-card hub-insight-card--featured' ); ?> href="<?php the_permalink(); ?>">
+							<div class="hub-insight-card__media<?= $hub_thumb ? '' : ' hub-insight-card__media--empty'; ?>">
+								<?= $hub_thumb; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+								<?php
+								if ( $hub_primary_cat ) {
+									?>
+								<span class="hub-insight-card__badge"><?= esc_html( $hub_primary_cat->name ); ?></span>
+									<?php
+								}
+								?>
+							</div>
+							<p class="hub-insight-card__meta"><?= esc_html( $hub_meta ); ?></p>
+							<div class="hub-insight-card__body">
+								<h2 class="hub-insight-card__title editorial-m"><?php the_title(); ?></h2>
+								<?php
+								$hub_excerpt = hub_gsct2026_content_excerpt( get_the_ID(), 40 );
+								if ( $hub_excerpt ) {
+									?>
+								<p class="hub-insight-card__excerpt text-body"><?php echo esc_html( $hub_excerpt ); ?></p>
+									<?php
+								}
+								?>
+							</div>
+						</a>
+						<?php
+					} else {
+						?>
+						<a <?php post_class( 'hub-insight-card' ); ?> href="<?php the_permalink(); ?>">
+							<div class="hub-insight-card__media<?= $hub_thumb ? '' : ' hub-insight-card__media--empty'; ?>">
+								<?= $hub_thumb; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+								<?php
+								if ( $hub_primary_cat ) {
+									?>
+								<span class="hub-insight-card__badge"><?= esc_html( $hub_primary_cat->name ); ?></span>
+									<?php
+								}
+								?>
+							</div>
+							<p class="hub-insight-card__meta"><?= esc_html( $hub_meta ); ?></p>
+							<h2 class="hub-insight-card__title h3-data-m"><?php the_title(); ?></h2>
+							<?php
+							$hub_excerpt = hub_gsct2026_content_excerpt( get_the_ID(), 25 );
+							if ( $hub_excerpt ) {
+								?>
+							<p class="hub-insight-card__excerpt text-body"><?php echo esc_html( $hub_excerpt ); ?></p>
+								<?php
+							}
+							?>
+						</a>
+						<?php
+					}
+					?>
+				</div>
+				<?php
+			}
 			?>
-		<?php else : ?>
-			<p><?php esc_html_e( 'Nothing found.', 'hub-gsct2026' ); ?></p>
-		<?php endif; ?>
+		</div>
+			<?php
+		} else {
+			?>
+		<p><?php esc_html_e( 'Nothing found.', 'hub-gsct2026' ); ?></p>
+			<?php
+		}
+		?>
 	</div>
 </div>
 

@@ -63,9 +63,23 @@
 	}
 }
 
-/* Cards — image with category badge, date meta, title + excerpt. */
+/* Cards — the whole card is a single <a>: image, meta, title and excerpt.
+   Hover zooms the image only; no colour or underline changes. */
 .hub-insight-card {
+	display: block;
 	margin-bottom: var(--space-4);
+	color: inherit;
+	text-decoration: none;
+
+	&:hover {
+		color: inherit;
+		text-decoration: none;
+	}
+
+	&:focus-visible {
+		outline: 2px solid var(--col-brand-purple);
+		outline-offset: 3px;
+	}
 }
 
 .hub-insight-card__media {
@@ -82,6 +96,16 @@
 		height: 100%;
 		object-fit: cover;
 	}
+
+	@media (prefers-reduced-motion: no-preference) {
+		img {
+			transition: transform 300ms ease;
+		}
+
+		.hub-insight-card:hover & img {
+			transform: scale(1.04);
+		}
+	}
 }
 
 .hub-insight-card--featured .hub-insight-card__media {
@@ -97,7 +121,7 @@
 	left: 0;
 	bottom: 0;
 	padding: 0.5rem 1rem;
-	border-radius: 0 var(--radius-sm) 0 0;
+	border-radius: 0 var(--radius-lg) 0 0;
 	background-color: var(--col-brand-purple);
 	color: var(--col-white);
 	font-family: var(--font-family-base);
@@ -114,47 +138,75 @@
 
 .hub-insight-card__title {
 	margin-block: var(--space-1) 0;
-
-	a {
-		color: inherit;
-		text-decoration: none;
-
-		&:hover {
-			color: var(--col-brand-purple);
-			text-decoration: underline;
-		}
-	}
 }
 
 .hub-insight-card__excerpt {
-	margin-top: var(--space-2);
+	margin-block: var(--space-2) 0;
 	color: var(--col-grey-700);
+}
 
-	p {
+/*
+ * Featured card title/excerpt split — deliberately NOT .row/.col-*: that
+ * body sits inside <article>, not directly in the listing grid, so the
+ * theme's `.row .row` subgrid rule would match it and collapse it to a
+ * single column (subgrid only works on direct grid children). A bespoke
+ * two-track grid sidesteps that entirely. 992px is the lg breakpoint —
+ * keep in sync with src/build/tokens.config.js.
+ */
+.hub-insight-card__body {
+	display: grid;
+	grid-template-columns: 1fr;
+	gap: var(--space-2) var(--grid-gutter);
+	align-items: start;
+	margin-top: var(--space-2);
+
+	> * {
 		margin-block: 0;
+	}
+
+	@media (min-width: 992px) {
+		grid-template-columns: 1fr 1fr;
 	}
 }
 
-/* Pagination — plain numbered links, current page filled purple. */
-.hub-insights-list .pagination {
-	display: flex;
-	flex-wrap: wrap;
-	gap: var(--space-2);
-	align-items: center;
-	margin-top: var(--space-4);
+.article-container {
+	max-width: 660px;
+	margin-inline: auto;
+	margin-bottom: var(--space-6);
+}
 
-	.page-numbers {
-		display: inline-block;
-		padding: 0.5rem 1rem;
-		border: 1px solid var(--col-brand-purple);
-		border-radius: 100vw;
-		color: var(--col-brand-purple);
-		text-decoration: none;
-		font-weight: var(--fw-bold);
+article h1 {
+	text-align: center;
+	max-width: 960px;
+	margin-inline: auto;
+	text-wrap: pretty;
+}
 
-		&.current {
-			background-color: var(--col-brand-purple);
-			color: var(--col-white);
-		}
-	}
+article h2 {
+	font-family: var(--font-family-base);
+	font-weight: var(--fw-medium);
+	font-size: clamp(24px, calc(19.76px + 1.13vw), 36px);
+	line-height: clamp(28px, calc(23.06px + 1.51vw), 42px);
+	letter-spacing: -0.03em;
+}
+
+article .single-hero {
+	width: 100%;
+	aspect-ratio: 9 / 5;
+	object-fit: cover;
+}
+
+/* Quote paragraphs are excluded: WP itself outputs the quote text as
+   <p class="wp-block-paragraph"> inside the blockquote (removing the class
+   invalidates the block), so class scoping alone can't spare them. */
+article .wp-block-paragraph:not(blockquote p) {
+	font-family: var(--font-family-base);
+	font-size: var(--fs-500);
+	font-weight: var(--fw-regular);
+	line-height: 27px;
+	margin-bottom: 2rem;
+}
+
+article blockquote.wp-block-quote {
+	margin-bottom: 3rem;
 }

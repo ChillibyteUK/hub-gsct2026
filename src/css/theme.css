@@ -9,6 +9,8 @@
 /* @import "tables.css"; -- uncomment if this project actually needs styled tables */
 @import "accordion.css";
 @import "insights.css";
+@import "quote.css";
+@import "single.css";
 @import "blocks.css"; /* generated — concatenation of src/blocks/*.css, see src/build/generate-utilities.js */
 
 

@@ -1,0 +1,112 @@
+/* Post meta row (single.php) — avatar + name/role, published/read time,
+   share button, separated by red rules. Text sizing comes from the
+   .text-body/.text-body-medium classes in the markup; only colours and
+   layout live here. */
+
+.hub-post-meta {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	justify-content: center;
+	gap: var(--space-2) var(--space-3);
+	margin-block: var(--space-3) var(--space-5);
+}
+
+.hub-post-meta__author {
+	display: flex;
+	align-items: center;
+	gap: var(--space-2);
+}
+
+.hub-post-meta__text {
+	display: flex;
+	flex-direction: column;
+}
+
+.hub-post-meta__name {
+	color: var(--col-black);
+}
+
+.hub-post-meta__sub {
+	color: var(--col-medium-grey);
+}
+
+.hub-post-meta__divider {
+	width: 1px;
+	align-self: stretch;
+	background-color: var(--col-brand-red);
+}
+
+.hub-post-meta__avatar {
+	display: inline-flex;
+}
+
+.hub-post-meta__avatar img {
+	display: block;
+	width: 40px;
+	height: 40px;
+	object-fit: cover;
+	border-radius: 50%;
+}
+
+.hub-share-btn {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	padding: var(--space-1);
+	border: 0;
+	border-radius: 50%;
+	background: none;
+	color: inherit;
+	cursor: pointer;
+	position: relative;
+
+	&:hover {
+		opacity: 0.7;
+	}
+
+	&:focus-visible {
+		outline: 2px solid var(--col-brand-purple);
+		outline-offset: 2px;
+	}
+
+	&.is-copied::after {
+		content: "Copied";
+		position: absolute;
+		top: calc(100% + 4px);
+		left: 50%;
+		transform: translateX(-50%);
+		padding: 0.25rem 0.5rem;
+		border-radius: var(--radius-sm);
+		background-color: var(--col-black);
+		color: var(--col-white);
+		font-size: var(--fs-small);
+		white-space: nowrap;
+	}
+}
+
+.hub-post-tags {
+	display: flex;
+	flex-wrap: wrap;
+	gap: var(--space-2);
+	margin-block: var(--space-4) 0;
+}
+
+/* Single post author box (single.php) — shown only when the post has an
+   attributed author (author_person_id meta pointing at a person post). */
+.hub-author-box {
+	display: flex;
+	gap: var(--space-3);
+	align-items: flex-start;
+	margin-top: var(--space-5);
+	padding-top: var(--space-4);
+	border-top: 1px solid var(--col-grey-200);
+}
+
+.hub-author-box__name {
+	margin-block: 0 var(--space-3);
+}
+
+.hub-author-box__bio {
+	margin-block: var(--space-1) 0;
+}

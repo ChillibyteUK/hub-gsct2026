@@ -1,0 +1,22 @@
+/* Default Gutenberg quote (core/quote) — structural reset + citation dash.
+   Type comes from typography.css via selector grouping (.editorial-m for the
+   quote text, .text-attribution for the citation), so no extra classes are
+   needed and the editor iframe matches the frontend automatically. */
+
+.wp-block-quote {
+	margin: 0;
+	padding: 0;
+	border: 0;
+}
+
+.wp-block-quote p {
+	color: var(--col-brand-red);
+}
+
+.wp-block-quote cite {
+	font-style: normal;
+}
+
+.wp-block-quote cite::before {
+	content: "\2014\00a0";
+}

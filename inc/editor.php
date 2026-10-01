@@ -105,6 +105,34 @@ function hub_gsct2026_enqueue_lede_format() {
 add_action( 'enqueue_block_editor_assets', 'hub_gsct2026_enqueue_lede_format' );
 
 /**
+ * Enqueue the Post Author document-sidebar panel
+ * (blocks/_post-author-panel) — the picker for a post's attributed author
+ * (a person post ID in author_person_id meta). Same explicit-enqueue
+ * pattern as the panels above: no block.json, so inc/blocks.php's glob
+ * never picks it up.
+ *
+ * @return void
+ */
+function hub_gsct2026_enqueue_post_author_panel() {
+	$asset_file = HUB_GSCT2026_DIR . '/blocks/_post-author-panel/build/index.asset.php';
+
+	if ( ! file_exists( $asset_file ) ) {
+		return;
+	}
+
+	$asset = require $asset_file;
+
+	wp_enqueue_script(
+		'hub-gsct2026-post-author-panel',
+		get_template_directory_uri() . '/blocks/_post-author-panel/build/index.js',
+		$asset['dependencies'],
+		$asset['version'],
+		true
+	);
+}
+add_action( 'enqueue_block_editor_assets', 'hub_gsct2026_enqueue_post_author_panel' );
+
+/**
  * Enqueue the Person Details document-sidebar panel
  * (blocks/_person-panel) — the editing UI for person post meta. Same
  * explicit-enqueue pattern as the lede format above: no block.json, so

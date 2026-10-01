@@ -57,6 +57,68 @@ function hub_gsct2026_register_post_types() {
 			},
 		)
 	);
+
+	// Person-as-author fields + people-cards visibility. Edited through the
+	// Person Details document sidebar (blocks/_person-panel), which is the
+	// only UI for this postmeta — see its header comment.
+	register_post_meta(
+		'person',
+		'show_in_people_cards',
+		array(
+			'show_in_rest'  => true,
+			'single'        => true,
+			'type'          => 'boolean',
+			'default'       => false,
+			'auth_callback' => function () {
+				return current_user_can( 'edit_posts' );
+			},
+		)
+	);
+
+	register_post_meta(
+		'person',
+		'author_thumbnail',
+		array(
+			'show_in_rest'  => true,
+			'single'        => true,
+			'type'          => 'integer',
+			'default'       => 0,
+			'auth_callback' => function () {
+				return current_user_can( 'edit_posts' );
+			},
+		)
+	);
+
+	register_post_meta(
+		'person',
+		'author_bio',
+		array(
+			'show_in_rest'  => true,
+			'single'        => true,
+			'type'          => 'string',
+			'default'       => '',
+			'auth_callback' => function () {
+				return current_user_can( 'edit_posts' );
+			},
+		)
+	);
+
+	// Attributed author for regular posts — a person post ID (0 = none).
+	// Edited through the Post Author document sidebar
+	// (blocks/_post-author-panel); rendered at the bottom of single.php.
+	register_post_meta(
+		'post',
+		'author_person_id',
+		array(
+			'show_in_rest'  => true,
+			'single'        => true,
+			'type'          => 'integer',
+			'default'       => 0,
+			'auth_callback' => function () {
+				return current_user_can( 'edit_posts' );
+			},
+		)
+	);
 }
 add_action( 'init', 'hub_gsct2026_register_post_types' );
 

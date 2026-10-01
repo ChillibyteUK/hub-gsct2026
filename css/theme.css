@@ -256,7 +256,8 @@ ol {
 	text-transform: uppercase;
 }
 
-.text-attribution {
+.text-attribution,
+.wp-block-quote cite {
 	font-family: var(--font-family-base);
 	font-size: var(--fs-400);
 	font-weight: var(--fw-bold);
@@ -421,8 +422,10 @@ ol {
 	letter-spacing: -0.03em;
 }
 
-/* Editorial M — 24px → 36px */
-.editorial-m {
+/* Editorial M — 24px → 36px. Also the default quote text (see quote.css):
+   grouping the selector here keeps one source of truth for the type. */
+.editorial-m,
+.wp-block-quote p {
 	font-family: var(--font-family-base);
 	font-weight: var(--fw-medium);
 	font-size: clamp(24px, calc(19.76px + 1.13vw), 36px);
@@ -667,6 +670,10 @@ h3,
  * if you change the "lg" breakpoint there, update it here too.
  */
 
+ header {
+	border-bottom: 1px solid var(--col-light-grey);
+ }
+ 
 .navbar {
 	position: relative;
 	display: flex;
@@ -2129,10 +2136,22 @@ select {
 }
 	}
 
-/* Cards — image with category badge, date meta, title + excerpt. */
+/* Cards — the whole card is a single <a>: image, meta, title and excerpt.
+   Hover zooms the image only; no colour or underline changes. */
 .hub-insight-card {
+	display: block;
 	margin-bottom: var(--space-4);
+	color: inherit;
+	text-decoration: none;
 }
+.hub-insight-card:hover {
+		color: inherit;
+		text-decoration: none;
+	}
+.hub-insight-card:focus-visible {
+		outline: 2px solid var(--col-brand-purple);
+		outline-offset: 3px;
+	}
 
 .hub-insight-card__media {
 	position: relative;
@@ -2148,6 +2167,16 @@ select {
 		width: 100%;
 		height: 100%;
 		object-fit: cover;
+	}
+
+@media (prefers-reduced-motion: no-preference) {
+		.hub-insight-card__media img {
+			transition: transform 300ms ease;
+		}
+
+		.hub-insight-card:hover .hub-insight-card__media img {
+			transform: scale(1.04);
+		}
 	}
 
 .hub-insight-card--featured .hub-insight-card__media {
@@ -2166,7 +2195,7 @@ select {
 	left: 0;
 	bottom: 0;
 	padding: 0.5rem 1rem;
-	border-radius: 0 var(--radius-sm) 0 0;
+	border-radius: 0 var(--radius-lg) 0 0;
 	background-color: var(--col-brand-purple);
 	color: var(--col-white);
 	font-family: var(--font-family-base);
@@ -2185,46 +2214,213 @@ select {
 	margin-block: var(--space-1) 0;
 }
 
-.hub-insight-card__title a {
-		color: inherit;
-		text-decoration: none;
-	}
-
-:is(.hub-insight-card__title a):hover {
-			color: var(--col-brand-purple);
-			text-decoration: underline;
-		}
-
 .hub-insight-card__excerpt {
-	margin-top: var(--space-2);
+	margin-block: var(--space-2) 0;
 	color: var(--col-grey-700);
 }
 
-.hub-insight-card__excerpt p {
+/*
+ * Featured card title/excerpt split — deliberately NOT .row/.col-*: that
+ * body sits inside <article>, not directly in the listing grid, so the
+ * theme's `.row .row` subgrid rule would match it and collapse it to a
+ * single column (subgrid only works on direct grid children). A bespoke
+ * two-track grid sidesteps that entirely. 992px is the lg breakpoint —
+ * keep in sync with src/build/tokens.config.js.
+ */
+.hub-insight-card__body {
+	display: grid;
+	grid-template-columns: 1fr;
+	gap: var(--space-2) var(--grid-gutter);
+	align-items: start;
+	margin-top: var(--space-2);
+}
+.hub-insight-card__body  > * {
 		margin-block: 0;
 	}
+@media (min-width: 992px) {
+.hub-insight-card__body {
+		grid-template-columns: 1fr 1fr;
+}
+	}
 
-/* Pagination — plain numbered links, current page filled purple. */
-.hub-insights-list .pagination {
+.article-container {
+	max-width: 660px;
+	margin-inline: auto;
+	margin-bottom: var(--space-6);
+}
+
+article h1 {
+	text-align: center;
+	max-width: 960px;
+	margin-inline: auto;
+	text-wrap: pretty;
+}
+
+article h2 {
+	font-family: var(--font-family-base);
+	font-weight: var(--fw-medium);
+	font-size: clamp(24px, calc(19.76px + 1.13vw), 36px);
+	line-height: clamp(28px, calc(23.06px + 1.51vw), 42px);
+	letter-spacing: -0.03em;
+}
+
+article .single-hero {
+	width: 100%;
+	aspect-ratio: 9 / 5;
+	object-fit: cover;
+}
+
+/* Quote paragraphs are excluded: WP itself outputs the quote text as
+   <p class="wp-block-paragraph"> inside the blockquote (removing the class
+   invalidates the block), so class scoping alone can't spare them. */
+article .wp-block-paragraph:not(blockquote p) {
+	font-family: var(--font-family-base);
+	font-size: var(--fs-500);
+	font-weight: var(--fw-regular);
+	line-height: 27px;
+	margin-bottom: 2rem;
+}
+
+article blockquote.wp-block-quote {
+	margin-bottom: 3rem;
+}
+
+/* Default Gutenberg quote (core/quote) — structural reset + citation dash.
+   Type comes from typography.css via selector grouping (.editorial-m for the
+   quote text, .text-attribution for the citation), so no extra classes are
+   needed and the editor iframe matches the frontend automatically. */
+
+.wp-block-quote {
+	margin: 0;
+	padding: 0;
+	border: 0;
+}
+
+.wp-block-quote p {
+	color: var(--col-brand-red);
+}
+
+.wp-block-quote cite {
+	font-style: normal;
+}
+
+.wp-block-quote cite::before {
+	content: "\2014\00a0";
+}
+
+/* Post meta row (single.php) — avatar + name/role, published/read time,
+   share button, separated by red rules. Text sizing comes from the
+   .text-body/.text-body-medium classes in the markup; only colours and
+   layout live here. */
+
+.hub-post-meta {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	justify-content: center;
+	gap: var(--space-2) var(--space-3);
+	margin-block: var(--space-3) var(--space-5);
+}
+
+.hub-post-meta__author {
+	display: flex;
+	align-items: center;
+	gap: var(--space-2);
+}
+
+.hub-post-meta__text {
+	display: flex;
+	flex-direction: column;
+}
+
+.hub-post-meta__name {
+	color: var(--col-black);
+}
+
+.hub-post-meta__sub {
+	color: var(--col-medium-grey);
+}
+
+.hub-post-meta__divider {
+	width: 1px;
+	align-self: stretch;
+	background-color: var(--col-brand-red);
+}
+
+.hub-post-meta__avatar {
+	display: inline-flex;
+}
+
+.hub-post-meta__avatar img {
+	display: block;
+	width: 40px;
+	height: 40px;
+	object-fit: cover;
+	border-radius: 50%;
+}
+
+.hub-share-btn {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	padding: var(--space-1);
+	border: 0;
+	border-radius: 50%;
+	background: none;
+	color: inherit;
+	cursor: pointer;
+	position: relative;
+}
+
+.hub-share-btn:hover {
+		opacity: 0.7;
+	}
+
+.hub-share-btn:focus-visible {
+		outline: 2px solid var(--col-brand-purple);
+		outline-offset: 2px;
+	}
+
+.hub-share-btn.is-copied::after {
+		content: "Copied";
+		position: absolute;
+		top: calc(100% + 4px);
+		left: 50%;
+		transform: translateX(-50%);
+		padding: 0.25rem 0.5rem;
+		border-radius: var(--radius-sm);
+		background-color: var(--col-black);
+		color: var(--col-white);
+		font-size: var(--fs-small);
+		white-space: nowrap;
+	}
+
+.hub-post-tags {
 	display: flex;
 	flex-wrap: wrap;
 	gap: var(--space-2);
-	align-items: center;
-	margin-top: var(--space-4);
+	margin-block: var(--space-4) 0;
 }
-:is(.hub-insights-list .pagination) .page-numbers {
-		display: inline-block;
-		padding: 0.5rem 1rem;
-		border: 1px solid var(--col-brand-purple);
-		border-radius: 100vw;
-		color: var(--col-brand-purple);
-		text-decoration: none;
-		font-weight: var(--fw-bold);
-	}
-.current:is(:is(.hub-insights-list .pagination) .page-numbers) {
-			background-color: var(--col-brand-purple);
-			color: var(--col-white);
-		}
+
+/* Single post author box (single.php) — shown only when the post has an
+   attributed author (author_person_id meta pointing at a person post). */
+.hub-author-box {
+	display: flex;
+	gap: var(--space-3);
+	align-items: flex-start;
+	margin-top: var(--space-5);
+	padding-top: var(--space-4);
+	border-top: 1px solid var(--col-grey-200);
+}
+
+.hub-author-box__name {
+	margin-block: 0 var(--space-3);
+}
+
+.hub-author-box__bio {
+	margin-block: var(--space-1) 0;
+}
+
 /* Generated by src/build/generate-utilities.js — do not hand-edit.
    Concatenation of src/blocks/*.css, alphabetical by filename. */
 

@@ -30,11 +30,21 @@ $wrapper_attributes = get_block_wrapper_attributes( array( 'class' => 'hub-peopl
 		</div>
 		<div class="row gap-4">
 			<?php
-			// Output People cards here.
+			// Only people explicitly ticked for it: show_in_people_cards
+			// defaults to unchecked, so there is no "missing means shown"
+			// fallback — people without the tick (e.g. post-only authors)
+			// stay out of the cards.
 			$q = new WP_Query(
 				array(
 					'post_type'      => 'person',
 					'posts_per_page' => -1,
+					'meta_query'     => array(
+						array(
+							'key'     => 'show_in_people_cards',
+							'value'   => '1',
+							'compare' => '=',
+						),
+					),
 				)
 			);
 			if ( $q->have_posts() ) {
