@@ -1,0 +1,160 @@
+/* Insights listing (index.php) — hero, category filter pills, cards. */
+
+/* Full-bleed pink hero; the listing below overlaps its bottom edge. */
+.hub-insights-hero {
+	background: linear-gradient(
+		180deg,
+		color-mix(in srgb, var(--col-brand-pink) 55%, white) 0%,
+		var(--col-brand-pink) 100%
+	);
+	padding-block: var(--space-5) 9rem;
+}
+
+.hub-insights-hero h1 {
+	margin-block: 0 var(--space-2);
+}
+
+.hub-insights-hero__intro {
+	max-width: 44rem;
+	margin-block: 0 var(--space-4);
+}
+
+/* Category filter pills — links, not buttons: each goes to an archive. */
+.hub-insights-filters {
+	display: flex;
+	flex-wrap: wrap;
+	gap: var(--space-2);
+}
+
+.hub-filter-pill {
+	display: inline-block;
+	padding: 0.5rem 1.125rem;
+	border: 1px solid var(--col-brand-purple);
+	border-radius: 100vw;
+	background-color: transparent;
+	color: var(--col-brand-purple);
+	text-decoration: none;
+	font-family: var(--font-family-base);
+	font-size: var(--fs-400);
+	font-weight: var(--fw-bold);
+	line-height: normal;
+	transition: background-color var(--transition), color var(--transition);
+
+	&:hover {
+		background-color: color-mix(in srgb, var(--col-brand-purple) 12%, white);
+		color: var(--col-brand-purple);
+	}
+
+	&.is-active {
+		background-color: var(--col-brand-purple);
+		color: var(--col-white);
+	}
+}
+
+/* Overlaps the hero so the featured image sits half on pink, half on white. */
+.hub-insights-list {
+	position: relative;
+	z-index: 1;
+	margin-top: -7rem;
+	padding-bottom: var(--space-5);
+
+	@media (max-width: 767px) {
+		margin-top: -6rem;
+	}
+}
+
+/* Cards — image with category badge, date meta, title + excerpt. */
+.hub-insight-card {
+	margin-bottom: var(--space-4);
+}
+
+.hub-insight-card__media {
+	position: relative;
+	display: block;
+	overflow: hidden;
+	border-radius: var(--radius-lg);
+	aspect-ratio: 16 / 9;
+	background-color: var(--col-grey-200);
+
+	img {
+		display: block;
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+	}
+}
+
+.hub-insight-card--featured .hub-insight-card__media {
+	aspect-ratio: 16 / 9;
+
+	@media (min-width: 992px) {
+		aspect-ratio: 21 / 9;
+	}
+}
+
+.hub-insight-card__badge {
+	position: absolute;
+	left: 0;
+	bottom: 0;
+	padding: 0.5rem 1rem;
+	border-radius: 0 var(--radius-sm) 0 0;
+	background-color: var(--col-brand-purple);
+	color: var(--col-white);
+	font-family: var(--font-family-base);
+	font-size: var(--fs-400);
+	font-weight: var(--fw-bold);
+	line-height: normal;
+}
+
+.hub-insight-card__meta {
+	margin-block: var(--space-2) 0;
+	color: var(--col-grey-600);
+	font-size: var(--fs-small);
+}
+
+.hub-insight-card__title {
+	margin-block: var(--space-1) 0;
+
+	a {
+		color: inherit;
+		text-decoration: none;
+
+		&:hover {
+			color: var(--col-brand-purple);
+			text-decoration: underline;
+		}
+	}
+}
+
+.hub-insight-card__excerpt {
+	margin-top: var(--space-2);
+	color: var(--col-grey-700);
+
+	p {
+		margin-block: 0;
+	}
+}
+
+/* Pagination — plain numbered links, current page filled purple. */
+.hub-insights-list .pagination {
+	display: flex;
+	flex-wrap: wrap;
+	gap: var(--space-2);
+	align-items: center;
+	margin-top: var(--space-4);
+
+	.page-numbers {
+		display: inline-block;
+		padding: 0.5rem 1rem;
+		border: 1px solid var(--col-brand-purple);
+		border-radius: 100vw;
+		color: var(--col-brand-purple);
+		text-decoration: none;
+		font-weight: var(--fw-bold);
+
+		&.current {
+			background-color: var(--col-brand-purple);
+			color: var(--col-white);
+		}
+	}
+}
