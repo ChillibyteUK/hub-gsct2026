@@ -107,5 +107,8 @@
 	   a new class per layout. Smaller value = more columns fit. */
   --grid-min: 16rem;
 
-  --nav-height: 4rem;
+  /* Fixed header height — .navbar is exactly this tall (see nav.css) and
+     main is offset by the same amount, so the two can never drift apart.
+     Fits the 3rem logo with breathing room. */
+  --nav-height: 6rem;
 }

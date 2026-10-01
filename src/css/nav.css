@@ -7,7 +7,45 @@
 
  header {
 	border-bottom: 1px solid var(--col-light-grey);
- }
+}
+
+/*
+ * Fixed header with a static offset — no JS measuring, no layout shift.
+ * .navbar is exactly --nav-height tall (logo vertically centred), so plain
+ * padding-top on main always clears it. Padding, not margin: a margin would
+ * collapse with the first child's own margin-top (e.g. single.php's h1.my-6)
+ * and swallow it. The +1px covers the header's own bottom border.
+ */
+#masthead {
+	position: fixed;
+	top: 0;
+	left: 0;
+	right: 0;
+	z-index: 50;
+	background-color: var(--col-body-bg);
+}
+
+body.admin-bar #masthead {
+	top: 32px;
+}
+
+@media (max-width: 782px) {
+	body.admin-bar #masthead {
+		top: 46px;
+	}
+}
+
+main {
+	padding-top: calc(var(--nav-height) + 1px);
+}
+
+.navbar {
+	position: relative;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	height: var(--nav-height);
+}
  
 .navbar {
 	position: relative;

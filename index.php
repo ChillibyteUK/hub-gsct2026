@@ -92,7 +92,7 @@ if ( $is_filtered ) {
 
 				$hub_thumb = get_the_post_thumbnail(
 					null,
-					1 === $hub_insight_index ? 'large' : 'large',
+					1 === $hub_insight_index ? 'full' : 'full',
 					array( 'alt' => the_title_attribute( array( 'echo' => false ) ) )
 				);
 

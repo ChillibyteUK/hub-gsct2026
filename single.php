@@ -37,7 +37,7 @@ get_header();
 			$hub_minutes = estimate_reading_time_in_minutes( get_the_content(), 300, true );
 			?>
 		<article <?php post_class(); ?>>
-			<h1 class="display-xl my-6"><?php the_title(); ?></h1>
+			<h1 class="display-xl pt-6 mb-6"><?php the_title(); ?></h1>
 			<div class="hub-post-meta">
 				<div class="hub-post-meta__author">
 					<span class="hub-post-meta__avatar"><?= $hub_meta_avatar; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- core image functions already escape. ?></span>
