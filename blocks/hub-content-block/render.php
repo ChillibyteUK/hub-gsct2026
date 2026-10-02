@@ -164,7 +164,7 @@ $wrapper_attributes = get_block_wrapper_attributes( array( 'class' => 'hub-conte
 						<?php
 						if ( $form_title ) {
 							?>
-							<div class="hub-content-block__form-title text-body-l-medium"><?= esc_html( $form_title ); ?></h3>
+							<div class="hub-content-block__form-title text-body-l-medium"><?= esc_html( $form_title ); ?></div>
 							<?php
 						}
 						?>

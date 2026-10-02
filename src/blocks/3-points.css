@@ -15,6 +15,7 @@
     h1 {
         padding-bottom: var(--space-3);
         border-bottom: 1px solid var(--col-light-grey);
+        max-width: 800px;
     }
     h2 {
         padding-bottom: var(--space-2);

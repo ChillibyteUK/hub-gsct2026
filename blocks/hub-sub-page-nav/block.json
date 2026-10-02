@@ -1,0 +1,22 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "hub-gsct2026/hub-sub-page-nav",
+	"title": "HUB Sub-Page Nav",
+	"category": "hub-gsct2026",
+	"icon": "menu",
+	"description": "Tab-style nav across a set of chosen pages — the current page gets the same red-underline accent as the main nav.",
+	"attributes": {
+		"pages": {
+			"type": "array",
+			"default": []
+		}
+	},
+	"supports": {
+		"anchor": true,
+		"className": true,
+		"align": true
+	},
+	"editorScript": "file:./build/index.js",
+	"render": "file:./render.php"
+}

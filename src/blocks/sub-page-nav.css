@@ -1,0 +1,42 @@
+/* HUB Sub-Page Nav — tab-style nav across a hand-picked set of pages. The
+   active item's red underline reuses the main nav's exact accent (6px bar,
+   --col-brand-red — see .nav-link.active::after in src/css/nav.css), kept
+   thinner here (3px) since this sits well below the primary nav's own
+   accent bar and a second 6px bar this close would read as competing for
+   the same visual weight rather than a lighter, secondary nav. */
+
+.hub-sub-page-nav__list {
+	display: flex;
+	flex-wrap: wrap;
+	column-gap: var(--space-5);
+	row-gap: var(--space-2);
+	margin: 0;
+	padding: 0;
+	list-style: none;
+	border-bottom: 1px solid var(--col-grey-200);
+}
+
+.hub-sub-page-nav__link {
+	display: inline-block;
+	position: relative;
+	padding-bottom: var(--space-2);
+	color: var(--col-body);
+	font-weight: var(--fw-bold);
+	text-decoration: none;
+}
+
+.hub-sub-page-nav__link:hover,
+.hub-sub-page-nav__link:focus-visible {
+	color: var(--col-body);
+	text-decoration: none;
+}
+
+.hub-sub-page-nav__link.active::after {
+	content: "";
+	position: absolute;
+	left: 0;
+	right: 0;
+	bottom: -1px;
+	height: 3px;
+	background-color: var(--col-brand-red);
+}

@@ -4,6 +4,7 @@ import { TextControl, TextareaControl, ToggleControl, Button, RadioControl } fro
 import { useEffect, useMemo } from '@wordpress/element';
 import { useSelect } from '@wordpress/data';
 import { store as coreStore } from '@wordpress/core-data';
+import PostTypePicker from './PostTypePicker';
 
 /**
  * Makes a legacy plain-text value safe to hand to RichText. RichText's
@@ -124,7 +125,11 @@ function RepeaterImageField( { field, row, index, updateRow, isColumn } ) {
  * @param {string}   props.label    Field group label.
  * @param {Object[]} props.value    Current rows.
  * @param {Function} props.onChange ( rows ) => void
- * @param {Object[]} props.fields   [ { name, label, type: 'text'|'number'|'textarea'|'richtext'|'image'|'file'|'link'|'radio', help, mimeTypes, linkTarget, options, className, showIf, multiline } ]
+ * @param {Object[]} props.fields   [ { name, label, type: 'text'|'number'|'textarea'|'richtext'|'image'|'file'|'link'|'radio'|'post', help, mimeTypes, linkTarget, options, className, showIf, multiline, postType } ]
+ *                                  `postType` ('post' fields only) is the post type slug to search
+ *                                  (default 'page') — renders ./PostTypePicker, storing the selected
+ *                                  post's ID directly on `field.name` (no separate `{name}Url`-style
+ *                                  companion key, unlike image/file).
  *                                  `linkTarget` (link fields only) adds an "open in new tab" toggle,
  *                                  storing `{name}Target` on the row — same opt-in shape as the
  *                                  top-level `link` field type's `link_target` option. `options`
@@ -402,6 +407,19 @@ export default function RepeaterField( { label, value, onChange, fields, emptyRo
 									hideLabelFromVision={ ! isColumn }
 									value={ row[ field.name ] ?? '' }
 									onChange={ ( v ) => updateRow( index, { [ field.name ]: '' === v ? '' : Number( v ) } ) }
+									help={ field.help }
+								/>
+							);
+						}
+
+						if ( 'post' === field.type ) {
+							return (
+								<PostTypePicker
+									key={ field.name }
+									label={ field.label }
+									postType={ field.postType || 'page' }
+									value={ row[ field.name ] || 0 }
+									onChange={ ( id ) => updateRow( index, { [ field.name ]: id } ) }
 									help={ field.help }
 								/>
 							);
