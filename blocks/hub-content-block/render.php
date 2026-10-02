@@ -56,7 +56,25 @@ $wrapper_attributes = get_block_wrapper_attributes( array( 'class' => 'hub-conte
 					<?php
 				}
 				if ( $btitle ) {
-					$title_class  = 'Red' === ( $attributes['titleColour'] ?? '' ) ? 'has-brand-red-color' : 'has-black-color';
+					// Section backgrounds that dictate their own title colour
+					// (see the .has-*-background-color rules in src/css/theme.css)
+					// win over the Title Colour radio: core renders its
+					// has-*-color utilities with !important, so an explicit
+					// radio class here would otherwise override them.
+					$hub_bg_colours = array(
+						'brand-yellow' => 'brand-purple',
+						'black'        => 'brand-yellow',
+						'brand-red'    => 'white',
+						'brand-purple' => 'white',
+					);
+					$hub_bg         = $attributes['backgroundColor'] ?? '';
+
+					if ( isset( $hub_bg_colours[ $hub_bg ] ) ) {
+						$title_class = 'has-' . $hub_bg_colours[ $hub_bg ] . '-color';
+					} else {
+						$title_class = 'Red' === ( $attributes['titleColour'] ?? '' ) ? 'has-brand-red-color' : 'has-black-color';
+					}
+
 					$weight_class = 'bold' === ( $attributes['titleWeight'] ?? '' ) ? 'h2-data-l' : 'editorial-m';
 					?>
 					<h2 class="<?= esc_attr( $weight_class ); ?> <?= esc_attr( $title_class ); ?>"><?= esc_html( $btitle ); ?></h2>

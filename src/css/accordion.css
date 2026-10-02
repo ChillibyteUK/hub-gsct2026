@@ -15,12 +15,22 @@
   margin-inline: auto;
 }
 
+/* Reusable 720px centred-measure heading with a hairline below — same
+   measure as .accordion and .hub-faqs__title--left (see
+   src/blocks/hub-faqs.css), so anything wearing this lines up with both. */
+.faq-h2 {
+  max-width: 720px;
+  margin-inline: auto;
+  border-bottom: 1px solid var(--col-light-grey);
+  text-wrap: pretty;
+}
+
 .accordion-item {
-  border-bottom: 1px solid var(--col-grey-200);
+  border-bottom: 1px solid var(--col-light-grey);
 }
 
 .accordion-item:first-child {
-  border-top: 1px solid var(--col-grey-200);
+  border-top: 1px solid var(--col-light-grey);
 }
 
 .accordion-header {

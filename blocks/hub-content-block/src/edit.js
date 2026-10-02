@@ -68,6 +68,7 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 							{ label: __( 'Black', 'hub-gsct2026' ), value: 'Black' },
 						] }
 						onChange={ ( value ) => setAttributes( { titleColour: value } ) }
+						help={ __( 'Ignored when the section background sets its own title colour.', 'hub-gsct2026' ) }
 					/>
 				</div>
 				<div style={ { flex: '20 1 0%' } }>

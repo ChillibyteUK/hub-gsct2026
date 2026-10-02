@@ -12,10 +12,11 @@
 
 defined( 'ABSPATH' ) || exit;
 
-$btitle    = $attributes['title'] ?? '';
-$faqs      = $attributes['faqs'] ?? array();
-$link_text = $attributes['linkText'] ?? '';
-$link_url  = $attributes['linkUrl'] ?? '';
+$btitle      = $attributes['title'] ?? '';
+$title_align = $attributes['titleAlign'] ?? 'centre';
+$faqs        = $attributes['faqs'] ?? array();
+$link_text   = $attributes['linkText'] ?? '';
+$link_url    = $attributes['linkUrl'] ?? '';
 
 // Single blog posts show FAQs as static content — left-aligned black
 // titles, questions as plain headings, answers always visible. Everywhere
@@ -47,14 +48,21 @@ if ( $faqs ) {
 
 $accordion_name = wp_unique_id( 'hub-faqs-' );
 
-$wrapper_attributes = get_block_wrapper_attributes( array( 'class' => $hub_static ? 'hub-faqs pb-5' : 'hub-faqs py-6' ) );
+$wrapper_attributes = get_block_wrapper_attributes( array( 'class' => $hub_static ? 'hub-faqs pb-5' : ( 'left' === $title_align ? 'hub-faqs py-5' : 'hub-faqs py-6' ) ) );
 ?>
 <section <?= $wrapper_attributes; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- get_block_wrapper_attributes() already escapes. ?>>
 	<div class="container">
 		<?php
 		if ( $btitle ) {
+			if ( $hub_static ) {
+				$title_class = 'mb-4';
+			} elseif ( 'left' === $title_align ) {
+				$title_class = 'has-brand-red-color h3-data-m hub-faqs__title--left';
+			} else {
+				$title_class = 'has-brand-red-color text-center mb-5';
+			}
 			?>
-			<h2 class="<?= $hub_static ? 'mb-4' : 'has-brand-red-color text-center mb-5'; ?>"><?= esc_html( $btitle ); ?></h2>
+			<h2 class="<?= esc_attr( $title_class ); ?>"><?= esc_html( $btitle ); ?></h2>
 			<?php
 		}
 		if ( $faqs ) {

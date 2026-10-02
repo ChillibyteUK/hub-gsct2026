@@ -2128,12 +2128,22 @@ select {
   margin-inline: auto;
 }
 
+/* Reusable 720px centred-measure heading with a hairline below — same
+   measure as .accordion and .hub-faqs__title--left (see
+   src/blocks/hub-faqs.css), so anything wearing this lines up with both. */
+.faq-h2 {
+  max-width: 720px;
+  margin-inline: auto;
+  border-bottom: 1px solid var(--col-light-grey);
+  text-wrap: pretty;
+}
+
 .accordion-item {
-  border-bottom: 1px solid var(--col-grey-200);
+  border-bottom: 1px solid var(--col-light-grey);
 }
 
 .accordion-item:first-child {
-  border-top: 1px solid var(--col-grey-200);
+  border-top: 1px solid var(--col-light-grey);
 }
 
 .accordion-header {
@@ -3668,6 +3678,14 @@ a.hub-how-to-invest-full__platform:focus-visible {
 
 .hub-faqs__static > :last-child {
 	margin-bottom: 0;
+}
+
+/* Left-aligned title variant (see render.php): same 720px centred measure
+   as .accordion above, so the title's left edge lines up with the
+   accordion items below it. */
+.hub-faqs__title--left {
+	max-width: 720px;
+	margin-inline: auto;
 }
 
 /* --- src/blocks/hub-gradient-hero.css --- */

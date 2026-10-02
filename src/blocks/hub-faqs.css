@@ -16,3 +16,11 @@
 .hub-faqs__static > :last-child {
 	margin-bottom: 0;
 }
+
+/* Left-aligned title variant (see render.php): same 720px centred measure
+   as .accordion above, so the title's left edge lines up with the
+   accordion items below it. */
+.hub-faqs__title--left {
+	max-width: 720px;
+	margin-inline: auto;
+}

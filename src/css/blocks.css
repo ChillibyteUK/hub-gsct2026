@@ -1093,6 +1093,14 @@ a.hub-how-to-invest-full__platform:focus-visible {
 	margin-bottom: 0;
 }
 
+/* Left-aligned title variant (see render.php): same 720px centred measure
+   as .accordion above, so the title's left edge lines up with the
+   accordion items below it. */
+.hub-faqs__title--left {
+	max-width: 720px;
+	margin-inline: auto;
+}
+
 /* --- src/blocks/hub-gradient-hero.css --- */
 /* HUB Gradient Hero — two columns (copy left, circular image right) on a
    fixed sunrise/sunset gradient set inline by render.php. */

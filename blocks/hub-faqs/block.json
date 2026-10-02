@@ -10,6 +10,10 @@
 			"type": "string",
 			"default": ""
 		},
+		"titleAlign": {
+			"type": "string",
+			"default": "centre"
+		},
 		"faqs": {
 			"type": "array",
 			"default": []
