@@ -84,7 +84,7 @@ function RepeaterImageField( { field, row, index, updateRow, isColumn } ) {
 				value={ id }
 				render={ ( { open } ) => (
 					<div className="hub-repeater-field__image">
-						<span className={ isColumn ? 'hub-editor-field__label' : 'screen-reader-text' }>
+						<span className={ isColumn || field.labelPerRow ? 'hub-editor-field__label' : 'screen-reader-text' }>
 							{ field.label }
 						</span>
 						{ url && (
@@ -135,14 +135,14 @@ function renderRowField( field, row, index, updateRow, isColumn ) {
 			<div className="hub-repeater-field__link" key={ field.name }>
 				<TextControl
 					label={ __( `${ field.label } Title`, 'hub-gsct2026' ) }
-					hideLabelFromVision={ ! isColumn }
+					hideLabelFromVision={ ! isColumn && ! field.labelPerRow }
 					value={ row[ `${ field.name }Text` ] || '' }
 					onChange={ ( v ) => updateRow( index, { [ `${ field.name }Text` ]: v } ) }
 				/>
 				<TextControl
 					type="url"
 					label={ __( `${ field.label } URL`, 'hub-gsct2026' ) }
-					hideLabelFromVision={ ! isColumn }
+					hideLabelFromVision={ ! isColumn && ! field.labelPerRow }
 					value={ row[ field.name ] || '' }
 					onChange={ ( v ) => updateRow( index, { [ field.name ]: v } ) }
 					help={ field.help }
@@ -172,7 +172,7 @@ function renderRowField( field, row, index, updateRow, isColumn ) {
 					value={ row[ field.name ] }
 					render={ ( { open } ) => (
 						<div className="hub-repeater-field__image">
-							<span className={ isColumn ? 'hub-editor-field__label' : 'screen-reader-text' }>
+							<span className={ isColumn || field.labelPerRow ? 'hub-editor-field__label' : 'screen-reader-text' }>
 								{ field.label }
 							</span>
 							{ row[ `${ field.name }Name` ] && (
@@ -197,7 +197,7 @@ function renderRowField( field, row, index, updateRow, isColumn ) {
 			<TextareaControl
 				key={ field.name }
 				label={ field.label }
-				hideLabelFromVision={ ! isColumn }
+				hideLabelFromVision={ ! isColumn && ! field.labelPerRow }
 				value={ row[ field.name ] || '' }
 				onChange={ ( v ) => updateRow( index, { [ field.name ]: v } ) }
 				help={ field.help }
@@ -208,7 +208,7 @@ function renderRowField( field, row, index, updateRow, isColumn ) {
 	if ( 'richtext' === field.type ) {
 		return (
 			<div className="hub-repeater-field__richtext" key={ field.name }>
-				{ isColumn && <span className="hub-editor-field__label">{ field.label }</span> }
+							{ ( isColumn || field.labelPerRow ) && <span className="hub-editor-field__label">{ field.label }</span> }
 				{ /* field.multiline: true for real multi-paragraph fields.
 				    Leave unset/false for a single-line-with-<br> field —
 				    matches a plain textarea's own "line breaks only, no
@@ -236,7 +236,7 @@ function renderRowField( field, row, index, updateRow, isColumn ) {
 				key={ field.name }
 				className={ field.className }
 				label={ field.label }
-				hideLabelFromVision={ ! isColumn }
+				hideLabelFromVision={ ! isColumn && ! field.labelPerRow }
 				selected={ row[ field.name ] || '' }
 				options={ field.options || [] }
 				onChange={ ( v ) => updateRow( index, { [ field.name ]: v } ) }
@@ -250,7 +250,7 @@ function renderRowField( field, row, index, updateRow, isColumn ) {
 				key={ field.name }
 				type="number"
 				label={ field.label }
-				hideLabelFromVision={ ! isColumn }
+				hideLabelFromVision={ ! isColumn && ! field.labelPerRow }
 				value={ row[ field.name ] ?? '' }
 				onChange={ ( v ) => updateRow( index, { [ field.name ]: '' === v ? '' : Number( v ) } ) }
 				help={ field.help }
@@ -275,7 +275,7 @@ function renderRowField( field, row, index, updateRow, isColumn ) {
 		<TextControl
 			key={ field.name }
 			label={ field.label }
-			hideLabelFromVision={ ! isColumn }
+			hideLabelFromVision={ ! isColumn && ! field.labelPerRow }
 			value={ row[ field.name ] || '' }
 			onChange={ ( v ) => updateRow( index, { [ field.name ]: v } ) }
 			help={ field.help }
@@ -329,7 +329,12 @@ function renderRowField( field, row, index, updateRow, isColumn ) {
  *                                  `field` equals `value` — e.g. popover detail fields that
  *                                  only apply when a 'popover' radio is set. In `row` layout
  *                                  the shared column header keeps a cell while any row
- *                                  shows the field. `multiline` (richtext fields only)
+ *                                  shows the field. `labelPerRow` renders the field's own
+ *                                  label visibly above its control in every row (like
+ *                                  `column` layout does) instead of hiding it behind the
+ *                                  shared header — and drops the field from that header;
+ *                                  if every field opts in, the header doesn't render at
+ *                                  all. `multiline` (richtext fields only)
  *                                  turns on real multi-paragraph editing (RichText's
  *                                  `multiline="p"`); leave it unset for a field that's
  *                                  just single-line-with-line-breaks, e.g. a title.
@@ -410,6 +415,13 @@ export default function RepeaterField( { label, value, onChange, fields, emptyRo
 		return ( row[ field.showIf.field ] ?? '' ) === field.showIf.value;
 	}
 
+	// Fields labelling themselves per row (field.labelPerRow) stay out of
+	// the shared column header — and if every field does that, the header
+	// would be two spacers and nothing, so it doesn't render at all.
+	const headerFields = fields.filter(
+		( field ) => ! field.labelPerRow && ( ! field.showIf || rows.some( ( row ) => fieldVisible( field, row ) ) )
+	);
+
 	return (
 		<div
 			className={
@@ -419,11 +431,11 @@ export default function RepeaterField( { label, value, onChange, fields, emptyRo
 			}
 		>
 			<label className="hub-editor-field__label">{ label }</label>
-			{ ! isColumn && rows.length > 0 && (
+			{ ! isColumn && rows.length > 0 && headerFields.length > 0 && (
 				<div className="hub-repeater-field__header">
 					<span className="hub-repeater-field__number-spacer" />
-					{ fields.map( ( field ) => (
-						( ! field.showIf || rows.some( ( row ) => fieldVisible( field, row ) ) ) && (
+					{ headerFields.map( ( field ) => (
+						(
 						<span
 							key={ field.name }
 							className={

@@ -4,9 +4,9 @@ import RepeaterField from '../../_shared/RepeaterField';
 import EditorBlockShell from '../../_shared/EditorBlockShell';
 
 const cardsFields = [
-	{ name: 'cardTitle', label: 'Title', type: 'text', flex: '1 1 100%' },
-	{ name: 'file', label: 'File', type: 'file' },
-	{ name: 'date', label: 'Date', type: 'text', help: 'Manual entry, UK format — e.g. 15 Jan 2026.' },
+	{ name: 'cardTitle', label: 'Title', type: 'text', flex: '1 1 100%', labelPerRow: true },
+	{ name: 'file', label: 'File', type: 'file', labelPerRow: true },
+	{ name: 'date', label: 'Date', type: 'text', help: 'Manual entry, UK format — e.g. 15 Jan 2026.', labelPerRow: true },
 ];
 
 const cardsEmptyRow = { cardTitle: '', file: 0, fileName: '', date: '' };
