@@ -27,12 +27,13 @@
 	pointer-events: none;
 }
 
-/* Double class: the theme-wide input padding in forms.css
-   (input:not(...), specificity 0,1,1) otherwise beats this rule and the
-   text runs under the icon. */
+/* The theme-wide input padding in forms.css carries nine :not() type
+   exclusions, landing it at specificity 0,9,1 — no sane selector beats
+   that fairly, so this single clearance rule takes !important instead of
+   a chained-class arms race. */
 .hub-document-library__search .hub-document-library__search-input {
 	width: 100%;
-	padding-left: calc(var(--space-3) * 2 + 18px);
+	padding-left: calc(var(--space-3) * 2 + 18px) !important;
 }
 
 .hub-document-library__filters {
