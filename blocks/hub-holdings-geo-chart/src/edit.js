@@ -5,7 +5,7 @@ import EditorBlockShell from '../../_shared/EditorBlockShell';
 
 const regionsFields = [
 	{ name: 'region', label: 'Region', type: 'text' },
-	{ name: 'allocation', label: 'Allocation %', type: 'number', help: 'To 1 decimal place.' },
+	{ name: 'allocation', label: 'Allocation %', type: 'number' },
 ];
 
 const regionsEmptyRow = { region: '', allocation: '' };

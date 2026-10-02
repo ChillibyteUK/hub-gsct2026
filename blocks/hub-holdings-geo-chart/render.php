@@ -72,7 +72,7 @@ $wrapper_attributes = get_block_wrapper_attributes( array( 'class' => 'hub-holdi
 		<?php
 		if ( '' !== trim( $hub_title ) ) {
 			?>
-			<h2 class="hub-holdings-geo-chart__title h2-data-l"><?= esc_html( $hub_title ); ?></h2>
+			<h2 class="hub-holdings-geo-chart__title h3-data-m"><?= esc_html( $hub_title ); ?></h2>
 			<?php
 		}
 		?>

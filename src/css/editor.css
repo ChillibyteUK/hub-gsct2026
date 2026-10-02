@@ -364,9 +364,14 @@
 	width: 60px;
 }
 
+/* Matches the actual .hub-repeater-field__row-actions width below (a single
+   20px icon-button column since the buttons stack vertically) so the shared
+   column headers in row layout sit directly above their inputs. The old
+   88px here dated from three side-by-side buttons and pushed every header
+   cell right of its field. */
 .hub-repeater-field__row-actions-spacer {
 	flex: none;
-	width: 88px;
+	width: 20px;
 }
 
 /*
