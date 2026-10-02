@@ -302,6 +302,24 @@ function hub_gsct2026_get_vimeo_embed_url( $url ) {
 }
 
 /**
+ * Format a byte count for display next to a download link — whole kb,
+ * switching to 1dp Mb at 1MB+. Same shape the document blocks render
+ * ("235kb", "1.2Mb").
+ *
+ * @param int $bytes Byte count.
+ * @return string
+ */
+function hub_gsct2026_format_file_size( $bytes ) {
+	$bytes = (int) $bytes;
+
+	if ( $bytes >= 1048576 ) {
+		return rtrim( rtrim( number_format( $bytes / 1048576, 1 ), '0' ), '.' ) . 'Mb';
+	}
+
+	return round( $bytes / 1024 ) . 'kb';
+}
+
+/**
  * Render breadcrumb markup with schema metadata.
  *
  * @param array  $breadcrumbs Breadcrumb items.

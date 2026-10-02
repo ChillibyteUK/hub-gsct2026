@@ -57,9 +57,16 @@
 
 .hub-holdings-geo-chart__table th,
 .hub-holdings-geo-chart__table td {
-	padding: var(--space-2);
 	border-bottom: 1px solid var(--col-light-grey);
 	text-align: left;
+}
+
+.hub-holdings-geo-chart__table th {
+	padding: var(--space-2);
+}
+
+.hub-holdings-geo-chart__table td {
+	padding: var(--space-3) var(--space-2);
 }
 
 .hub-holdings-geo-chart__table thead th {

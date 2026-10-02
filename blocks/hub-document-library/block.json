@@ -1,0 +1,26 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "hub-gsct2026/hub-document-library",
+	"title": "HUB Document Library",
+	"category": "hub-gsct2026",
+	"icon": "list-view",
+	"description": "Searchable, filterable table of every document post — category pills with a More dropdown, title search, no pagination.",
+	"attributes": {
+		"title": {
+			"type": "string",
+			"default": "All documents"
+		},
+		"pillCount": {
+			"type": "number",
+			"default": 5
+		}
+	},
+	"supports": {
+		"anchor": true,
+		"className": true,
+		"align": true
+	},
+	"editorScript": "file:./build/index.js",
+	"render": "file:./render.php"
+}

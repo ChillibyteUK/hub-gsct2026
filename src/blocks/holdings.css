@@ -58,6 +58,14 @@
 	text-align: left;
 }
 
+.hub-holdings__table th {
+	padding: var(--space-2);
+}
+
+.hub-holdings__table td {
+	padding: var(--space-3) var(--space-2);
+}
+
 .hub-holdings__table thead th {
 	border-bottom-width: 2px;
 }

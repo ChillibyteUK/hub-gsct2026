@@ -11,6 +11,7 @@ import { initShareButtons } from './share';
 import { initRelatedInsights } from './related-insights';
 import { initHoldings } from './holdings';
 import { initGeoCharts } from './geo-chart';
+import { initDocumentLibraries } from './document-library';
 
 document.addEventListener('DOMContentLoaded', () => {
 	initLenis();
@@ -26,4 +27,5 @@ document.addEventListener('DOMContentLoaded', () => {
 	initRelatedInsights();
 	initHoldings();
 	initGeoCharts();
+	initDocumentLibraries();
 });
