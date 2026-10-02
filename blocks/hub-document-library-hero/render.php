@@ -82,9 +82,9 @@ $wrapper_attributes = get_block_wrapper_attributes( array( 'class' => 'hub-docum
 						}
 					}
 
-					$meta = implode( ' · ', array_filter( array( $card_date, $file_detail ) ) );
-					$tag  = $file_url ? 'a' : 'div';
-					$href = $file_url ? ' href="' . esc_url( $file_url ) . '" download' : '';
+					$meta  = implode( ' · ', array_filter( array( $card_date, $file_detail ) ) );
+					$tag   = $file_url ? 'a' : 'div';
+					$href  = $file_url ? ' href="' . esc_url( $file_url ) . '" download' : '';
 					$label = $card_title ? sprintf( 'Download %s', $card_title ) : 'Download document';
 					?>
 					<div class="col-12 col-md-4">
