@@ -1,0 +1,71 @@
+/* HUB Document Library Hero — title + intro + three download cards on the
+   fixed sunset gradient (same value as HUB Nav Cards / HUB Gradient Hero's
+   "sunset" choice). Cards read like nav-cards (white, radius-lg) with a
+   download row pinned to the bottom. */
+
+.hub-document-library-hero {
+	background: radial-gradient(120% 120% at 50% 100%, #ff7670 0%, #ffb5ce 50%, #ffd2f7 90%);
+	padding-block: var(--space-5) var(--space-6);
+}
+
+.hub-document-library-hero__title {
+	margin-block: 0 var(--space-3);
+}
+
+.hub-document-library-hero__intro {
+	margin-block: 0 var(--space-5);
+	max-width: 34rem;
+}
+
+.hub-document-library-hero__cards-title {
+	margin-block: 0 var(--space-4);
+	color: var(--col-brand-purple);
+}
+
+.hub-document-library-hero__card {
+	display: flex;
+	flex-direction: column;
+	height: 100%;
+	padding: var(--space-4);
+	background: linear-gradient(0deg, #ffffff99 0%, #ffffff 100%);
+	border-radius: var(--radius-lg);
+	color: inherit;
+	text-decoration: none;
+	transition: box-shadow 200ms ease, background 200ms ease;
+}
+
+a.hub-document-library-hero__card:hover,
+a.hub-document-library-hero__card:focus-visible {
+	box-shadow: var(--shadow-lg);
+	color: inherit;
+	text-decoration: none;
+	background-color: var(--col-white);
+}
+
+a.hub-document-library-hero__card:focus-visible {
+	outline: 2px solid var(--col-brand-purple);
+	outline-offset: 2px;
+}
+
+.hub-document-library-hero__card-title {
+	margin-block: 0 var(--space-2);
+}
+
+.hub-document-library-hero__card-meta {
+	margin-block: 0 var(--space-3);
+	color: var(--col-body);
+}
+
+.hub-document-library-hero__download {
+	display: flex;
+	align-items: center;
+	gap: 0.375rem;
+	margin-top: auto;
+	padding-top: var(--space-2);
+	font-weight: var(--fw-bold);
+}
+
+.hub-document-library-hero__download-text {
+	text-decoration: underline;
+	text-underline-offset: 0.15em;
+}
