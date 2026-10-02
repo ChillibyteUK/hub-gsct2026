@@ -25,6 +25,19 @@
   --col-medium-grey: hsla(0, 0%, 40%, 1);
   --col-dark-grey: hsla(0, 0%, 20%, 1);
 
+  --col-chart-2-tx: #7628D40d;
+
+  /* Chart palette — geographic allocation doughnut (HUB Holdings Geographic
+     Chart). Hexes here are mirrored in that block's render.php colour map
+     (canvas needs real hex, not var()) — keep the two in sync. */
+  --col-chart-1: #f74333;
+  --col-chart-2: #7628D4;
+  --col-chart-2-tx: #7628D40d;
+  --col-chart-3: #307eff;
+  --col-chart-4: #d869bc;
+  --col-chart-5: #0813af;
+  --col-chart-6: #dd7d07;
+
   /* Brand colours — not used yet. Named by hue; the three blues slot into
      the existing numeric ramp under --col-blue-700. */
   --col-brand-red: #f74333;

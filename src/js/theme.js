@@ -9,6 +9,8 @@ import { initSecondaryHero } from './secondary-hero';
 import { initTimelines } from './timeline';
 import { initShareButtons } from './share';
 import { initRelatedInsights } from './related-insights';
+import { initHoldings } from './holdings';
+import { initGeoCharts } from './geo-chart';
 
 document.addEventListener('DOMContentLoaded', () => {
 	initLenis();
@@ -22,4 +24,6 @@ document.addEventListener('DOMContentLoaded', () => {
 	initTimelines();
 	initShareButtons();
 	initRelatedInsights();
+	initHoldings();
+	initGeoCharts();
 });

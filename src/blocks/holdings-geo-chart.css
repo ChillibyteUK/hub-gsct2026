@@ -1,0 +1,85 @@
+/* HUB Holdings Geographic Chart — doughnut (Chart.js canvas with a
+   "Total portfolio" centre overlay) beside a region/allocation table.
+   Table striping is plain :nth-child — this block's rows are never hidden
+   client-side, so unlike HUB Holdings there's no filtering to break the
+   alternation and no JS-managed class needed. */
+
+.hub-holdings-geo-chart {
+	padding-block: var(--space-5) var(--space-6);
+}
+
+.hub-holdings-geo-chart__title {
+	margin-block: 0 var(--space-4);
+}
+
+.hub-holdings-geo-chart__chart-wrap {
+	position: relative;
+	max-width: 22rem;
+	margin-inline: auto;
+}
+
+.hub-holdings-geo-chart__chart-wrap canvas {
+	display: block;
+	width: 100%;
+	height: auto;
+}
+
+.hub-holdings-geo-chart__center {
+	position: absolute;
+	inset: 0;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	text-align: center;
+	pointer-events: none;
+}
+
+.hub-holdings-geo-chart__center-label {
+	font-size: var(--fs-400);
+	color: var(--col-body);
+}
+
+.hub-holdings-geo-chart__center-total {
+	font-size: var(--fs-h3);
+	font-weight: var(--fw-bold);
+	line-height: var(--line-height-heading);
+}
+
+.hub-holdings-geo-chart__table-wrap {
+	overflow-x: auto;
+}
+
+.hub-holdings-geo-chart__table {
+	width: 100%;
+	border-collapse: collapse;
+}
+
+.hub-holdings-geo-chart__table th,
+.hub-holdings-geo-chart__table td {
+	padding: var(--space-2);
+	border-bottom: 1px solid var(--col-light-grey);
+	text-align: left;
+}
+
+.hub-holdings-geo-chart__table thead th {
+	border-bottom-width: 2px;
+}
+
+.hub-holdings-geo-chart__table tbody tr:nth-child(even) td {
+	background-color: var(--col-chart-2-tx);
+}
+
+.hub-holdings-geo-chart__table th.hub-holdings-geo-chart__allocation-col,
+.hub-holdings-geo-chart__table td.hub-holdings-geo-chart__allocation-col {
+	text-align: right;
+}
+
+.hub-holdings-geo-chart__chip {
+	display: inline-block;
+	width: 0.75rem;
+	height: 0.75rem;
+	margin-right: var(--space-2);
+	border-radius: 3px;
+	vertical-align: baseline;
+}

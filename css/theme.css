@@ -25,6 +25,19 @@
   --col-medium-grey: hsla(0, 0%, 40%, 1);
   --col-dark-grey: hsla(0, 0%, 20%, 1);
 
+  --col-chart-2-tx: #7628D40d;
+
+  /* Chart palette — geographic allocation doughnut (HUB Holdings Geographic
+     Chart). Hexes here are mirrored in that block's render.php colour map
+     (canvas needs real hex, not var()) — keep the two in sync. */
+  --col-chart-1: #f74333;
+  --col-chart-2: #7628D4;
+  --col-chart-2-tx: #7628D40d;
+  --col-chart-3: #307eff;
+  --col-chart-4: #d869bc;
+  --col-chart-5: #0813af;
+  --col-chart-6: #dd7d07;
+
   /* Brand colours — not used yet. Named by hue; the three blues slot into
      the existing numeric ramp under --col-blue-700. */
   --col-brand-red: #f74333;
@@ -3073,6 +3086,179 @@ article h2[id] {
     .hub-definition-list__fact:nth-child(even) {
         padding-inline-start: 0;
     }
+}
+
+/* --- src/blocks/holdings-geo-chart.css --- */
+/* HUB Holdings Geographic Chart — doughnut (Chart.js canvas with a
+   "Total portfolio" centre overlay) beside a region/allocation table.
+   Table striping is plain :nth-child — this block's rows are never hidden
+   client-side, so unlike HUB Holdings there's no filtering to break the
+   alternation and no JS-managed class needed. */
+
+.hub-holdings-geo-chart {
+	padding-block: var(--space-5) var(--space-6);
+}
+
+.hub-holdings-geo-chart__title {
+	margin-block: 0 var(--space-4);
+}
+
+.hub-holdings-geo-chart__chart-wrap {
+	position: relative;
+	max-width: 22rem;
+	margin-inline: auto;
+}
+
+.hub-holdings-geo-chart__chart-wrap canvas {
+	display: block;
+	width: 100%;
+	height: auto;
+}
+
+.hub-holdings-geo-chart__center {
+	position: absolute;
+	inset: 0;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	text-align: center;
+	pointer-events: none;
+}
+
+.hub-holdings-geo-chart__center-label {
+	font-size: var(--fs-400);
+	color: var(--col-body);
+}
+
+.hub-holdings-geo-chart__center-total {
+	font-size: var(--fs-h3);
+	font-weight: var(--fw-bold);
+	line-height: var(--line-height-heading);
+}
+
+.hub-holdings-geo-chart__table-wrap {
+	overflow-x: auto;
+}
+
+.hub-holdings-geo-chart__table {
+	width: 100%;
+	border-collapse: collapse;
+}
+
+.hub-holdings-geo-chart__table th,
+.hub-holdings-geo-chart__table td {
+	padding: var(--space-2);
+	border-bottom: 1px solid var(--col-light-grey);
+	text-align: left;
+}
+
+.hub-holdings-geo-chart__table thead th {
+	border-bottom-width: 2px;
+}
+
+.hub-holdings-geo-chart__table tbody tr:nth-child(even) td {
+	background-color: var(--col-chart-2-tx);
+}
+
+.hub-holdings-geo-chart__table th.hub-holdings-geo-chart__allocation-col,
+.hub-holdings-geo-chart__table td.hub-holdings-geo-chart__allocation-col {
+	text-align: right;
+}
+
+.hub-holdings-geo-chart__chip {
+	display: inline-block;
+	width: 0.75rem;
+	height: 0.75rem;
+	margin-right: var(--space-2);
+	border-radius: 3px;
+	vertical-align: baseline;
+}
+
+/* --- src/blocks/holdings.css --- */
+/* HUB Holdings — top-10 holdings table with a filter toggle for
+   'Collective investments' rows. Table borrows the optional .table base
+   look (1px dividers, left-aligned) rather than importing tables.css —
+   that file is deliberately opt-in/unimported project-wide, so this keeps
+   that convention instead of dragging the whole file in for one table. */
+
+.hub-holdings {
+	padding-block: var(--space-5);
+}
+
+.hub-holdings__title {
+	margin-block: 0 var(--space-4);
+}
+
+.hub-holdings__filter {
+	margin-bottom: var(--space-3);
+}
+
+.hub-holdings__toggle {
+	display: inline-block;
+	padding: var(--space-2) var(--space-3);
+	border: 1px solid var(--col-black);
+	border-radius: 100vw;
+	background-color: transparent;
+	color: var(--col-black);
+	cursor: pointer;
+	font-family: var(--font-family-base);
+	font-size: var(--fs-400);
+	font-weight: var(--fw-bold);
+	line-height: normal;
+	transition: background-color 200ms ease, color 200ms ease;
+}
+
+.hub-holdings__toggle[aria-pressed="true"] {
+	background-color: var(--col-black);
+	color: var(--col-white);
+}
+
+.hub-holdings__toggle:focus-visible {
+	outline: 2px solid var(--col-brand-yellow);
+	outline-offset: 2px;
+}
+
+.hub-holdings__table-wrap {
+	overflow-x: auto;
+}
+
+.hub-holdings__table {
+	width: 100%;
+	border-collapse: collapse;
+	table-layout: fixed;
+}
+
+.hub-holdings__table th,
+.hub-holdings__table td {
+	padding: var(--space-3) var(--space-2);
+	border-bottom: 1px solid var(--col-light-grey);
+	text-align: left;
+}
+
+.hub-holdings__table thead th {
+	border-bottom-width: 2px;
+}
+
+.hub-holdings__table tbody td {
+	border-top: 1px solid var(--col-light-grey);
+	color: var(--col-dark-grey);
+}
+
+.hub-holdings__table tbody tr.is-alt td {
+	background-color: var(--col-chart-2-tx);
+}
+
+.hub-holdings__table th.hub-holdings__rank-col,
+.hub-holdings__table td.hub-holdings__rank-col {
+	width: 3rem;
+	text-align: right;
+}
+
+.hub-holdings__table th.hub-holdings__weight-col,
+.hub-holdings__table td.hub-holdings__weight-col {
+	width: 7rem;
+	text-align: right;
 }
 
 /* --- src/blocks/how-to-invest-full.css --- */

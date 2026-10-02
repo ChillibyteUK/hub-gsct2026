@@ -86,11 +86,13 @@ function hub_gsct2026_enqueue_scripts() {
 	// lenis.css / lenis.min.js 1.3.11 unpkg.com/lenis@1.3.11/dist/
 	hub_gsct2026_enqueue_vendor( 'lenis-style', 'lenis.css', true );
 	hub_gsct2026_enqueue_vendor( 'lenis', 'lenis.min.js' );
+	// chart.umd.min.js 4.4.1 cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js
+	hub_gsct2026_enqueue_vendor( 'chart-js', 'chart.umd.min.js' );
 
 	$rel = '/js/theme.min.js';
 	$abs = get_stylesheet_directory() . $rel;
 	if ( file_exists( $abs ) ) {
-		wp_enqueue_script( 'hub-gsct2026-theme', get_stylesheet_directory_uri() . $rel, array( 'gsap', 'gsap-scrolltrigger', 'lenis' ), filemtime( $abs ), true );
+		wp_enqueue_script( 'hub-gsct2026-theme', get_stylesheet_directory_uri() . $rel, array( 'gsap', 'gsap-scrolltrigger', 'lenis', 'chart-js' ), filemtime( $abs ), true );
 	}
 }
 add_action( 'wp_enqueue_scripts', 'hub_gsct2026_enqueue_scripts' );

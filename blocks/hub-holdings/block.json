@@ -1,0 +1,30 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "hub-gsct2026/hub-holdings",
+	"title": "HUB Holdings",
+	"category": "hub-gsct2026",
+	"icon": "editor-table",
+	"description": "Top 10 holdings table from a pasted CSV (name, sector/industry, weight %). Filter button hides 'Collective investments' rows.",
+	"attributes": {
+		"title": {
+			"type": "string",
+			"default": ""
+		},
+		"holdingsCsv": {
+			"type": "string",
+			"default": ""
+		},
+		"excludeLabel": {
+			"type": "string",
+			"default": "Exclude Collective investments"
+		}
+	},
+	"supports": {
+		"anchor": true,
+		"className": true,
+		"align": true
+	},
+	"editorScript": "file:./build/index.js",
+	"render": "file:./render.php"
+}

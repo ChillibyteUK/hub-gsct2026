@@ -568,6 +568,104 @@
 	  });
 	}
 
+	/**
+	 * Holdings exclusion toggle — within each .hub-holdings section, keeps
+	 * exactly the first 10 rows visible, either unfiltered or skipping rows
+	 * tagged data-hub-holdings-excluded (sector 'Collective investments').
+	 * Scoped per section so multiple holdings blocks never interfere.
+	 */
+	function initHoldings() {
+	  document.querySelectorAll('.hub-holdings').forEach(section => {
+	    const toggle = section.querySelector('.hub-holdings__toggle');
+	    if (!toggle) {
+	      return;
+	    }
+	    const rows = Array.from(section.querySelectorAll('.hub-holdings__table tbody tr'));
+	    const apply = excluding => {
+	      let shown = 0;
+	      rows.forEach(row => {
+	        if (excluding && row.hasAttribute('data-hub-holdings-excluded')) {
+	          row.hidden = true;
+	          row.classList.remove('is-alt');
+	          return;
+	        }
+	        if (shown < 10) {
+	          row.hidden = false;
+	          shown += 1;
+	          const rank = row.querySelector('.hub-holdings__rank-col');
+	          if (rank) {
+	            rank.textContent = String(shown);
+	          }
+	          row.classList.toggle('is-alt', 0 === shown % 2);
+	        } else {
+	          row.hidden = true;
+	          row.classList.remove('is-alt');
+	        }
+	      });
+	    };
+	    toggle.addEventListener('click', () => {
+	      const excluding = 'true' !== toggle.getAttribute('aria-pressed');
+	      toggle.setAttribute('aria-pressed', String(excluding));
+	      apply(excluding);
+	    });
+	  });
+	}
+
+	/**
+	 * Geographic allocation doughnuts ([data-geo-chart]) — reads labels, values
+	 * and slice colours from the canvas's own data attributes (rendered by the
+	 * HUB Holdings Geographic Chart block) and draws a Chart.js doughnut. No
+	 * legend (the sibling table is the legend); tooltips read "Region: x.x%".
+	 * Silently skips everything if the vendored Chart.js global isn't there.
+	 */
+	function initGeoCharts() {
+	  if (typeof window.Chart === 'undefined') {
+	    return;
+	  }
+	  document.querySelectorAll('[data-geo-chart]').forEach(canvas => {
+	    let labels = [];
+	    let values = [];
+	    let colors = [];
+	    try {
+	      labels = JSON.parse(canvas.getAttribute('data-labels') || '[]');
+	      values = JSON.parse(canvas.getAttribute('data-values') || '[]');
+	      colors = JSON.parse(canvas.getAttribute('data-colors') || '[]');
+	    } catch (err) {
+	      return;
+	    }
+	    if (!labels.length || !values.length) {
+	      return;
+	    }
+	    new window.Chart(canvas, {
+	      type: 'doughnut',
+	      data: {
+	        labels,
+	        datasets: [{
+	          data: values,
+	          backgroundColor: colors,
+	          borderColor: '#ffffff',
+	          borderWidth: 2
+	        }]
+	      },
+	      options: {
+	        responsive: true,
+	        maintainAspectRatio: true,
+	        cutout: '70%',
+	        plugins: {
+	          legend: {
+	            display: false
+	          },
+	          tooltip: {
+	            callbacks: {
+	              label: context => ` ${context.parsed}%`
+	            }
+	          }
+	        }
+	      }
+	    });
+	  });
+	}
+
 	document.addEventListener('DOMContentLoaded', () => {
 	  initLenis();
 	  initNavToggle();
@@ -580,6 +678,8 @@
 	  initTimelines();
 	  initShareButtons();
 	  initRelatedInsights();
+	  initHoldings();
+	  initGeoCharts();
 	});
 
 })();

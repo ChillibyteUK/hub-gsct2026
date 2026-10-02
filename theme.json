@@ -90,6 +90,48 @@
           "origin": "theme"
         },
         {
+          "name": "chart-2-tx",
+          "slug": "chart-2-tx",
+          "color": "#7628D40d",
+          "origin": "theme"
+        },
+        {
+          "name": "chart-1",
+          "slug": "chart-1",
+          "color": "#f74333",
+          "origin": "theme"
+        },
+        {
+          "name": "chart-2",
+          "slug": "chart-2",
+          "color": "#7628D4",
+          "origin": "theme"
+        },
+        {
+          "name": "chart-3",
+          "slug": "chart-3",
+          "color": "#307eff",
+          "origin": "theme"
+        },
+        {
+          "name": "chart-4",
+          "slug": "chart-4",
+          "color": "#d869bc",
+          "origin": "theme"
+        },
+        {
+          "name": "chart-5",
+          "slug": "chart-5",
+          "color": "#0813af",
+          "origin": "theme"
+        },
+        {
+          "name": "chart-6",
+          "slug": "chart-6",
+          "color": "#dd7d07",
+          "origin": "theme"
+        },
+        {
           "name": "brand-red",
           "slug": "brand-red",
           "color": "#f74333",

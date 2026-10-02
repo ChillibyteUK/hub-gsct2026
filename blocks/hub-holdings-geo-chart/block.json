@@ -1,0 +1,33 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "hub-gsct2026/hub-holdings-geo-chart",
+	"title": "HUB Holdings Geographic Chart",
+	"category": "hub-gsct2026",
+	"icon": "chart-pie",
+	"description": "Geographical allocation doughnut (Chart.js) beside a region/allocation table.",
+	"attributes": {
+		"title": {
+			"type": "string",
+			"default": "Geographical breakdown"
+		},
+		"regions": {
+			"type": "array",
+			"default": [
+				{ "region": "North America", "allocation": 46.2 },
+				{ "region": "Rest of world", "allocation": 10.3 },
+				{ "region": "Japan", "allocation": 18.7 },
+				{ "region": "UK", "allocation": 12.5 },
+				{ "region": "Continental Europe", "allocation": 11 },
+				{ "region": "Cash & fixed interest", "allocation": 1.3 }
+			]
+		}
+	},
+	"supports": {
+		"anchor": true,
+		"className": true,
+		"align": true
+	},
+	"editorScript": "file:./build/index.js",
+	"render": "file:./render.php"
+}
