@@ -59,8 +59,7 @@ $wrapper_attributes = get_block_wrapper_attributes( array( 'class' => 'hub-docum
 					$file_detail = '';
 
 					if ( $file_url ) {
-						$filetype = wp_check_filetype( $file_url );
-						$file_ext = $filetype['ext'] ? strtoupper( $filetype['ext'] ) : '';
+						$file_ext = hub_gsct2026_get_attachment_ext( $file_id );
 
 						$file_size = '';
 						$file_path = get_attached_file( $file_id );

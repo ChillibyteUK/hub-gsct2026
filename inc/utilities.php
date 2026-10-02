@@ -320,6 +320,25 @@ function hub_gsct2026_format_file_size( $bytes ) {
 }
 
 /**
+ * Uppercase file extension for an attachment, read straight off the real
+ * file path — deliberately not wp_check_filetype(), which only recognises
+ * WordPress's allowed-uploads list and returns blank for anything else
+ * (e.g. the .xhtml annual reports).
+ *
+ * @param int $attachment_id Attachment ID.
+ * @return string e.g. "PDF", "XHTML", or "" when unresolvable.
+ */
+function hub_gsct2026_get_attachment_ext( $attachment_id ) {
+	$path = get_attached_file( (int) $attachment_id );
+
+	if ( ! $path ) {
+		return '';
+	}
+
+	return strtoupper( pathinfo( $path, PATHINFO_EXTENSION ) );
+}
+
+/**
  * Render breadcrumb markup with schema metadata.
  *
  * @param array  $breadcrumbs Breadcrumb items.
