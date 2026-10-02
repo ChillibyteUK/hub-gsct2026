@@ -4,7 +4,7 @@ import RepeaterField from '../../_shared/RepeaterField';
 import EditorBlockShell from '../../_shared/EditorBlockShell';
 
 const cardsFields = [
-	{ name: 'cardTitle', label: 'Title', type: 'text' },
+	{ name: 'cardTitle', label: 'Title', type: 'text', flex: '1 1 100%' },
 	{ name: 'file', label: 'File', type: 'file' },
 	{ name: 'date', label: 'Date', type: 'text', help: 'Manual entry, UK format — e.g. 15 Jan 2026.' },
 ];
@@ -38,7 +38,7 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 				onChange={ ( value ) => setAttributes( { cards: value } ) }
 				fields={ cardsFields }
 				emptyRow={ cardsEmptyRow }
-				layout="column"
+				layout="row"
 			/>
 			<p className="hub-editor-block__note">
 				File type and size are derived from the uploaded file itself — only the date is typed in by hand.

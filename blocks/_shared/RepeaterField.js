@@ -103,6 +103,187 @@ function RepeaterImageField( { field, row, index, updateRow, isColumn } ) {
 }
 
 /**
+ * Renders one sub-field control for a repeater row. The per-type chain used
+ * to live inline in RepeaterField's fields.map() below, but an opt-in
+ * non-equal field width (`field.flex`) needs the control wrapped in a flex
+ * cell — cleaner around a named helper's single return than threaded
+ * through every branch of the chain in place.
+ *
+ * @param {Object}   field      Field config ({ name, label, type, ... }).
+ * @param {Object}   row        Current row object.
+ * @param {number}   index      Row index (for updateRow).
+ * @param {Function} updateRow  ( index, patch ) => void.
+ * @param {boolean}  isColumn   Column-layout flag (label visibility).
+ * @return {*} Single field control element (keyed by field.name).
+ */
+function renderRowField( field, row, index, updateRow, isColumn ) {
+	if ( 'image' === field.type ) {
+		return (
+			<RepeaterImageField
+				key={ field.name }
+				field={ field }
+				row={ row }
+				index={ index }
+				updateRow={ updateRow }
+				isColumn={ isColumn }
+			/>
+		);
+	}
+
+	if ( 'link' === field.type ) {
+		return (
+			<div className="hub-repeater-field__link" key={ field.name }>
+				<TextControl
+					label={ __( `${ field.label } Title`, 'hub-gsct2026' ) }
+					hideLabelFromVision={ ! isColumn }
+					value={ row[ `${ field.name }Text` ] || '' }
+					onChange={ ( v ) => updateRow( index, { [ `${ field.name }Text` ]: v } ) }
+				/>
+				<TextControl
+					type="url"
+					label={ __( `${ field.label } URL`, 'hub-gsct2026' ) }
+					hideLabelFromVision={ ! isColumn }
+					value={ row[ field.name ] || '' }
+					onChange={ ( v ) => updateRow( index, { [ field.name ]: v } ) }
+					help={ field.help }
+				/>
+				{ field.linkTarget && (
+					<ToggleControl
+						label={ __( `Open ${ field.label } in a new tab`, 'hub-gsct2026' ) }
+						checked={ !! row[ `${ field.name }Target` ] }
+						onChange={ ( v ) => updateRow( index, { [ `${ field.name }Target` ]: v } ) }
+					/>
+				) }
+			</div>
+		);
+	}
+
+	if ( 'file' === field.type ) {
+		return (
+			<MediaUploadCheck key={ field.name }>
+				<MediaUpload
+					onSelect={ ( media ) =>
+						updateRow( index, {
+							[ field.name ]: media.id,
+							[ `${ field.name }Name` ]: media.filename || media.title || '',
+						} )
+					}
+					allowedTypes={ field.mimeTypes || [] }
+					value={ row[ field.name ] }
+					render={ ( { open } ) => (
+						<div className="hub-repeater-field__image">
+							<span className={ isColumn ? 'hub-editor-field__label' : 'screen-reader-text' }>
+								{ field.label }
+							</span>
+							{ row[ `${ field.name }Name` ] && (
+								<span className="hub-repeater-field__file-name">
+									{ row[ `${ field.name }Name` ] }
+								</span>
+							) }
+							<Button variant="secondary" size="small" onClick={ open }>
+								{ row[ field.name ]
+									? __( 'Replace', 'hub-gsct2026' )
+									: __( 'Select', 'hub-gsct2026' ) }
+							</Button>
+						</div>
+					) }
+				/>
+			</MediaUploadCheck>
+		);
+	}
+
+	if ( 'textarea' === field.type ) {
+		return (
+			<TextareaControl
+				key={ field.name }
+				label={ field.label }
+				hideLabelFromVision={ ! isColumn }
+				value={ row[ field.name ] || '' }
+				onChange={ ( v ) => updateRow( index, { [ field.name ]: v } ) }
+				help={ field.help }
+			/>
+		);
+	}
+
+	if ( 'richtext' === field.type ) {
+		return (
+			<div className="hub-repeater-field__richtext" key={ field.name }>
+				{ isColumn && <span className="hub-editor-field__label">{ field.label }</span> }
+				{ /* field.multiline: true for real multi-paragraph fields.
+				    Leave unset/false for a single-line-with-<br> field —
+				    matches a plain textarea's own "line breaks only, no
+				    separate paragraphs" semantics, and multiline="p"
+				    would wrongly turn a plain Enter into a new paragraph
+				    instead. */ }
+				<RichText
+					identifier={ `${ row.id }-${ field.name }` }
+					tagName="div"
+					multiline={ field.multiline ? 'p' : undefined }
+					className="hub-editor-field__control"
+					aria-label={ field.label }
+					placeholder={ field.label }
+					value={ toSafeRichTextHtml( row[ field.name ], field.multiline ) }
+					onChange={ ( v ) => updateRow( index, { [ field.name ]: v } ) }
+				/>
+				{ field.help && <p className="hub-editor-field__help">{ field.help }</p> }
+			</div>
+		);
+	}
+
+	if ( 'radio' === field.type ) {
+		return (
+			<RadioControl
+				key={ field.name }
+				className={ field.className }
+				label={ field.label }
+				hideLabelFromVision={ ! isColumn }
+				selected={ row[ field.name ] || '' }
+				options={ field.options || [] }
+				onChange={ ( v ) => updateRow( index, { [ field.name ]: v } ) }
+			/>
+		);
+	}
+
+	if ( 'number' === field.type ) {
+		return (
+			<TextControl
+				key={ field.name }
+				type="number"
+				label={ field.label }
+				hideLabelFromVision={ ! isColumn }
+				value={ row[ field.name ] ?? '' }
+				onChange={ ( v ) => updateRow( index, { [ field.name ]: '' === v ? '' : Number( v ) } ) }
+				help={ field.help }
+			/>
+		);
+	}
+
+	if ( 'post' === field.type ) {
+		return (
+			<PostTypePicker
+				key={ field.name }
+				label={ field.label }
+				postType={ field.postType || 'page' }
+				value={ row[ field.name ] || 0 }
+				onChange={ ( id ) => updateRow( index, { [ field.name ]: id } ) }
+				help={ field.help }
+			/>
+		);
+	}
+
+	return (
+		<TextControl
+			key={ field.name }
+			label={ field.label }
+			hideLabelFromVision={ ! isColumn }
+			value={ row[ field.name ] || '' }
+			onChange={ ( v ) => updateRow( index, { [ field.name ]: v } ) }
+			help={ field.help }
+		/>
+	);
+}
+
+/**
  * Generic repeater UI for a block attribute holding an array of row objects.
  * The block-editor equivalent of the `repeater` field type in
  * inc/options.php — same sub-field vocabulary (text/textarea/image), separate
@@ -125,7 +306,13 @@ function RepeaterImageField( { field, row, index, updateRow, isColumn } ) {
  * @param {string}   props.label    Field group label.
  * @param {Object[]} props.value    Current rows.
  * @param {Function} props.onChange ( rows ) => void
- * @param {Object[]} props.fields   [ { name, label, type: 'text'|'number'|'textarea'|'richtext'|'image'|'file'|'link'|'radio'|'post', help, mimeTypes, linkTarget, options, className, showIf, multiline, postType } ]
+ * @param {Object[]} props.fields   [ { name, label, type: 'text'|'number'|'textarea'|'richtext'|'image'|'file'|'link'|'radio'|'post', help, mimeTypes, linkTarget, options, className, showIf, multiline, postType, flex } ]
+ *                                  `flex` (row layout only) overrides a field's flex shorthand —
+ *                                  e.g. a full-width title above two half-width fields is
+ *                                  `{ flex: '1 1 100%' }` on the title with the row wrapping
+ *                                  (see the flex-wrap rules in src/css/editor.css). The shared
+ *                                  header cell gets the same value so columns stay aligned.
+ *                                  Unset fields keep the default equal slot.
  *                                  `postType` ('post' fields only) is the post type slug to search
  *                                  (default 'page') — renders ./PostTypePicker, storing the selected
  *                                  post's ID directly on `field.name` (no separate `{name}Url`-style
@@ -244,6 +431,7 @@ export default function RepeaterField( { label, value, onChange, fields, emptyRo
 									? 'hub-repeater-field__header-cell hub-repeater-field__header-cell--image'
 									: 'hub-repeater-field__header-cell'
 							}
+							style={ field.flex ? { flex: field.flex } : undefined }
 						>
 							{ field.label }
 						</span>
@@ -274,167 +462,22 @@ export default function RepeaterField( { label, value, onChange, fields, emptyRo
 							return null;
 						}
 
-						if ( 'image' === field.type ) {
-							return (
-								<RepeaterImageField
-									key={ field.name }
-									field={ field }
-									row={ row }
-									index={ index }
-									updateRow={ updateRow }
-									isColumn={ isColumn }
-								/>
-							);
-						}
+						const node = renderRowField( field, row, index, updateRow, isColumn );
 
-						if ( 'link' === field.type ) {
+						// Opt-in per-field flex (field.flex, row layout only) wraps
+						// the control in a flex cell so it can take a non-equal
+						// width — the shared header cell above gets the same
+						// value, so columns stay aligned. Fields without it
+						// render exactly as before.
+						if ( field.flex && ! isColumn ) {
 							return (
-								<div className="hub-repeater-field__link" key={ field.name }>
-									<TextControl
-										label={ __( `${ field.label } Title`, 'hub-gsct2026' ) }
-										hideLabelFromVision={ ! isColumn }
-										value={ row[ `${ field.name }Text` ] || '' }
-										onChange={ ( v ) => updateRow( index, { [ `${ field.name }Text` ]: v } ) }
-									/>
-									<TextControl
-										type="url"
-										label={ __( `${ field.label } URL`, 'hub-gsct2026' ) }
-										hideLabelFromVision={ ! isColumn }
-										value={ row[ field.name ] || '' }
-										onChange={ ( v ) => updateRow( index, { [ field.name ]: v } ) }
-										help={ field.help }
-									/>
-									{ field.linkTarget && (
-										<ToggleControl
-											label={ __( `Open ${ field.label } in a new tab`, 'hub-gsct2026' ) }
-											checked={ !! row[ `${ field.name }Target` ] }
-											onChange={ ( v ) => updateRow( index, { [ `${ field.name }Target` ]: v } ) }
-										/>
-									) }
+								<div key={ field.name } className="hub-repeater-field__cell" style={ { flex: field.flex } }>
+									{ node }
 								</div>
 							);
 						}
 
-						if ( 'file' === field.type ) {
-							return (
-								<MediaUploadCheck key={ field.name }>
-									<MediaUpload
-										onSelect={ ( media ) =>
-											updateRow( index, {
-												[ field.name ]: media.id,
-												[ `${ field.name }Name` ]: media.filename || media.title || '',
-											} )
-										}
-										allowedTypes={ field.mimeTypes || [] }
-										value={ row[ field.name ] }
-										render={ ( { open } ) => (
-											<div className="hub-repeater-field__image">
-												{ row[ `${ field.name }Name` ] && (
-													<span className="hub-repeater-field__file-name">
-														{ row[ `${ field.name }Name` ] }
-													</span>
-												) }
-												<Button variant="secondary" size="small" onClick={ open }>
-													{ row[ field.name ]
-														? __( 'Replace', 'hub-gsct2026' )
-														: __( 'Select', 'hub-gsct2026' ) }
-												</Button>
-											</div>
-										) }
-									/>
-								</MediaUploadCheck>
-							);
-						}
-
-						if ( 'textarea' === field.type ) {
-							return (
-								<TextareaControl
-									key={ field.name }
-									label={ field.label }
-									hideLabelFromVision={ ! isColumn }
-									value={ row[ field.name ] || '' }
-									onChange={ ( v ) => updateRow( index, { [ field.name ]: v } ) }
-									help={ field.help }
-								/>
-							);
-						}
-
-						if ( 'richtext' === field.type ) {
-							return (
-								<div className="hub-repeater-field__richtext" key={ field.name }>
-									{ isColumn && <span className="hub-editor-field__label">{ field.label }</span> }
-									{ /* field.multiline: true for real multi-paragraph fields.
-									    Leave unset/false for a single-line-with-<br> field —
-									    matches a plain textarea's own "line breaks only, no
-									    separate paragraphs" semantics, and multiline="p"
-									    would wrongly turn a plain Enter into a new paragraph
-									    instead. */ }
-									<RichText
-										identifier={ `${ row.id }-${ field.name }` }
-										tagName="div"
-										multiline={ field.multiline ? 'p' : undefined }
-										className="hub-editor-field__control"
-										aria-label={ field.label }
-										placeholder={ field.label }
-										value={ toSafeRichTextHtml( row[ field.name ], field.multiline ) }
-										onChange={ ( v ) => updateRow( index, { [ field.name ]: v } ) }
-									/>
-									{ field.help && <p className="hub-editor-field__help">{ field.help }</p> }
-								</div>
-							);
-						}
-
-						if ( 'radio' === field.type ) {
-							return (
-								<RadioControl
-									key={ field.name }
-									className={ field.className }
-									label={ field.label }
-									hideLabelFromVision={ ! isColumn }
-									selected={ row[ field.name ] || '' }
-									options={ field.options || [] }
-									onChange={ ( v ) => updateRow( index, { [ field.name ]: v } ) }
-								/>
-							);
-						}
-
-						if ( 'number' === field.type ) {
-							return (
-								<TextControl
-									key={ field.name }
-									type="number"
-									label={ field.label }
-									hideLabelFromVision={ ! isColumn }
-									value={ row[ field.name ] ?? '' }
-									onChange={ ( v ) => updateRow( index, { [ field.name ]: '' === v ? '' : Number( v ) } ) }
-									help={ field.help }
-								/>
-							);
-						}
-
-						if ( 'post' === field.type ) {
-							return (
-								<PostTypePicker
-									key={ field.name }
-									label={ field.label }
-									postType={ field.postType || 'page' }
-									value={ row[ field.name ] || 0 }
-									onChange={ ( id ) => updateRow( index, { [ field.name ]: id } ) }
-									help={ field.help }
-								/>
-							);
-						}
-
-						return (
-							<TextControl
-								key={ field.name }
-								label={ field.label }
-								hideLabelFromVision={ ! isColumn }
-								value={ row[ field.name ] || '' }
-								onChange={ ( v ) => updateRow( index, { [ field.name ]: v } ) }
-								help={ field.help }
-							/>
-						);
+						return node;
 					} ) }
 					<div className="hub-repeater-field__row-actions">
 						<Button
