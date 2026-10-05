@@ -247,6 +247,20 @@ function hub_gsct2026_disable_emojis_tinymce( $plugins ) {
 }
 
 /**
+ * Suppress noisy core dashboard widgets: WordPress Events and News,
+ * At a Glance and Quick Draft. Same remove_meta_box approach the old
+ * cbp-blog-options plugin used — only these three, nothing else.
+ *
+ * @return void
+ */
+function hub_gsct2026_suppress_dashboard_widgets() {
+	remove_meta_box( 'dashboard_primary', 'dashboard', 'side' );
+	remove_meta_box( 'dashboard_right_now', 'dashboard', 'normal' );
+	remove_meta_box( 'dashboard_quick_press', 'dashboard', 'side' );
+}
+add_action( 'wp_dashboard_setup', 'hub_gsct2026_suppress_dashboard_widgets' );
+
+/**
  * Send fixed security response headers on every response.
  *
  * HSTS only over actual HTTPS (over plain HTTP it would be a no-op at
