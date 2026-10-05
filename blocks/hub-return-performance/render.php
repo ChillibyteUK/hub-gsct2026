@@ -99,7 +99,7 @@ $wrapper_attributes = get_block_wrapper_attributes( array( 'class' => 'hub-retur
 		<?php
 		if ( '' !== trim( $disclaimer ) ) {
 			?>
-			<p class="hub-return-performance__disclaimer"><?= esc_html( $disclaimer ); ?></p>
+			<p class="hub-return-performance__disclaimer mt-4"><?= wp_kses_post( nl2br( $disclaimer ) ); ?></p>
 			<?php
 		}
 		if ( '' !== trim( $cum_heading ) ) {
