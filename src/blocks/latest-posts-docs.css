@@ -1,0 +1,23 @@
+/* HUB Latest Posts and Documents — two swipeable groups (posts as
+   Related Insights cards, documents as Document Library Hero cards) on
+   the sunset gradient. Card, track, footer, dots and title styling all
+   come from those two blocks' own classes, reused verbatim — this file
+   only owns the section shell, the gap between the groups, and the one
+   mobile rule the hero cards need to behave as swipe-track items
+   (Related Insights cards bring their own via their card class). */
+
+.hub-latest-posts-docs {
+	background: var(--gradient-sunset);
+	padding-block: var(--space-6);
+}
+
+.hub-latest-posts-docs__docs {
+	margin-top: var(--space-6);
+}
+
+@media (max-width: 991px) {
+	.hub-latest-posts-docs .hub-document-library-hero__card[data-hub-carousel-card] {
+		flex: 0 0 78%;
+		scroll-snap-align: start;
+	}
+}

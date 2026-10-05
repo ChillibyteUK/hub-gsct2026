@@ -52,6 +52,13 @@
   --col-brand-blue-100: #c6e0ff;
   --col-brand-pink: #ffaaeb;
 
+  /* Fixed gradients — referenced by var() wherever a sunset/sunrise
+     section background is needed (nav cards, document heroes, related
+     insights, secondary + gradient heroes). One definition so the stops
+     can't drift apart per usage. */
+  --gradient-sunset: radial-gradient(120% 120% at 50% 100%, #ff7670 0%, #ffb5ce 50%, #ffd2f7 90%);
+  --gradient-sunrise: radial-gradient(120% 120% at 50% 100%, #fff036 0%, #cbe1f2 60%);
+
   --col-primary: var(--col-blue-700);
   --col-body: var(--col-black);
   --col-body-bg: var(--col-white);
@@ -3106,7 +3113,7 @@ article h2[id] {
    download row pinned to the bottom. */
 
 .hub-document-library-hero {
-	background: radial-gradient(120% 120% at 50% 100%, #ff7670 0%, #ffb5ce 50%, #ffd2f7 90%);
+	background: var(--gradient-sunset);
 	padding-block: var(--space-5) var(--space-6);
 }
 
@@ -3732,7 +3739,7 @@ a.hub-how-to-invest-full__platform:focus-visible {
    can never introduce horizontal scrolling. */
 
 .hub-related-insights {
-	background: radial-gradient(120% 120% at 50% 100%, #ff7670 0%, #ffb5ce 50%, #ffd2f7 90%);
+	background: var(--gradient-sunset);
 	padding-block: var(--space-6);
 }
 
@@ -3880,13 +3887,38 @@ a.hub-how-to-invest-full__platform:focus-visible {
 		}
 }
 
+/* --- src/blocks/latest-posts-docs.css --- */
+/* HUB Latest Posts and Documents — two swipeable groups (posts as
+   Related Insights cards, documents as Document Library Hero cards) on
+   the sunset gradient. Card, track, footer, dots and title styling all
+   come from those two blocks' own classes, reused verbatim — this file
+   only owns the section shell, the gap between the groups, and the one
+   mobile rule the hero cards need to behave as swipe-track items
+   (Related Insights cards bring their own via their card class). */
+
+.hub-latest-posts-docs {
+	background: var(--gradient-sunset);
+	padding-block: var(--space-6);
+}
+
+.hub-latest-posts-docs__docs {
+	margin-top: var(--space-6);
+}
+
+@media (max-width: 991px) {
+	.hub-latest-posts-docs .hub-document-library-hero__card[data-hub-carousel-card] {
+		flex: 0 0 78%;
+		scroll-snap-align: start;
+	}
+}
+
 /* --- src/blocks/nav-cards.css --- */
 /* HUB Nav Cards — title + three link cards on the fixed sunset gradient
    (same value as HUB Gradient Hero's "sunset" choice / HUB Related
    Insights' pink section). */
 
 .hub-nav-cards {
-	background: radial-gradient(120% 120% at 50% 100%, #ff7670 0%, #ffb5ce 50%, #ffd2f7 90%);
+	background: var(--gradient-sunset);
 	padding-block: var(--space-6);
 }
 
@@ -4188,7 +4220,7 @@ a.hub-nav-cards__card:focus-visible {
    (left pair positive, right pair negative); the primary faces forward and
    layers above the rest. */
 .hub-secondary-hero {
-    background: radial-gradient(120% 120% at 50% 100%, #fff036 0%, #cbe1f2 60%);
+    background: var(--gradient-sunrise);
     padding-block: var(--space-5);
 }
 

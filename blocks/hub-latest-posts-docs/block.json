@@ -1,0 +1,34 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "hub-gsct2026/hub-latest-posts-docs",
+	"title": "HUB Latest Posts and Documents",
+	"category": "hub-gsct2026",
+	"icon": "grid",
+	"description": "Latest three posts plus the site-wide featured documents on sunset — post cards and hero cards, swiping on mobile.",
+	"attributes": {
+		"postsTitle": {
+			"type": "string",
+			"default": "Latest insights & market perspectives"
+		},
+		"docsTitle": {
+			"type": "string",
+			"default": "Latest investor documents"
+		},
+		"insightsLinkUrl": {
+			"type": "string",
+			"default": ""
+		},
+		"documentsLinkUrl": {
+			"type": "string",
+			"default": ""
+		}
+	},
+	"supports": {
+		"anchor": true,
+		"className": true,
+		"align": true
+	},
+	"editorScript": "file:./build/index.js",
+	"render": "file:./render.php"
+}

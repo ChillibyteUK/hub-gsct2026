@@ -13,8 +13,8 @@
 defined( 'ABSPATH' ) || exit;
 
 $hub_gradients = array(
-	'sunrise' => 'radial-gradient(120% 120% at 50% 100%, #fff036 0%, #cbe1f2 60%)',
-	'sunset'  => 'radial-gradient(120% 120% at 50% 100%, #ff7670 0%, #ffb5ce 50%, #ffd2f7 90%)',
+	'sunrise' => 'var(--gradient-sunrise)',
+	'sunset'  => 'var(--gradient-sunset)',
 );
 
 $hub_choice = $attributes['backgroundChoice'] ?? 'sunrise';

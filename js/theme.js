@@ -520,16 +520,18 @@
 	}
 
 	/**
-	 * Related Insights carousel dots. Each section's dots mirror its swipe
-	 * track: tapping a dot scrolls to that card, and scrolling updates the
-	 * active dot. Desktop shows a plain grid (no overflow), so the dots stay
-	 * hidden there and this is a no-op.
+	 * Swipe-carousel dots for card tracks. Each section's dots mirror its
+	 * swipe track: tapping a dot scrolls to that card, and scrolling updates
+	 * the active dot. Desktop shows a plain grid (no overflow), so the dots
+	 * stay hidden there and this is a no-op. Scopes to Related Insights
+	 * sections plus any [data-hub-carousel] group (e.g. HUB Latest Posts and
+	 * Documents), with cards found by [data-hub-carousel-card].
 	 */
 	function initRelatedInsights() {
 	  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-	  document.querySelectorAll('.hub-related-insights').forEach(section => {
+	  document.querySelectorAll('.hub-related-insights, [data-hub-carousel]').forEach(section => {
 	    const track = section.querySelector('.hub-related-insights__track');
-	    const cards = Array.from(section.querySelectorAll('.hub-related-insights__card'));
+	    const cards = Array.from(section.querySelectorAll('[data-hub-carousel-card]'));
 	    const dots = Array.from(section.querySelectorAll('[data-hub-related-dot]'));
 	    if (!track || cards.length === 0 || dots.length === 0) return;
 	    const setActive = index => {

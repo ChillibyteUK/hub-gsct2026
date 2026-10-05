@@ -52,6 +52,13 @@
   --col-brand-blue-100: #c6e0ff;
   --col-brand-pink: #ffaaeb;
 
+  /* Fixed gradients — referenced by var() wherever a sunset/sunrise
+     section background is needed (nav cards, document heroes, related
+     insights, secondary + gradient heroes). One definition so the stops
+     can't drift apart per usage. */
+  --gradient-sunset: radial-gradient(120% 120% at 50% 100%, #ff7670 0%, #ffb5ce 50%, #ffd2f7 90%);
+  --gradient-sunrise: radial-gradient(120% 120% at 50% 100%, #fff036 0%, #cbe1f2 60%);
+
   --col-primary: var(--col-blue-700);
   --col-body: var(--col-black);
   --col-body-bg: var(--col-white);
