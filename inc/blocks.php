@@ -22,6 +22,25 @@ function hub_gsct2026_register_blocks() {
 add_action( 'init', 'hub_gsct2026_register_blocks' );
 
 /**
+ * Flag tool-embed pages on the <body> for page-wide neutralizations in
+ * CSS (e.g. the Investis stylesheet's bare `a.active`). Must live on an
+ * early hook like this — a body_class filter added from a block's
+ * render.php fires after <body> has already printed, so silently never
+ * applies.
+ *
+ * @param string[] $classes Body classes.
+ * @return string[]
+ */
+function hub_gsct2026_tool_page_body_class( $classes ) {
+	if ( is_singular() && has_block( 'hub-gsct2026/hub-announcements' ) ) {
+		$classes[] = 'has-investis-tool';
+	}
+
+	return $classes;
+}
+add_filter( 'body_class', 'hub_gsct2026_tool_page_body_class' );
+
+/**
  * Localize the primary-hero block's editor script with its hardcoded test
  * image URL, so the FocalPointPicker preview matches the image render.php
  * outputs on the front end without duplicating the theme URL as a

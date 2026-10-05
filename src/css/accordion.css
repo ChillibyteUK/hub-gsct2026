@@ -8,7 +8,11 @@
  * unique one) if independent multi-open items are wanted instead.
  */
 
-.accordion {
+/* All accordion rules below are scoped to .hub-faqs — the bare class
+   names collide with the Investis tool's own filter accordion
+   (.accordion.js-accordion etc.), which must keep its own flex layout. */
+
+.hub-faqs .accordion {
   display: flex;
   flex-direction: column;
   max-width: 720px;
@@ -25,15 +29,15 @@
   text-wrap: pretty;
 }
 
-.accordion-item {
+.hub-faqs .accordion-item {
   border-bottom: 1px solid var(--col-light-grey);
 }
 
-.accordion-item:first-child {
+.hub-faqs .accordion-item:first-child {
   border-top: 1px solid var(--col-light-grey);
 }
 
-.accordion-header {
+.hub-faqs .accordion-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -43,11 +47,11 @@
   cursor: pointer;
 }
 
-.accordion-header::-webkit-details-marker {
+.hub-faqs .accordion-header::-webkit-details-marker {
   display: none;
 }
 
-.accordion-icon {
+.hub-faqs .accordion-icon {
   flex-shrink: 0;
   display: block;
   width: 1.5rem;
@@ -55,11 +59,11 @@
   transition: transform var(--transition);
 }
 
-.accordion-item[open] .accordion-icon {
+.hub-faqs .accordion-item[open] .accordion-icon {
   transform: rotate(180deg);
 }
 
-.accordion-body {
+.hub-faqs .accordion-body {
   padding-bottom: var(--space-3);
   color: var(--col-black);
 }
