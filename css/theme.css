@@ -2604,6 +2604,23 @@ article h2[id] {
    Concatenation of src/blocks/*.css, alphabetical by filename. */
 
 /* --- src/blocks/3-points.css --- */
+/* Points fade-in (see src/js/three-points.js), numbered points only: a
+   point showing a big stat renders as-is, while one falling back to the
+   circled .number badge fades in. Pre-hidden only when scripts actually
+   run, so no-JS visitors get the finished layout with nothing to reveal.
+   Reduced motion opts back out to visible via the override below. */
+@media (scripting: enabled) {
+    .hub-3-points__point:has(> .number) {
+        opacity: 0;
+    }
+}
+
+@media (scripting: enabled) and (prefers-reduced-motion: reduce) {
+    .hub-3-points__point:has(> .number) {
+        opacity: 1;
+    }
+}
+
 .hub-3-points .number {
         background-color: var(--col-brand-red);
         color: var(--col-white);
@@ -2615,18 +2632,22 @@ article h2[id] {
         justify-content: center;
         margin-bottom: var(--space-2);
     }
+
 .hub-3-points h1 {
         padding-bottom: var(--space-3);
         border-bottom: 1px solid var(--col-light-grey);
         max-width: 800px;
     }
+
 .hub-3-points h2 {
         padding-bottom: var(--space-2);
         border-bottom: 1px solid var(--col-light-grey);
     }
+
 .hub-3-points .hub-3-points__intro {
         max-width: 600px;
     }
+
 .hub-3-points a {
         font-weight: var(--fw-500);
     }

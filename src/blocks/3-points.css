@@ -1,3 +1,20 @@
+/* Points fade-in (see src/js/three-points.js), numbered points only: a
+   point showing a big stat renders as-is, while one falling back to the
+   circled .number badge fades in. Pre-hidden only when scripts actually
+   run, so no-JS visitors get the finished layout with nothing to reveal.
+   Reduced motion opts back out to visible via the override below. */
+@media (scripting: enabled) {
+    .hub-3-points__point:has(> .number) {
+        opacity: 0;
+    }
+}
+
+@media (scripting: enabled) and (prefers-reduced-motion: reduce) {
+    .hub-3-points__point:has(> .number) {
+        opacity: 1;
+    }
+}
+
 .hub-3-points {
 
     .number {

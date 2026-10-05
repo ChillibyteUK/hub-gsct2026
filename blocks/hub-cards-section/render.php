@@ -41,7 +41,7 @@ $wrapper_attributes = get_block_wrapper_attributes( array( 'class' => 'hub-cards
 
 			$position_classes = array( 'hub-cards-section__card--first', 'hub-cards-section__card--second', 'hub-cards-section__card--third' );
 			?>
-		<div class="row gap-4 mb-4">
+		<div class="row gap-4 mb-4 hub-cards-section__cards">
 			<?php
 			foreach ( $cards as $item ) {
 				$position_class = $position_classes[ $loop_index ] ?? '';
@@ -69,6 +69,43 @@ $wrapper_attributes = get_block_wrapper_attributes( array( 'class' => 'hub-cards
 
 			?>
 		</div>
+		<script>
+		/* Parse-time pre-stack for the cards entrance (see src/js/cards-section.js):
+		   the footer bundle runs after first paint can occur, so without this
+		   the cards flash in their final spots before jumping to the stack.
+		   Runs synchronously while parsing, mirroring the init guards
+		   (desktop + motion OK only). The init clears this state and
+		   re-measures, so no-JS visitors — for whom this never runs — are
+		   unaffected. */
+		( function () {
+			if ( window.matchMedia( '(max-width: 767px)' ).matches ) {
+				return;
+			}
+			if ( window.matchMedia( '(prefers-reduced-motion: reduce)' ).matches ) {
+				return;
+			}
+			if ( ! document.currentScript ) {
+				return;
+			}
+			var section = document.currentScript.closest( '.hub-cards-section' );
+			if ( ! section ) {
+				return;
+			}
+			var cards = Array.prototype.slice.call( section.querySelectorAll( '.hub-cards-section__card' ) ).filter( function ( card ) {
+				return card.getBoundingClientRect().width > 0;
+			} );
+			if ( cards.length < 2 ) {
+				return;
+			}
+			var first = cards[ 0 ].getBoundingClientRect();
+			var firstCentreX = first.left + first.width / 2;
+			cards.forEach( function ( card, i ) {
+				var rect = card.getBoundingClientRect();
+				card.style.transform = 'translateX(' + ( firstCentreX - ( rect.left + rect.width / 2 ) ) + 'px)';
+				card.style.zIndex = String( cards.length - i );
+			} );
+		} )();
+		</script>
 			<?php
 		}
 		?>

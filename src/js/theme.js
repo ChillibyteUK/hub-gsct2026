@@ -6,6 +6,8 @@ import { initVideoFacades } from './video-facade';
 import { initLenis } from './lenis-init';
 import { initPrimaryHero } from './primary-hero';
 import { initSecondaryHero } from './secondary-hero';
+import { initCardsSections } from './cards-section';
+import { initThreePoints } from './three-points';
 import { initTimelines } from './timeline';
 import { initShareButtons } from './share';
 import { initRelatedInsights } from './related-insights';
@@ -22,6 +24,8 @@ document.addEventListener('DOMContentLoaded', () => {
 	initVideoFacades();
 	initPrimaryHero();
 	initSecondaryHero();
+	initCardsSections();
+	initThreePoints();
 	initTimelines();
 	initShareButtons();
 	initRelatedInsights();

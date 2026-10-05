@@ -401,6 +401,156 @@
 	}
 
 	/**
+	 * Cards Section entrance: on desktop the cards start stacked on the left
+	 * underneath card 1, then deal out rightward in order when the row scrolls
+	 * into view — card 2 slides out first, then card 3 from under it. Card 1
+	 * never moves; it sits on top of the starting pile via explicit z-order,
+	 * cleared once everything lands. Final positions are measured from the
+	 * real layout (not hardcoded), so any card count or responsive width just
+	 * works.
+	 *
+	 * Everything happens through gsap.set() inside the animated path, so
+	 * reduced-motion / missing GSAP / register failure / no-JS all simply
+	 * render the finished layout with nothing to reveal. Below 768px (the
+	 * block's own stacking breakpoint — see src/blocks/cards-section.css)
+	 * there is no animation at all, just the normal stacked cards.
+	 */
+	function initCardsSections() {
+	  const rows = document.querySelectorAll('.hub-cards-section__cards');
+
+	  // Clear the parse-time pre-stack first (see inline script in render.php)
+	  // — every early return below must leave the finished layout behind.
+	  rows.forEach(row => {
+	    row.querySelectorAll('.hub-cards-section__card').forEach(card => {
+	      card.style.transform = '';
+	      card.style.zIndex = '';
+	    });
+	  });
+	  if (window.matchMedia('(max-width: 767px)').matches) {
+	    return;
+	  }
+	  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+	    return;
+	  }
+	  if (typeof window.gsap === 'undefined' || typeof window.ScrollTrigger === 'undefined') {
+	    return;
+	  }
+	  try {
+	    window.gsap.registerPlugin(window.ScrollTrigger);
+	  } catch (error) {
+	    return;
+	  }
+	  rows.forEach(row => {
+	    const cards = [...row.querySelectorAll('.hub-cards-section__card')].filter(card => card.getBoundingClientRect().width > 0);
+	    if (cards.length < 2) return;
+	    const firstRect = cards[0].getBoundingClientRect();
+	    const firstCentreX = firstRect.left + firstRect.width / 2;
+	    const targets = cards.map(card => {
+	      const rect = card.getBoundingClientRect();
+	      return {
+	        card,
+	        dx: firstCentreX - (rect.left + rect.width / 2)
+	      };
+	    });
+
+	    // Pile everything under card 1 (first on top), then deal out in
+	    // DOM order — card 2 slides out, then card 3 from under it.
+	    targets.forEach(({
+	      card,
+	      dx
+	    }, i) => {
+	      window.gsap.set(card, {
+	        x: dx,
+	        zIndex: targets.length - i
+	      });
+	    });
+	    const timeline = window.gsap.timeline({
+	      scrollTrigger: {
+	        trigger: row,
+	        start: 'top 85%',
+	        once: true
+	      }
+	    });
+	    targets.forEach(({
+	      card
+	    }, i) => {
+	      if (0 === i) return;
+	      timeline.to(card, {
+	        x: 0,
+	        duration: 1,
+	        ease: 'power3.out'
+	      }, (i - 1) * 0.25);
+	    });
+	    timeline.set(cards, {
+	      clearProps: 'zIndex'
+	    });
+	  });
+
+	  // Trigger positions measured above can be stale by the time late assets
+	  // shift the page — refresh once everything has landed.
+	  window.addEventListener('load', () => {
+	    window.ScrollTrigger.refresh();
+	  });
+	}
+
+	/**
+	 * 3 Points fade-in: each numbered .hub-3-points__point fades in
+	 * consecutively when its row scrolls into view (covers both HUB 3 Points
+	 * and HUB 3 Points Hero — they share the markup). Only the numbered
+	 * variant animates — a point showing a big stat renders as-is. Numbered
+	 * points start at opacity 0 from CSS gated on scripting:enabled (see
+	 * src/blocks/3-points.css), so reduced-motion / missing GSAP / register
+	 * failure just clear back to visible instead of animating; no-JS keeps
+	 * the finished layout with nothing to reveal.
+	 */
+	function initThreePoints() {
+	  const rows = document.querySelectorAll('.hub-3-points__points');
+	  if (!rows.length) return;
+	  function revealAll() {
+	    document.querySelectorAll('.hub-3-points__point').forEach(point => {
+	      point.style.opacity = '1';
+	    });
+	  }
+	  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+	    revealAll();
+	    return;
+	  }
+	  if (typeof window.gsap === 'undefined' || typeof window.ScrollTrigger === 'undefined') {
+	    revealAll();
+	    return;
+	  }
+	  try {
+	    window.gsap.registerPlugin(window.ScrollTrigger);
+	  } catch (error) {
+	    revealAll();
+	    return;
+	  }
+	  rows.forEach(row => {
+	    const points = [...row.querySelectorAll('.hub-3-points__point')].filter(point => point.getBoundingClientRect().width > 0 && point.querySelector(':scope > .number'));
+	    if (!points.length) return;
+	    const timeline = window.gsap.timeline({
+	      scrollTrigger: {
+	        trigger: row,
+	        start: 'top 85%',
+	        once: true
+	      }
+	    });
+	    timeline.to(points, {
+	      opacity: 1,
+	      duration: 0.8,
+	      ease: 'power2.out',
+	      stagger: 0.2
+	    });
+	  });
+
+	  // Trigger positions measured above can be stale by the time late assets
+	  // shift the page — refresh once everything has landed.
+	  window.addEventListener('load', () => {
+	    window.ScrollTrigger.refresh();
+	  });
+	}
+
+	/**
 	 * Timeline slider arrows: each click lands the next (or previous) card
 	 * exactly on the track's left padding edge — computed from live geometry,
 	 * not by nudging a fixed card width, so partially-scrolled positions still
@@ -777,6 +927,8 @@
 	  initVideoFacades();
 	  initPrimaryHero();
 	  initSecondaryHero();
+	  initCardsSections();
+	  initThreePoints();
 	  initTimelines();
 	  initShareButtons();
 	  initRelatedInsights();
