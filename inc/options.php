@@ -85,13 +85,6 @@ function hub_gsct2026_register_settings_page() {
 			'section'     => 'hub_gsct2026_market_data',
 			'description' => 'Key for the market data API (Stats Banner share price). A HUB_INVESTIS_API_KEY wp-config.php constant takes precedence when both are set.',
 		),
-		'nav_per_share'             => array(
-			'label'       => 'NAV per Share (p)',
-			'type'        => 'text',
-			'section'     => 'hub_gsct2026_market_data',
-			'placeholder' => 'e.g. 185.20',
-			'description' => 'Manual NAV in pence for the Premium calculation. Used only while the API returns no NAV — go stale and the premium misleads, so replace with the API source as soon as Investis confirms one.',
-		),
 		'ga_property'               => array(
 			'label'       => 'GA Property',
 			'type'        => 'text',

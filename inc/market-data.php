@@ -170,8 +170,9 @@ function hub_gsct2026_fetch_market_snapshot() {
 }
 
 /**
- * NAV per share in pence. Prefers the API's closeNav when populated,
- * falls back to the manual Site-Wide Settings value, else null.
+ * NAV per share in pence, from the API's closeNav when populated, else
+ * null. No manual fallback — one was briefly added and removed per
+ * direction; a hand-entered NAV would go stale against the live price.
  *
  * @return float|null
  */
@@ -182,9 +183,7 @@ function hub_gsct2026_get_nav_per_share() {
 		return (float) $snapshot['closeNav'];
 	}
 
-	$manual = hub_gsct2026_get_setting( 'nav_per_share' );
-
-	return is_numeric( $manual ) && (float) $manual > 0 ? (float) $manual : null;
+	return null;
 }
 
 /**
