@@ -3347,6 +3347,227 @@ body.has-investis-tool a.active {
     }
 }
 
+/* --- src/blocks/dividends.css --- */
+/* HUB Dividends — latest card, annual stacked chart, searchable history
+   table. Table striping is class-based (.is-alt, re-applied to visible
+   rows by the filter JS) rather than :nth-child, so search/disclosure
+   hiding can't break the alternation — same approach as HUB Holdings. */
+
+.hub-dividends {
+	padding-block: var(--space-5);
+}
+
+.hub-dividends .h2-data-l {
+	margin-block: var(--space-5) var(--space-3);
+}
+
+.hub-dividends .h2-data-l:first-child {
+	margin-top: 0;
+}
+
+.hub-dividends__latest {
+	background-color: var(--col-brand-yellow);
+	border-radius: var(--radius-lg);
+	padding: var(--space-4);
+	color: var(--col-black);
+	margin-bottom: var(--space-2);
+}
+
+.hub-dividends__latest .h2-data-l {
+	margin: 0;
+}
+
+.hub-dividends__pills {
+	display: flex;
+	flex-wrap: wrap;
+	gap: var(--space-2);
+	margin-bottom: var(--space-4);
+}
+
+.hub-dividends__pills button {
+	padding: var(--space-1) var(--space-3);
+	border: 1px solid var(--col-brand-purple);
+	border-radius: 100vw;
+	background-color: transparent;
+	color: var(--col-brand-purple);
+	cursor: pointer;
+	font-family: var(--font-family-base);
+	font-size: var(--fs-400);
+	font-weight: var(--fw-bold);
+	line-height: normal;
+	transition: background-color 200ms ease, color 200ms ease;
+}
+
+.hub-dividends__pills button:hover,
+.hub-dividends__pills button:focus-visible {
+	background-color: var(--col-brand-purple);
+	color: var(--col-white);
+}
+
+.hub-dividends__pills button:focus-visible {
+	outline: 2px solid var(--col-brand-yellow);
+	outline-offset: 2px;
+}
+
+.hub-dividends__pills button.is-active {
+	background-color: var(--col-brand-purple);
+	color: var(--col-white);
+}
+
+.hub-dividends__chart-wrap {
+	margin-bottom: var(--space-3);
+}
+
+.hub-dividends__canvas {
+	position: relative;
+	height: 260px;
+}
+
+.hub-dividends__canvas canvas {
+	display: block;
+	width: 100%;
+	height: 100%;
+}
+
+.hub-dividends__legend {
+	display: flex;
+	flex-wrap: wrap;
+	gap: var(--space-2) var(--space-4);
+	margin: var(--space-3) 0 0;
+	padding: 0;
+	list-style: none;
+}
+
+.hub-dividends__legend li {
+	display: flex;
+	align-items: center;
+	gap: var(--space-1);
+	font-size: var(--fs-400);
+}
+
+.hub-dividends__chip {
+	display: inline-block;
+	width: 0.625rem;
+	height: 0.625rem;
+	border-radius: 50%;
+}
+
+.hub-dividends__search {
+	position: relative;
+	max-width: 28rem;
+	margin-bottom: var(--space-3);
+}
+
+.hub-dividends__search svg {
+	position: absolute;
+	top: 50%;
+	left: var(--space-3);
+	transform: translateY(-50%);
+	color: var(--col-brand-red);
+	pointer-events: none;
+}
+
+/* Same clearance fight as the document library search: the theme-wide
+   input padding lands at 0,9,1, so this takes !important. */
+.hub-dividends__search .hub-dividends__search-input {
+	width: 100%;
+	padding-left: calc(var(--space-3) * 2 + 18px) !important;
+}
+
+.hub-dividends__table-wrap {
+	overflow-x: auto;
+}
+
+.hub-dividends__table {
+	width: 100%;
+	border-collapse: collapse;
+}
+
+.hub-dividends__table th,
+.hub-dividends__table td {
+	padding: var(--space-2);
+	border-bottom: 1px solid var(--col-light-grey);
+	text-align: left;
+}
+
+.hub-dividends__table thead th {
+	border-bottom-width: 2px;
+}
+
+.hub-dividends__table tbody tr.is-alt td {
+	background-color: var(--col-grey-100);
+}
+
+.hub-dividends__table th.hub-dividends__value-col,
+.hub-dividends__table td.hub-dividends__value-col {
+	text-align: right;
+}
+
+.hub-dividends__more {
+	display: flex;
+	align-items: center;
+	gap: var(--space-3);
+	margin-top: var(--space-3);
+	color: var(--col-grey-600);
+	font-size: var(--fs-small);
+}
+
+.hub-dividends__show-more {
+	padding: var(--space-2) var(--space-4);
+	border: 1px solid var(--col-black);
+	border-radius: 100vw;
+	background-color: transparent;
+	color: var(--col-black);
+	cursor: pointer;
+	font-family: var(--font-family-base);
+	font-size: var(--fs-400);
+	font-weight: var(--fw-bold);
+	line-height: normal;
+	text-transform: uppercase;
+	transition: background-color 200ms ease, color 200ms ease;
+}
+
+.hub-dividends__show-more:hover,
+.hub-dividends__show-more:focus-visible {
+	background-color: var(--col-black);
+	color: var(--col-white);
+}
+
+.hub-dividends__show-more:focus-visible {
+	outline: 2px solid var(--col-brand-yellow);
+	outline-offset: 2px;
+}
+
+.hub-dividends__show-more[hidden] {
+	display: none;
+}
+
+.hub-dividends__csv {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 2.5rem;
+	height: 2.5rem;
+	margin-left: auto;
+	padding: 0;
+	border: 1px solid var(--col-black);
+	border-radius: 50%;
+	background-color: transparent;
+	color: var(--col-black);
+	cursor: pointer;
+}
+
+.hub-dividends__csv:hover,
+.hub-dividends__csv:focus-visible {
+	background-color: var(--col-black);
+	color: var(--col-white);
+}
+
+.hub-dividends__csv:focus-visible {
+	outline: 2px solid var(--col-brand-yellow);
+	outline-offset: 2px;
+}
+
 /* --- src/blocks/document-library-hero.css --- */
 /* HUB Document Library Hero — title + intro + three download cards on the
    fixed sunset gradient (same value as HUB Nav Cards / HUB Gradient Hero's

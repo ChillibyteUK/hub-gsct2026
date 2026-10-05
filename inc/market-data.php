@@ -240,3 +240,121 @@ function hub_gsct2026_get_net_yield() {
 
 	return (float) $snapshot['yearlyDividendYield'];
 }
+
+/**
+ * Dividend display label for a corporate-action subType.
+ *
+ * @param string $sub_type Raw subType, e.g. 'half_year'.
+ * @return string
+ */
+function hub_gsct2026_dividend_type_label( $sub_type ) {
+	$labels = array(
+		'annual'    => 'Annual',
+		'half_year' => 'Half yearly',
+	);
+
+	return $labels[ $sub_type ] ?? ucfirst( $sub_type );
+}
+
+/**
+ * All dividend events, newest first. One corporateactions fetch per
+ * request (static memo) — no persistent caching, per the real-time rule.
+ * Each row: exDate/payDate ('Y-m-d'), value (float, GBp), subType, label.
+ *
+ * @return array[]
+ */
+function hub_gsct2026_get_dividend_events() {
+	static $events = null;
+
+	if ( is_array( $events ) ) {
+		return $events;
+	}
+
+	$events = array();
+	$key    = hub_gsct2026_market_api_key();
+
+	if ( '' !== $key ) {
+		$response = wp_remote_get(
+			'https://api.investisdigital.com/marketdata/v1/instruments/' . rawurlencode( hub_gsct2026_market_instrument() ) . '/corporateactions?limit=100',
+			array(
+				'timeout'    => 10,
+				'user-agent' => apply_filters(
+					'hub_gsct2026_market_user_agent',
+					'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0 Safari/537.36'
+				),
+				'headers'    => array(
+					'accept'    => '*/*',
+					'x-api-key' => $key,
+				),
+			)
+		);
+
+		if ( ! is_wp_error( $response ) && 200 === wp_remote_retrieve_response_code( $response ) ) {
+			$body  = json_decode( wp_remote_retrieve_body( $response ), true );
+			$items = is_array( $body ) ? ( $body['data']['corporateactions'] ?? array() ) : array();
+
+			foreach ( (array) $items as $item ) {
+				$item = (array) $item;
+
+				if ( 'dividend' !== ( $item['type'] ?? '' ) || ! isset( $item['value'] ) ) {
+					continue;
+				}
+
+				$events[] = array(
+					'exDate'   => substr( (string) ( $item['date'] ?? '' ), 0, 10 ),
+					'payDate'  => substr( (string) ( $item['paymentDate'] ?? '' ), 0, 10 ),
+					'value'    => (float) $item['value'],
+					'subType'  => (string) ( $item['subType'] ?? '' ),
+					'label'    => $item['freetextcomment3'] ?? hub_gsct2026_dividend_type_label( (string) ( $item['subType'] ?? '' ) ),
+				);
+			}
+
+			usort(
+				$events,
+				static function ( $a, $b ) {
+					return strcmp( $b['exDate'], $a['exDate'] );
+				}
+			);
+		}
+	}
+
+	return $events;
+}
+
+/**
+ * Annual dividend totals keyed by ex-div calendar year (descending),
+ * split into Final (annual subtype) and Interim (half_year) stacks for
+ * the chart. Other subtypes are table-only — they don't join a stack.
+ *
+ * @param array[]|null $events Optional pre-fetched events.
+ * @return array Year => array( 'final' => float, 'interim' => float ).
+ */
+function hub_gsct2026_get_annual_dividends( $events = null ) {
+	if ( null === $events ) {
+		$events = hub_gsct2026_get_dividend_events();
+	}
+
+	$years = array();
+
+	foreach ( $events as $event ) {
+		$year = substr( $event['exDate'], 0, 4 );
+
+		if ( '' === $year ) {
+			continue;
+		}
+
+		if ( ! isset( $years[ $year ] ) ) {
+			$years[ $year ] = array( 'final' => 0.0, 'interim' => 0.0 );
+		}
+
+		if ( 'annual' === $event['subType'] ) {
+			$years[ $year ]['final'] += $event['value'];
+		} elseif ( 'half_year' === $event['subType'] ) {
+			$years[ $year ]['interim'] += $event['value'];
+		}
+	}
+
+	krsort( $years );
+
+	return $years;
+}

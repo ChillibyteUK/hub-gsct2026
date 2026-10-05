@@ -1,0 +1,17 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "hub-gsct2026/hub-dividends",
+	"title": "HUB Dividends",
+	"category": "hub-gsct2026",
+	"icon": "chart-bar",
+	"description": "Latest dividend card, annual stacked chart and searchable dividend history — all from the corporate actions API.",
+	"attributes": {},
+	"supports": {
+		"anchor": true,
+		"className": true,
+		"align": true
+	},
+	"editorScript": "file:./build/index.js",
+	"render": "file:./render.php"
+}
