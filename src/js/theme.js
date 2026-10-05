@@ -13,6 +13,7 @@ import { initShareButtons } from './share';
 import { initRelatedInsights } from './related-insights';
 import { initHoldings } from './holdings';
 import { initGeoCharts } from './geo-chart';
+import { initReturnPerformance } from './return-performance';
 import { initDocumentLibraries } from './document-library';
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -31,5 +32,6 @@ document.addEventListener('DOMContentLoaded', () => {
 	initRelatedInsights();
 	initHoldings();
 	initGeoCharts();
+	initReturnPerformance();
 	initDocumentLibraries();
 });

@@ -1643,6 +1643,109 @@ a.hub-nav-cards__card:focus-visible {
     pointer-events: none;
 }
 
+/* --- src/blocks/return-performance.css --- */
+/* HUB Return Performance — hand-entered bar chart plus cumulative and
+   discrete tables. Table striping is plain :nth-child — rows here are
+   never hidden client-side, so unlike filterable tables there's nothing
+   to break the alternation and no JS-managed class needed. */
+
+.hub-return-performance {
+	padding-block: var(--space-5);
+}
+
+.hub-return-performance .h2-data-l {
+	margin-block: 0 var(--space-3);
+}
+
+.hub-return-performance__subtitle {
+	margin-block: 0 var(--space-4);
+	color: var(--col-grey-600);
+}
+
+.hub-return-performance__chart-wrap {
+	margin-bottom: var(--space-3);
+}
+
+.hub-return-performance__canvas {
+	position: relative;
+	height: 210px;
+}
+
+.hub-return-performance__canvas canvas {
+	display: block;
+	width: 100%;
+	height: 100%;
+}
+
+.hub-return-performance__legend {
+	display: flex;
+	flex-wrap: wrap;
+	gap: var(--space-2) var(--space-4);
+	margin: var(--space-3) 0 0;
+	padding: 0;
+	list-style: none;
+}
+
+.hub-return-performance__legend li {
+	display: flex;
+	align-items: center;
+	gap: var(--space-1);
+	font-size: var(--fs-400);
+}
+
+.hub-return-performance__chip {
+	display: inline-block;
+	width: 0.625rem;
+	height: 0.625rem;
+	border-radius: 50%;
+}
+
+.hub-return-performance__disclaimer {
+	margin-block: 0 var(--space-5);
+	max-width: 60rem;
+	color: var(--col-grey-600);
+	font-size: var(--fs-small);
+}
+
+.hub-return-performance__table-wrap {
+	overflow-x: auto;
+	margin-bottom: var(--space-5);
+}
+
+/* .hub-return-performance__table-wrap:last-child {
+	margin-bottom: 0;
+} */
+
+.hub-return-performance__table {
+	width: 100%;
+	border-collapse: collapse;
+}
+
+.hub-return-performance__table th,
+.hub-return-performance__table td {
+	padding: var(--space-2);
+	font-size: var(--fs-400);
+	border-bottom: 1px solid var(--col-light-grey);
+	text-align: left;
+}
+
+.hub-return-performance__table td {
+	color: var(--col-dark-grey);
+}
+
+.hub-return-performance__table thead th {
+	border-bottom-width: 2px;
+}
+
+.hub-return-performance__table tbody tr:nth-child(even) td {
+	background-color: var(--col-grey-100);
+}
+
+.hub-return-performance__table th.hub-return-performance__value-col,
+.hub-return-performance__table td.hub-return-performance__value-col {
+	text-align: right;
+}
+
 /* --- src/blocks/secondary-hero.css --- */
 /* Cover-flow row: fixed portrait heights (widths follow from 2/3),
    spread across the container with space-between. Side images tilt in 3D

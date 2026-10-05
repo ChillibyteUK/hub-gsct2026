@@ -170,22 +170,22 @@ function EditorBlockShell({
 
 /***/ },
 
-/***/ "./blocks/hub-pullquote/src/edit.js"
-/*!******************************************!*\
-  !*** ./blocks/hub-pullquote/src/edit.js ***!
-  \******************************************/
+/***/ "./blocks/hub-return-performance/src/edit.js"
+/*!***************************************************!*\
+  !*** ./blocks/hub-return-performance/src/edit.js ***!
+  \***************************************************/
 (__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (/* binding */ Edit)
 /* harmony export */ });
-/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @wordpress/i18n */ "@wordpress/i18n");
-/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _wordpress_block_editor__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @wordpress/block-editor */ "@wordpress/block-editor");
-/* harmony import */ var _wordpress_block_editor__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @wordpress/components */ "@wordpress/components");
-/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var _wordpress_block_editor__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @wordpress/block-editor */ "@wordpress/block-editor");
+/* harmony import */ var _wordpress_block_editor__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @wordpress/components */ "@wordpress/components");
+/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @wordpress/element */ "@wordpress/element");
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_2__);
 /* harmony import */ var _shared_EditorBlockShell__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../_shared/EditorBlockShell */ "./blocks/_shared/EditorBlockShell.js");
 /* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
 /* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__);
@@ -194,87 +194,149 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+const cumPeriods = [{
+  key: '1m',
+  label: '1M'
+}, {
+  key: 'Ytd',
+  label: 'YTD'
+}, {
+  key: '1y',
+  label: '1Y'
+}, {
+  key: '3y',
+  label: '3Y'
+}, {
+  key: '5y',
+  label: '5Y'
+}];
+const legs = [{
+  key: 'Nav',
+  label: 'NAV'
+}, {
+  key: 'Price',
+  label: 'Share price'
+}, {
+  key: 'Bench',
+  label: 'Benchmark'
+}];
+const discYears = [1, 2, 3, 4, 5];
+const gridStyle = {
+  display: 'grid',
+  gridTemplateColumns: '110px repeat(5, 1fr)',
+  gap: '8px',
+  alignItems: 'end',
+  marginBottom: '12px'
+};
+const headerStyle = {
+  fontSize: '0.75rem',
+  fontWeight: 600,
+  textAlign: 'right'
+};
+function NumField({
+  label,
+  value,
+  onChange
+}) {
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.TextControl, {
+    type: "number",
+    step: "0.01",
+    label: label,
+    hideLabelFromVision: true,
+    value: value ?? '',
+    onChange: v => onChange('' === v ? '' : Number(v))
+  });
+}
 function Edit({
   attributes,
   setAttributes,
   clientId
 }) {
-  const {
-    quote,
-    attribution,
-    imageId,
-    imageUrl,
-    imageAlt,
-    focalPoint
-  } = attributes;
-  const blockProps = (0,_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_1__.useBlockProps)({
+  const blockProps = (0,_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_0__.useBlockProps)({
     className: 'container hub-editor-block'
   });
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.Fragment, {
-    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_1__.InspectorControls, {
-      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.PanelBody, {
-        title: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Image focal point', 'hub-gsct2026'),
-        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.FocalPointPicker, {
-          url: imageUrl,
-          value: focalPoint,
-          onChange: value => setAttributes({
-            focalPoint: value
-          })
-        })
-      })
-    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)(_shared_EditorBlockShell__WEBPACK_IMPORTED_MODULE_3__["default"], {
-      blockProps: blockProps,
-      clientId: clientId,
-      classPrefix: "hub",
-      textDomain: "hub-gsct2026",
-      title: "HUB Pullquote",
-      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.TextareaControl, {
-        label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Quote', 'hub-gsct2026'),
-        value: quote,
-        onChange: value => setAttributes({
-          quote: value
-        })
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.TextControl, {
-        label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Attribution', 'hub-gsct2026'),
-        value: attribution,
-        onChange: value => setAttributes({
-          attribution: value
-        })
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
-        className: "hub-editor-field",
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("label", {
-          className: "hub-editor-field__label",
-          children: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Image', 'hub-gsct2026')
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_1__.MediaUploadCheck, {
-          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_1__.MediaUpload, {
-            onSelect: media => setAttributes({
-              imageId: media.id,
-              imageUrl: media.url,
-              imageAlt: media.alt || ''
-            }),
-            allowedTypes: ['image'],
-            value: imageId,
-            render: ({
-              open
-            }) => /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
-              className: "hub-editor-field__control",
-              children: [imageUrl && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("img", {
-                src: imageUrl,
-                alt: imageAlt,
-                style: {
-                  maxWidth: '200px',
-                  display: 'block',
-                  marginBottom: '8px'
-                }
-              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.Button, {
-                variant: "secondary",
-                onClick: open,
-                children: imageUrl ? (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Replace Image', 'hub-gsct2026') : (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Select Image', 'hub-gsct2026')
-              })]
-            })
-          })
+  const set = name => value => setAttributes({
+    [name]: value
+  });
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)(_shared_EditorBlockShell__WEBPACK_IMPORTED_MODULE_3__["default"], {
+    blockProps: blockProps,
+    clientId: clientId,
+    classPrefix: "hub",
+    textDomain: "hub-gsct2026",
+    title: "HUB Return Performance",
+    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.TextControl, {
+      label: "Chart title",
+      value: attributes.chartTitle,
+      onChange: set('chartTitle')
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.TextControl, {
+      label: "Chart subtitle",
+      value: attributes.chartSubtitle,
+      onChange: set('chartSubtitle')
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.TextControl, {
+      label: "Cumulative heading",
+      value: attributes.cumHeading,
+      onChange: set('cumHeading')
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.TextControl, {
+      label: "Discrete heading",
+      value: attributes.discHeading,
+      onChange: set('discHeading')
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("p", {
+      className: "hub-editor-field__label",
+      children: "Cumulative values (%)"
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
+      style: gridStyle,
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("span", {}), cumPeriods.map(p => /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("span", {
+        style: headerStyle,
+        children: p.label
+      }, p.key)), legs.map(leg => /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)(_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.Fragment, {
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("span", {
+          style: {
+            fontSize: '0.75rem',
+            fontWeight: 600
+          },
+          children: leg.label
+        }), cumPeriods.map(p => {
+          const name = `cum${leg.key}${p.key}`;
+          return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(NumField, {
+            label: `Cumulative ${leg.label} ${p.label}`,
+            value: attributes[name],
+            onChange: set(name)
+          }, name);
         })]
-      })]
+      }, `cum-${leg.key}`))]
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("p", {
+      className: "hub-editor-field__label",
+      children: "Discrete years (roll forward annually)"
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
+      style: gridStyle,
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("span", {}), discYears.map(n => /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.TextControl, {
+        label: `Discrete year ${n}`,
+        hideLabelFromVision: true,
+        value: attributes[`year${n}`],
+        onChange: set(`year${n}`)
+      }, `year-${n}`)), legs.map(leg => /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)(_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.Fragment, {
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("span", {
+          style: {
+            fontSize: '0.75rem',
+            fontWeight: 600
+          },
+          children: leg.label
+        }), discYears.map(n => {
+          const name = `disc${leg.key}${n}`;
+          return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(NumField, {
+            label: `Discrete ${leg.label} year ${n}`,
+            value: attributes[name],
+            onChange: set(name)
+          }, name);
+        })]
+      }, `disc-${leg.key}`))]
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.TextareaControl, {
+      label: "Disclaimer",
+      value: attributes.disclaimer,
+      onChange: set('disclaimer')
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("p", {
+      className: "hub-editor-block__note",
+      children: "The chart reads the cumulative values above \u2014 one source of truth, no separate chart data to keep in sync."
     })]
   });
 }
@@ -361,13 +423,13 @@ module.exports = window["wp"]["i18n"];
 
 /***/ },
 
-/***/ "./blocks/hub-pullquote/block.json"
-/*!*****************************************!*\
-  !*** ./blocks/hub-pullquote/block.json ***!
-  \*****************************************/
+/***/ "./blocks/hub-return-performance/block.json"
+/*!**************************************************!*\
+  !*** ./blocks/hub-return-performance/block.json ***!
+  \**************************************************/
 (module) {
 
-module.exports = /*#__PURE__*/JSON.parse('{"$schema":"https://schemas.wp.org/trunk/block.json","apiVersion":3,"name":"hub-gsct2026/hub-pullquote","title":"HUB Pullquote","category":"hub-gsct2026","icon":"cover-image","attributes":{"quote":{"type":"string","default":""},"attribution":{"type":"string","default":""},"imageId":{"type":"number","default":0},"imageUrl":{"type":"string","default":""},"imageAlt":{"type":"string","default":""},"focalPoint":{"type":"object","default":{"x":0.5,"y":0.5}}},"supports":{"anchor":true,"className":true,"align":true,"color":{"background":true,"text":true}},"editorScript":"file:./build/index.js","render":"file:./render.php"}');
+module.exports = /*#__PURE__*/JSON.parse('{"$schema":"https://schemas.wp.org/trunk/block.json","apiVersion":3,"name":"hub-gsct2026/hub-return-performance","title":"HUB Return Performance","category":"hub-gsct2026","icon":"chart-bar","description":"Historical return bar chart plus cumulative and discrete performance tables. All values hand-entered (fixed fields); the chart reads the cumulative values.","attributes":{"chartTitle":{"type":"string","default":"Historical return performance"},"chartSubtitle":{"type":"string","default":"Performance (%) as at 31.05.26"},"cumHeading":{"type":"string","default":"Cumulative performance as at 31.07.26 (%)"},"discHeading":{"type":"string","default":"Discrete annual performance as at 31.07.26 (%)"},"disclaimer":{"type":"string","default":"Past performance is not a guide to future performance. Source: Lipper and CT. Basis: Percentage growth, total return, bid to bid price with net income reinvested in sterling."},"cumNav1m":{"type":"number","default":-2.97},"cumNavYtd":{"type":"number","default":6.5},"cumNav1y":{"type":"number","default":9.24},"cumNav3y":{"type":"number","default":23.58},"cumNav5y":{"type":"number","default":18.82},"cumPrice1m":{"type":"number","default":-1.64},"cumPriceYtd":{"type":"number","default":8.36},"cumPrice1y":{"type":"number","default":16},"cumPrice3y":{"type":"number","default":36.7},"cumPrice5y":{"type":"number","default":28.43},"cumBench1m":{"type":"number","default":-4.3},"cumBenchYtd":{"type":"number","default":10.78},"cumBench1y":{"type":"number","default":18.77},"cumBench3y":{"type":"number","default":40.76},"cumBench5y":{"type":"number","default":40.15},"year1":{"type":"string","default":"2025/26"},"year2":{"type":"string","default":"2024/25"},"year3":{"type":"string","default":"2023/24"},"year4":{"type":"string","default":"2022/23"},"year5":{"type":"string","default":"2021/22"},"discNav1":{"type":"number","default":9.24},"discNav2":{"type":"number","default":-0.06},"discNav3":{"type":"number","default":13.19},"discNav4":{"type":"number","default":2.25},"discNav5":{"type":"number","default":-5.96},"discPrice1":{"type":"number","default":16},"discPrice2":{"type":"number","default":-1.14},"discPrice3":{"type":"number","default":19.2},"discPrice4":{"type":"number","default":1.42},"discPrice5":{"type":"number","default":-7.37},"discBench1":{"type":"number","default":18.77},"discBench2":{"type":"number","default":5.21},"discBench3":{"type":"number","default":12.64},"discBench4":{"type":"number","default":4.59},"discBench5":{"type":"number","default":-4.8}},"supports":{"anchor":true,"className":true,"align":true},"editorScript":"file:./build/index.js","render":"file:./render.php"}');
 
 /***/ }
 
@@ -438,14 +500,14 @@ module.exports = /*#__PURE__*/JSON.parse('{"$schema":"https://schemas.wp.org/tru
 let __webpack_exports__ = {};
 // This entry needs to be wrapped in an IIFE because it needs to be isolated against other modules in the chunk.
 (() => {
-/*!*******************************************!*\
-  !*** ./blocks/hub-pullquote/src/index.js ***!
-  \*******************************************/
+/*!****************************************************!*\
+  !*** ./blocks/hub-return-performance/src/index.js ***!
+  \****************************************************/
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _wordpress_blocks__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @wordpress/blocks */ "@wordpress/blocks");
 /* harmony import */ var _wordpress_blocks__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_wordpress_blocks__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _edit__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./edit */ "./blocks/hub-pullquote/src/edit.js");
-/* harmony import */ var _block_json__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../block.json */ "./blocks/hub-pullquote/block.json");
+/* harmony import */ var _edit__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./edit */ "./blocks/hub-return-performance/src/edit.js");
+/* harmony import */ var _block_json__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../block.json */ "./blocks/hub-return-performance/block.json");
 
 
 
