@@ -1,0 +1,17 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "hub-gsct2026/hub-share-price",
+	"title": "HUB Share Price",
+	"category": "hub-gsct2026",
+	"icon": "chart-line",
+	"description": "Live share price card on brand-yellow: price, change, session and range figures from the market data API.",
+	"attributes": {},
+	"supports": {
+		"anchor": true,
+		"className": true,
+		"align": true
+	},
+	"editorScript": "file:./build/index.js",
+	"render": "file:./render.php"
+}

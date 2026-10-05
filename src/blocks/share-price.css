@@ -1,0 +1,76 @@
+/* HUB Share Price — live price card on brand-yellow. Layout reuses the
+   theme .row/.col grid; everything else is scoped here. */
+
+.hub-share-price__card {
+	background-color: var(--col-brand-yellow);
+	border-radius: var(--radius-lg);
+	padding: var(--space-5) var(--space-4);
+	color: var(--col-black);
+}
+
+.hub-share-price__current {
+	margin-bottom: var(--space-4);
+}
+
+.hub-share-price__price-row {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: var(--space-2) var(--space-3);
+}
+
+.hub-share-price__price-row .h2-data-l {
+	margin: 0;
+}
+
+.hub-share-price__status {
+	display: inline-block;
+	padding: var(--space-1) var(--space-2);
+	border-radius: var(--radius-sm);
+	background-color: var(--col-brand-purple);
+	color: var(--col-white);
+	font-size: var(--fs-small);
+	font-weight: var(--fw-bold);
+	text-transform: uppercase;
+}
+
+.hub-share-price__change {
+	margin-top: var(--space-1);
+	font-weight: var(--fw-bold);
+}
+
+.hub-share-price__change.is-down {
+	color: var(--col-negative);
+}
+
+.hub-share-price__change.is-up {
+	color: var(--col-positive);
+}
+
+.hub-share-price__updated {
+	margin-top: var(--space-1);
+}
+
+.hub-share-price__stat {
+	margin-bottom: var(--space-4);
+}
+
+.hub-share-price__stat:last-child {
+	margin-bottom: 0;
+}
+
+.hub-share-price__stat .h2-data-l {
+	margin: 0;
+}
+
+.hub-share-price__range-line {
+	display: block;
+	border-top: 1px solid var(--col-black);
+}
+
+.hub-share-price__range-values {
+	display: flex;
+	justify-content: space-between;
+	gap: var(--space-2);
+	margin-top: var(--space-1);
+}

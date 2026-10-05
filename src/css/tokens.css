@@ -22,6 +22,7 @@
 
   --col-lightest-grey: hsla(0, 0%, 97%, 1);
   --col-light-grey: hsla(0, 0%, 89%, 1);
+  --col-medium-light-grey: hsl(0, 0%, 60%);
   --col-medium-grey: hsla(0, 0%, 40%, 1);
   --col-dark-grey: hsla(0, 0%, 20%, 1);
 
@@ -51,6 +52,9 @@
   --col-brand-blue-300-x90: #90bffae6;
   --col-brand-blue-100: #c6e0ff;
   --col-brand-pink: #ffaaeb;
+
+  --col-positive: #1C771C;
+  --col-negative: #DA1A08;
 
   /* Fixed gradients — referenced by var() wherever a sunset/sunrise
      section background is needed (nav cards, document heroes, related

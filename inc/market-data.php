@@ -70,8 +70,11 @@ function hub_gsct2026_market_group() {
  * fallback when a fetch fails, null when nothing was ever fetched
  * (e.g. no API key yet).
  *
- * @return array|null Keys: price, lastTrade, absChange, percentChange,
- *                    currency, yearlyDividendYield, fetched (timestamp).
+ * @return array|null Keys: symbol, exchangeStatus, price, lastTrade,
+ *                    absChange, percentChange, currency, timeZone, open,
+ *                    prevClose, high, low, volume, marketCap,
+ *                    fiftytwoWeekHigh, fiftytwoWeekLow, closeNav,
+ *                    yearlyDividendYield, fetched (timestamp).
  */
 function hub_gsct2026_get_market_snapshot() {
 	$fresh = get_transient( 'hub_market_snapshot' );
@@ -159,14 +162,31 @@ function hub_gsct2026_fetch_market_snapshot() {
 		return null;
 	}
 
+	$num = static function ( $value ) {
+		return is_numeric( $value ) ? (float) $value : null;
+	};
+
 	return array(
+		'symbol'              => $body['data']['client']['symbol'] ?? '',
+		'exchangeStatus'      => $snapshot['exchangeStatus'] ?? ( $body['data']['client']['exchangeStatus'] ?? '' ),
 		'price'               => (float) $snapshot['price'],
 		'lastTrade'           => $snapshot['lastTrade'] ?? '',
-		'absChange'           => isset( $snapshot['absChange'] ) ? (float) $snapshot['absChange'] : null,
-		'percentChange'       => isset( $snapshot['percentChange'] ) ? (float) $snapshot['percentChange'] : null,
+		'absChange'           => $num( $snapshot['absChange'] ?? null ),
+		'percentChange'       => $num( $snapshot['percentChange'] ?? null ),
 		'currency'            => $body['data']['client']['currency'] ?? 'GBX',
+		'timeZone'            => $snapshot['timeZone'] ?? '',
+		// `close` carries the previous trading day's close (see
+		// closePriceTime); `open`/`high`/`low`/`volume` are today's session.
+		'open'                => $num( $snapshot['open'] ?? null ),
+		'prevClose'           => $num( $snapshot['close'] ?? null ),
+		'high'                => $num( $snapshot['high'] ?? null ),
+		'low'                 => $num( $snapshot['low'] ?? null ),
+		'volume'              => isset( $snapshot['volume'] ) && is_numeric( $snapshot['volume'] ) ? (int) $snapshot['volume'] : null,
+		'marketCap'           => $num( $snapshot['marketCap'] ?? null ),
+		'fiftytwoWeekHigh'    => $num( $snapshot['fiftytwoWeekHigh'] ?? null ),
+		'fiftytwoWeekLow'     => $num( $snapshot['fiftytwoWeekLow'] ?? null ),
 		'closeNav'            => isset( $snapshot['closeNav'] ) && $snapshot['closeNav'] > 0 ? (float) $snapshot['closeNav'] : null,
-		'yearlyDividendYield' => isset( $snapshot['yearlyDividendYield'] ) ? (float) $snapshot['yearlyDividendYield'] : null,
+		'yearlyDividendYield' => $num( $snapshot['yearlyDividendYield'] ?? null ),
 		'fetched'             => time(),
 	);
 }

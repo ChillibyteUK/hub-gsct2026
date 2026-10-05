@@ -12,17 +12,17 @@ $hub_price    = $hub_snapshot && isset( $hub_snapshot['price'] )
 	? number_format( (float) $hub_snapshot['price'], 2 ) . ' GBp'
 	: '&ndash;';
 
-$hub_nav = hub_gsct2026_get_nav_per_share();
+$hub_nav         = hub_gsct2026_get_nav_per_share();
 $hub_nav_display = $hub_nav
 	? number_format( $hub_nav, 2 ) . ' GBp'
 	: '&ndash;';
 
-$hub_premium = hub_gsct2026_get_premium_percent();
+$hub_premium         = hub_gsct2026_get_premium_percent();
 $hub_premium_display = null !== $hub_premium
 	? number_format( $hub_premium, 2 ) . '%'
 	: '&ndash;';
 
-$hub_yield = hub_gsct2026_get_net_yield();
+$hub_yield         = hub_gsct2026_get_net_yield();
 $hub_yield_display = null !== $hub_yield
 	? number_format( $hub_yield, 2 ) . '%'
 	: '&ndash;';

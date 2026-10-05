@@ -33,9 +33,24 @@ $cum_periods = array(
 // --col-chart-* tokens in src/css/tokens.css, keep them in sync. The
 // hand-rendered legend below uses the vars themselves.
 $chart_legs = array(
-	array( 'key' => 'Nav', 'label' => 'NAV', 'token' => 'var(--col-chart-3)', 'hex' => '#307eff' ),
-	array( 'key' => 'Price', 'label' => 'Share price', 'token' => 'var(--col-chart-2)', 'hex' => '#7628d4' ),
-	array( 'key' => 'Bench', 'label' => 'Benchmark', 'token' => 'var(--col-chart-1)', 'hex' => '#f74333' ),
+	array(
+		'key'   => 'Nav',
+		'label' => 'NAV',
+		'token' => 'var(--col-chart-3)',
+		'hex'   => '#307eff',
+	),
+	array(
+		'key'   => 'Price',
+		'label' => 'Share price',
+		'token' => 'var(--col-chart-2)',
+		'hex'   => '#7628d4',
+	),
+	array(
+		'key'   => 'Bench',
+		'label' => 'Benchmark',
+		'token' => 'var(--col-chart-1)',
+		'hex'   => '#f74333',
+	),
 );
 
 $chart_datasets = array();
@@ -172,8 +187,8 @@ $wrapper_attributes = get_block_wrapper_attributes( array( 'class' => 'hub-retur
 					<?php
 					$disc_rows = array(
 						'NAV (debt at market value)' => 'Nav',
-						'Share price'                 => 'Price',
-						'Benchmark'                   => 'Bench',
+						'Share price'                => 'Price',
+						'Benchmark'                  => 'Bench',
 					);
 					foreach ( $disc_rows as $row_label => $leg_key ) {
 						?>

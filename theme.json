@@ -78,6 +78,12 @@
           "origin": "theme"
         },
         {
+          "name": "medium-light-grey",
+          "slug": "medium-light-grey",
+          "color": "hsl(0, 0%, 60%)",
+          "origin": "theme"
+        },
+        {
           "name": "medium-grey",
           "slug": "medium-grey",
           "color": "hsla(0, 0%, 40%, 1)",
@@ -195,6 +201,18 @@
           "name": "brand-pink",
           "slug": "brand-pink",
           "color": "#ffaaeb",
+          "origin": "theme"
+        },
+        {
+          "name": "positive",
+          "slug": "positive",
+          "color": "#1C771C",
+          "origin": "theme"
+        },
+        {
+          "name": "negative",
+          "slug": "negative",
+          "color": "#DA1A08",
           "origin": "theme"
         }
       ]
