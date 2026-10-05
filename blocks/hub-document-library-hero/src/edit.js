@@ -1,18 +1,9 @@
 import { useBlockProps } from '@wordpress/block-editor';
 import { TextControl, TextareaControl } from '@wordpress/components';
-import RepeaterField from '../../_shared/RepeaterField';
 import EditorBlockShell from '../../_shared/EditorBlockShell';
 
-const cardsFields = [
-	{ name: 'cardTitle', label: 'Title', type: 'text', flex: '1 1 100%', labelPerRow: true },
-	{ name: 'file', label: 'File', type: 'file', labelPerRow: true },
-	{ name: 'date', label: 'Date', type: 'text', help: 'Manual entry, UK format — e.g. 15 Jan 2026.', labelPerRow: true },
-];
-
-const cardsEmptyRow = { cardTitle: '', file: 0, fileName: '', date: '' };
-
 export default function Edit( { attributes, setAttributes, clientId } ) {
-	const { title, intro, cardsTitle, cards } = attributes;
+	const { title, intro, cardsTitle } = attributes;
 	const blockProps = useBlockProps( { className: 'container hub-editor-block' } );
 
 	return (
@@ -32,16 +23,8 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 				value={ cardsTitle }
 				onChange={ ( value ) => setAttributes( { cardsTitle: value } ) }
 			/>
-			<RepeaterField
-				label="Documents"
-				value={ cards }
-				onChange={ ( value ) => setAttributes( { cards: value } ) }
-				fields={ cardsFields }
-				emptyRow={ cardsEmptyRow }
-				layout="row"
-			/>
 			<p className="hub-editor-block__note">
-				File type and size are derived from the uploaded file itself — only the date is typed in by hand.
+				The three cards are managed under Site-Wide Settings → Documents. File type and size are derived from the file itself — only the date is typed in by hand.
 			</p>
 		</EditorBlockShell>
 	);

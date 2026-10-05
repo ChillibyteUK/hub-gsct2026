@@ -8,6 +8,10 @@
  * manual UK date plus file type/size derived from the uploaded attachment,
  * and a Download row with an inline icon.
  *
+ * The cards themselves live in Site-Wide Settings → Documents
+ * (featured_documents), not on the block — one set of cards for every
+ * page using this hero.
+ *
  * @package hub-gsct2026
  */
 
@@ -18,10 +22,10 @@ $intro       = $attributes['intro'] ?? '';
 $cards_title = $attributes['cardsTitle'] ?? '';
 $cards       = array_values(
 	array_filter(
-		(array) ( $attributes['cards'] ?? array() ),
+		hub_gsct2026_get_repeater_setting( 'featured_documents' ),
 		static function ( $row ) {
 			$row = (array) $row;
-			return '' !== trim( (string) ( $row['cardTitle'] ?? '' ) ) || ! empty( $row['file'] );
+			return '' !== trim( (string) ( $row['title'] ?? '' ) ) || ! empty( $row['file'] );
 		}
 	)
 );
@@ -52,7 +56,7 @@ $wrapper_attributes = get_block_wrapper_attributes( array( 'class' => 'hub-docum
 				<?php
 				foreach ( $cards as $card ) {
 					$card        = (array) $card;
-					$card_title  = $card['cardTitle'] ?? '';
+					$card_title  = $card['title'] ?? '';
 					$card_date   = trim( (string) ( $card['date'] ?? '' ) );
 					$file_id     = (int) ( $card['file'] ?? 0 );
 					$file_url    = $file_id ? wp_get_attachment_url( $file_id ) : '';

@@ -70,6 +70,7 @@ function hub_gsct2026_register_settings_page() {
 	add_settings_section( 'hub_gsct2026_scripts', 'Scripts', '__return_false', 'theme-general-settings' );
 	add_settings_section( 'hub_gsct2026_gallery', 'Gallery', '__return_false', 'theme-general-settings' );
 	add_settings_section( 'hub_gsct2026_repeater', 'Repeater', '__return_false', 'theme-general-settings' );
+	add_settings_section( 'hub_gsct2026_documents', 'Documents', '__return_false', 'theme-general-settings' );
 	add_settings_section( 'hub_gsct2026_how_to_invest', 'How to Invest', '__return_false', 'theme-general-settings' );
 	add_settings_section( 'hub_gsct2026_footer', 'Footer', '__return_false', 'theme-general-settings' );
 
@@ -177,6 +178,26 @@ function hub_gsct2026_register_settings_page() {
 				),
 			),
 			'description' => 'Genuinely repeating structured rows — e.g. a client-logo list. Read with hub_gsct2026_get_repeater_setting( \'example_repeater\' ).',
+		),
+		'featured_documents'        => array(
+			'label'       => 'Featured Documents',
+			'type'        => 'repeater',
+			'section'     => 'hub_gsct2026_documents',
+			'sub_fields'  => array(
+				'title' => array(
+					'label' => 'Title',
+					'type'  => 'text',
+				),
+				'file'  => array(
+					'label' => 'File',
+					'type'  => 'file',
+				),
+				'date'  => array(
+					'label' => 'Date',
+					'type'  => 'text',
+				),
+			),
+			'description' => 'The three cards on the Document Library hero. File type and size are derived from the file itself — only the date is typed in by hand (UK format, e.g. 15 Jan 2026).',
 		),
 		'how_to_invest_title'       => array(
 			'label'   => 'Title',
@@ -522,8 +543,8 @@ function hub_gsct2026_render_gallery_field( $args ) {
 
 /**
  * Render a generic repeater field — rows of declaratively-configured
- * sub-fields (text or image), driven by js/repeater-field.js for add/
- * remove/reorder and per-row image selection.
+ * sub-fields (text, image or file), driven by js/repeater-field.js for
+ * add/remove/reorder and per-row media selection.
  *
  * Row indexes in submitted field names don't need to be sequential — the
  * Settings API stores whatever nested array PHP builds from the posted
@@ -635,6 +656,36 @@ function hub_gsct2026_render_repeater_row( $key, $index, $sub_fields, $row, $num
 						style="flex: 1; background: none; border: none; color: #fff; cursor: pointer; padding: 2px 0; font-size: 13px; line-height: 1; <?php echo $thumb ? '' : 'display: none;'; ?>"
 					>&times;</button>
 				</div>
+			</div>
+				<?php
+			} elseif ( 'file' === $sub_field['type'] ) {
+				$file_name = $value ? basename( get_attached_file( absint( $value ) ) ) : '';
+				?>
+			<div
+				class="hub-settings-repeater__file"
+				style="flex: 1 1 0%; min-width: 0;"
+			>
+				<span
+					class="hub-settings-repeater__file-name"
+					style="display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 12px; margin-bottom: 4px;"
+				><?php echo $file_name ? esc_html( $file_name ) : 'No file selected.'; ?></span>
+				<input
+					type="hidden"
+					class="hub-settings-repeater__image-input"
+					name="<?php echo esc_attr( $name ); ?>"
+					value="<?php echo esc_attr( $value ); ?>"
+				>
+				<button
+					type="button"
+					class="button hub-settings-repeater__select-image"
+					data-select-label="Select <?php echo esc_attr( $sub_field['label'] ); ?>"
+					data-button-text="Use this file"
+				>Select file</button>
+				<button
+					type="button"
+					class="button hub-settings-repeater__clear-image"
+					<?php echo $file_name ? '' : 'style="display: none;"'; ?>
+				>Clear</button>
 			</div>
 				<?php
 			} else {

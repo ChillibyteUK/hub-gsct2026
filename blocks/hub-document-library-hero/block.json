@@ -18,10 +18,6 @@
 		"cardsTitle": {
 			"type": "string",
 			"default": "Latest investor documents"
-		},
-		"cards": {
-			"type": "array",
-			"default": []
 		}
 	},
 	"supports": {
