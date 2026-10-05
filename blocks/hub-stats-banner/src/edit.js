@@ -7,6 +7,9 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 
 	return (
 		<EditorBlockShell blockProps={ blockProps } clientId={ clientId } title="HUB Stats Banner" textDomain="hub-gsct2026">
+			<p className="hub-editor-block__note">
+				Share price populates live from the market data API on the frontend — placeholders show here in the editor.
+			</p>
 		</EditorBlockShell>
 	);
 }

@@ -62,6 +62,7 @@ function hub_gsct2026_register_settings_page() {
 
 	add_settings_section( 'hub_gsct2026_general', 'General', '__return_false', 'theme-general-settings' );
 	add_settings_section( 'hub_gsct2026_tracking', 'Tracking & Verification', '__return_false', 'theme-general-settings' );
+	add_settings_section( 'hub_gsct2026_market_data', 'Market Data', '__return_false', 'theme-general-settings' );
 	add_settings_section( 'hub_gsct2026_scripts', 'Scripts', '__return_false', 'theme-general-settings' );
 	add_settings_section( 'hub_gsct2026_documents', 'Documents', '__return_false', 'theme-general-settings' );
 	add_settings_section( 'hub_gsct2026_how_to_invest', 'How to Invest', '__return_false', 'theme-general-settings' );
@@ -77,6 +78,19 @@ function hub_gsct2026_register_settings_page() {
 			'label'   => 'Phone',
 			'type'    => 'text',
 			'section' => 'hub_gsct2026_general',
+		),
+		'investis_api_key'          => array(
+			'label'       => 'Investis API Key',
+			'type'        => 'password',
+			'section'     => 'hub_gsct2026_market_data',
+			'description' => 'Key for the market data API (Stats Banner share price). A HUB_INVESTIS_API_KEY wp-config.php constant takes precedence when both are set.',
+		),
+		'nav_per_share'             => array(
+			'label'       => 'NAV per Share (p)',
+			'type'        => 'text',
+			'section'     => 'hub_gsct2026_market_data',
+			'placeholder' => 'e.g. 185.20',
+			'description' => 'Manual NAV in pence for the Premium calculation. Used only while the API returns no NAV — go stale and the premium misleads, so replace with the API source as soon as Investis confirms one.',
 		),
 		'ga_property'               => array(
 			'label'       => 'GA Property',
