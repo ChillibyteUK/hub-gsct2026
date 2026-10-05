@@ -35,3 +35,5 @@ require_once HUB_GSCT2026_DIR . '/inc/posttypes.php';
 require_once HUB_GSCT2026_DIR . '/inc/toc.php';
 require_once HUB_GSCT2026_DIR . '/inc/taxonomies.php';
 require_once HUB_GSCT2026_DIR . '/inc/market-data.php';
+require_once HUB_GSCT2026_DIR . '/inc/security.php';
+require_once HUB_GSCT2026_DIR . '/inc/footnotes.php';

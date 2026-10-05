@@ -11,6 +11,7 @@
 @import "insights.css";
 @import "quote.css";
 @import "single.css";
+@import "footnotes.css";
 @import "blocks.css"; /* generated — concatenation of src/blocks/*.css, see src/build/generate-utilities.js */
 
 
