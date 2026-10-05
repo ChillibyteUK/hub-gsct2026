@@ -81,7 +81,7 @@ function hub_gsct2026_register_settings_page() {
 		),
 		'investis_api_key'          => array(
 			'label'       => 'Investis API Key',
-			'type'        => 'password',
+			'type'        => 'text',
 			'section'     => 'hub_gsct2026_market_data',
 			'description' => 'Key for the market data API (Stats Banner share price). A HUB_INVESTIS_API_KEY wp-config.php constant takes precedence when both are set.',
 		),

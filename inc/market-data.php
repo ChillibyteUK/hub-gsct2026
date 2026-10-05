@@ -35,11 +35,13 @@ defined( 'ABSPATH' ) || exit;
  * @return string
  */
 function hub_gsct2026_market_api_key() {
-	if ( defined( 'HUB_INVESTIS_API_KEY' ) && HUB_INVESTIS_API_KEY ) {
-		return HUB_INVESTIS_API_KEY; // phpcs:ignore WordPress.NamingConventions.ValidVariableName.VariableNotSnakeCase
+	// Trimmed: pasted keys routinely trail whitespace, which the API
+	// rejects — strip it here rather than trusting the input.
+	if ( defined( 'HUB_INVESTIS_API_KEY' ) && '' !== trim( HUB_INVESTIS_API_KEY ) ) { // phpcs:ignore WordPress.NamingConventions.ValidVariableName.VariableNotSnakeCase
+		return trim( HUB_INVESTIS_API_KEY ); // phpcs:ignore WordPress.NamingConventions.ValidVariableName.VariableNotSnakeCase
 	}
 
-	return hub_gsct2026_get_setting( 'investis_api_key' );
+	return trim( hub_gsct2026_get_setting( 'investis_api_key' ) );
 }
 
 /**
