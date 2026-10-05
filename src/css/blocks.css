@@ -1738,7 +1738,7 @@ a.hub-nav-cards__card:focus-visible {
 }
 
 .hub-return-performance__table tbody tr:nth-child(even) td {
-	background-color: var(--col-grey-100);
+	background-color: var(--col-lightest-grey);
 }
 
 .hub-return-performance__table th.hub-return-performance__value-col,
