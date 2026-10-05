@@ -16,10 +16,7 @@
  * make one long scrolling page unwieldy. The Scripts tab's three raw markup
  * slots (`custom_head`, `custom_body_open`, `custom_body_close`), gated by
  * `custom_scripts_logged_out_only`, are printed unescaped by design — see
- * inc/head-tags.php. The example fields below
- * (`example_gallery`, `example_repeater`) exist to demonstrate both field
- * types working end to end; rename or replace them with real per-project
- * fields.
+ * inc/head-tags.php.
  *
  * @package hub-gsct2026
  */
@@ -64,12 +61,8 @@ function hub_gsct2026_register_settings_page() {
 	register_setting( 'hub_gsct2026_settings', HUB_GSCT2026_SETTINGS_OPTION );
 
 	add_settings_section( 'hub_gsct2026_general', 'General', '__return_false', 'theme-general-settings' );
-	add_settings_section( 'hub_gsct2026_social', 'Social', '__return_false', 'theme-general-settings' );
-	add_settings_section( 'hub_gsct2026_contact', 'Contact', '__return_false', 'theme-general-settings' );
 	add_settings_section( 'hub_gsct2026_tracking', 'Tracking & Verification', '__return_false', 'theme-general-settings' );
 	add_settings_section( 'hub_gsct2026_scripts', 'Scripts', '__return_false', 'theme-general-settings' );
-	add_settings_section( 'hub_gsct2026_gallery', 'Gallery', '__return_false', 'theme-general-settings' );
-	add_settings_section( 'hub_gsct2026_repeater', 'Repeater', '__return_false', 'theme-general-settings' );
 	add_settings_section( 'hub_gsct2026_documents', 'Documents', '__return_false', 'theme-general-settings' );
 	add_settings_section( 'hub_gsct2026_how_to_invest', 'How to Invest', '__return_false', 'theme-general-settings' );
 	add_settings_section( 'hub_gsct2026_footer', 'Footer', '__return_false', 'theme-general-settings' );
@@ -84,27 +77,6 @@ function hub_gsct2026_register_settings_page() {
 			'label'   => 'Phone',
 			'type'    => 'text',
 			'section' => 'hub_gsct2026_general',
-		),
-		'facebook_url'              => array(
-			'label'       => 'Facebook URL',
-			'type'        => 'url',
-			'section'     => 'hub_gsct2026_social',
-			'placeholder' => 'https://facebook.com/...',
-			'description' => 'Leave blank to hide this icon from [social_icons].',
-		),
-		'instagram_url'             => array(
-			'label'       => 'Instagram URL',
-			'type'        => 'url',
-			'section'     => 'hub_gsct2026_social',
-			'placeholder' => 'https://instagram.com/...',
-			'description' => 'Leave blank to hide this icon from [social_icons].',
-		),
-		'contact_form_shortcode'    => array(
-			'label'       => 'Contact Form Shortcode',
-			'type'        => 'text',
-			'section'     => 'hub_gsct2026_contact',
-			'placeholder' => '[gravityform id="1"]',
-			'description' => 'Shortcode output by the form plugin (Gravity Forms or CF7 — TBC). Rendered by the Contact block on both the Contact page and Manager Bio.',
 		),
 		'ga_property'               => array(
 			'label'       => 'GA Property',
@@ -156,28 +128,6 @@ function hub_gsct2026_register_settings_page() {
 			'section'     => 'hub_gsct2026_scripts',
 			'default'     => '1',
 			'description' => 'On by default, matching GA/GTM — keeps the team\'s own traffic out of whatever these scripts measure. Untick if a slot holds something every visitor should see, e.g. a chat widget.',
-		),
-		'example_gallery'           => array(
-			'label'       => 'Example Gallery',
-			'type'        => 'gallery',
-			'section'     => 'hub_gsct2026_gallery',
-			'description' => 'A fixed multi-image list — e.g. accreditation badges, a logo strip. Read with hub_gsct2026_get_gallery_setting( \'example_gallery\' ).',
-		),
-		'example_repeater'          => array(
-			'label'       => 'Example Repeater',
-			'type'        => 'repeater',
-			'section'     => 'hub_gsct2026_repeater',
-			'sub_fields'  => array(
-				'name' => array(
-					'label' => 'Name',
-					'type'  => 'text',
-				),
-				'logo' => array(
-					'label' => 'Logo',
-					'type'  => 'image',
-				),
-			),
-			'description' => 'Genuinely repeating structured rows — e.g. a client-logo list. Read with hub_gsct2026_get_repeater_setting( \'example_repeater\' ).',
 		),
 		'featured_documents'        => array(
 			'label'       => 'Featured Documents',
@@ -275,7 +225,7 @@ add_action( 'admin_menu', 'hub_gsct2026_register_settings_page' );
  * so rows survive as-is; this just guards the case where the key was never
  * set at all.
  *
- * @param string $key Setting key, e.g. 'example_repeater'.
+ * @param string $key Setting key, e.g. 'featured_documents'.
  * @return array[]
  */
 function hub_gsct2026_get_repeater_setting( $key ) {
@@ -309,27 +259,30 @@ function hub_gsct2026_settings_page_assets( $hook_suffix ) {
 	}
 
 	wp_enqueue_media();
-	wp_enqueue_script(
-		'hub-gallery-field',
-		get_stylesheet_directory_uri() . '/js/gallery-field.js',
-		array( 'jquery' ),
-		wp_get_theme()->get( 'Version' ),
-		true
+
+	// filemtime() versioning (not the static theme Version): these are
+	// hand-maintained admin scripts, and a static version serves stale JS
+	// after deploys — exactly how the file-picker fix once went missing
+	// upstream while the PHP was already current.
+	$hub_admin_scripts = array(
+		'hub-gallery-field'    => array( 'js/gallery-field.js', array( 'jquery' ) ),
+		'hub-settings-repeater' => array( 'js/repeater-field.js', array( 'jquery' ) ),
+		'hub-tabs'             => array( 'js/tabs.js', array() ),
 	);
-	wp_enqueue_script(
-		'hub-settings-repeater',
-		get_stylesheet_directory_uri() . '/js/repeater-field.js',
-		array( 'jquery' ),
-		wp_get_theme()->get( 'Version' ),
-		true
-	);
-	wp_enqueue_script(
-		'hub-tabs',
-		get_stylesheet_directory_uri() . '/js/tabs.js',
-		array(),
-		wp_get_theme()->get( 'Version' ),
-		true
-	);
+
+	foreach ( $hub_admin_scripts as $hub_handle => $hub_script ) {
+		$hub_abs = get_stylesheet_directory() . '/' . $hub_script[0];
+
+		if ( file_exists( $hub_abs ) ) {
+			wp_enqueue_script(
+				$hub_handle,
+				get_stylesheet_directory_uri() . '/' . $hub_script[0],
+				$hub_script[1],
+				filemtime( $hub_abs ),
+				true
+			);
+		}
+	}
 }
 add_action( 'admin_enqueue_scripts', 'hub_gsct2026_settings_page_assets' );
 
