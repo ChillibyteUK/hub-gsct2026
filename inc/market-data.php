@@ -322,6 +322,171 @@ function hub_gsct2026_get_dividend_events() {
 }
 
 /**
+ * Closing price for a date: nearest daily bar on or after it (covers
+ * weekends and holidays — the window always contains a trading day for
+ * any start date up to today). Null when unresolvable.
+ *
+ * @param string $ymd Start date, 'Y-m-d'.
+ * @return float|null
+ */
+function hub_gsct2026_get_close_on_or_after( $ymd ) {
+	$key = hub_gsct2026_market_api_key();
+
+	if ( '' === $key || ! preg_match( '/^\d{4}-\d{2}-\d{2}$/', $ymd ) ) {
+		return null;
+	}
+
+	$response = wp_remote_get(
+		'https://api.investisdigital.com/marketdata/v1/instruments/' . rawurlencode( hub_gsct2026_market_instrument() ) . '/history?from=' . $ymd . '&to=' . gmdate( 'Y-m-d', strtotime( $ymd . ' +14 days' ) ),
+		array(
+			'timeout'    => 10,
+			'user-agent' => apply_filters(
+				'hub_gsct2026_market_user_agent',
+				'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0 Safari/537.36'
+			),
+			'headers'    => array(
+				'accept'    => '*/*',
+				'x-api-key' => $key,
+			),
+		)
+	);
+
+	if ( is_wp_error( $response ) || 200 !== wp_remote_retrieve_response_code( $response ) ) {
+		return null;
+	}
+
+	$body  = json_decode( wp_remote_retrieve_body( $response ), true );
+	$items = is_array( $body ) ? ( $body['data']['history'] ?? array() ) : array();
+	$best  = null;
+
+	foreach ( (array) $items as $item ) {
+		$item = (array) $item;
+		$date = substr( (string) ( $item['date'] ?? '' ), 0, 10 );
+
+		if ( '' === $date || $date < $ymd || ! isset( $item['close'] ) || ! is_numeric( $item['close'] ) ) {
+			continue;
+		}
+
+		if ( null === $best || $date < $best['date'] ) {
+			$best = array(
+				'date'  => $date,
+				'close' => (float) $item['close'],
+			);
+		}
+	}
+
+	return $best ? $best['close'] : null;
+}
+
+/**
+ * GET /wp-json/hub/v1/dividend-calc?start=YYYY-MM-DD&end=YYYY-MM-DD&shares=N.
+ * Public read-only computation over data the theme already fetches
+ * server-side — no secrets involved. Dividends count by ex-div date
+ * (entitlement basis); shareholding assumed constant.
+ */
+add_action(
+	'rest_api_init',
+	static function () {
+		register_rest_route(
+			'hub/v1',
+			'/dividend-calc',
+			array(
+				'methods'             => 'GET',
+				'permission_callback' => '__return_true',
+				'args'                => array(
+					'start'  => array(
+						'required'          => true,
+						'validate_callback' => 'hub_gsct2026_validate_ymd',
+					),
+					'end'    => array(
+						'required'          => true,
+						'validate_callback' => 'hub_gsct2026_validate_ymd',
+					),
+					'shares' => array(
+						'required'          => true,
+						'validate_callback' => static function ( $value ) {
+							return is_numeric( $value ) && (int) $value > 0 && (int) $value <= 1000000000;
+						},
+					),
+				),
+				'callback'            => 'hub_gsct2026_dividend_calc',
+			)
+		);
+	}
+);
+
+/**
+ * Validate a Y-m-d date string.
+ *
+ * @param string $value Input.
+ * @return bool
+ */
+function hub_gsct2026_validate_ymd( $value ) {
+	if ( ! is_string( $value ) || ! preg_match( '/^\d{4}-\d{2}-\d{2}$/', $value ) ) {
+		return false;
+	}
+
+	$parts = array_map( 'intval', explode( '-', $value ) );
+
+	return checkdate( $parts[1], $parts[2], $parts[0] );
+}
+
+/**
+ * Dividend calculator callback: total GBp plus yield-on-cost against the
+ * start-date close. Yield is null (not an error) when either leg is
+ * missing, so the frontend can dash it while still showing the total.
+ *
+ * @param WP_REST_Request $request Request.
+ * @return array|WP_Error
+ */
+function hub_gsct2026_dividend_calc( $request ) {
+	$start  = $request->get_param( 'start' );
+	$end    = $request->get_param( 'end' );
+	$shares = (int) $request->get_param( 'shares' );
+
+	if ( $start > $end ) {
+		return new WP_Error( 'hub_bad_range', 'The start date must be before the end date.', array( 'status' => 400 ) );
+	}
+
+	if ( $start > gmdate( 'Y-m-d' ) ) {
+		return new WP_Error( 'hub_future_start', 'The start date cannot be in the future.', array( 'status' => 400 ) );
+	}
+
+	$per_share = 0.0;
+	$count     = 0;
+	$payments  = array();
+
+	$fmt_date = static function ( $ymd ) {
+		$time = strtotime( $ymd );
+		return false !== $time ? wp_date( 'd M Y', $time ) : $ymd;
+	};
+
+	foreach ( hub_gsct2026_get_dividend_events() as $event ) {
+		if ( $event['exDate'] >= $start && $event['exDate'] <= $end ) {
+			$per_share += $event['value'];
+			++$count;
+			$payments[] = array(
+				'ex'    => $fmt_date( $event['exDate'] ),
+				'pay'   => $fmt_date( $event['payDate'] ),
+				'type'  => hub_gsct2026_dividend_type_label( $event['subType'] ),
+				'value' => round( $event['value'], 2 ),
+			);
+		}
+	}
+
+	$start_price = hub_gsct2026_get_close_on_or_after( $start );
+
+	return array(
+		'total_gbp'   => round( $per_share * $shares, 2 ),
+		'yield_pct'   => ( $start_price ? round( $per_share / $start_price * 100, 2 ) : null ),
+		'start_price' => $start_price,
+		'dividends'   => $count,
+		'payments'    => $payments,
+		'yield_note'  => $start_price ? '' : 'No share price is available for the start date, so yield cannot be calculated.',
+	);
+}
+
+/**
  * Annual dividend totals keyed by ex-div calendar year (descending),
  * split into Final (annual subtype) and Interim (half_year) stacks for
  * the chart. Other subtypes are table-only — they don't join a stack.

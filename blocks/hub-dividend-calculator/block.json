@@ -1,0 +1,26 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "hub-gsct2026/hub-dividend-calculator",
+	"title": "HUB Dividend Calculator",
+	"category": "hub-gsct2026",
+	"icon": "calculator",
+	"description": "What-if dividend calculator: dates plus share count in, total GBp and yield-on-cost out.",
+	"attributes": {
+		"title": {
+			"type": "string",
+			"default": "Dividend calculator"
+		},
+		"disclaimer": {
+			"type": "string",
+			"default": "Dividends count by ex-div date with the holding assumed constant throughout."
+		}
+	},
+	"supports": {
+		"anchor": true,
+		"className": true,
+		"align": true
+	},
+	"editorScript": "file:./build/index.js",
+	"render": "file:./render.php"
+}

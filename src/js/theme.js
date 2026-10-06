@@ -15,6 +15,7 @@ import { initHoldings } from './holdings';
 import { initGeoCharts } from './geo-chart';
 import { initReturnPerformance } from './return-performance';
 import { initDividends } from './dividends';
+import { initDividendCalculator } from './dividend-calculator';
 import { initDocumentLibraries } from './document-library';
 import { initAnnouncements } from './announcements';
 
@@ -38,4 +39,5 @@ document.addEventListener('DOMContentLoaded', () => {
 	initDocumentLibraries();
 	initAnnouncements();
 	initDividends();
+	initDividendCalculator();
 });

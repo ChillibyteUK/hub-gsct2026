@@ -699,6 +699,93 @@ body.has-investis-tool a.active {
     }
 }
 
+/* --- src/blocks/dividend-calculator.css --- */
+/* HUB Dividend Calculator — stacked inputs left, yellow results card
+   right, payments table plus disclaimer below. Native inputs carry the
+   theme's forms.css treatment; this file only owns layout and the card. */
+
+.hub-dividend-calculator {
+	padding-block: var(--space-5);
+}
+
+.hub-dividend-calculator .h2-data-l {
+	margin-block: 0 var(--space-4);
+}
+
+.hub-dividend-calculator__form {
+	display: grid;
+	gap: var(--space-3);
+	margin-bottom: var(--space-4);
+}
+
+.hub-dividend-calculator__field label {
+	display: block;
+	margin-bottom: var(--space-1);
+	font-weight: var(--fw-bold);
+}
+
+.hub-dividend-calculator__field input {
+	width: 100%;
+}
+
+.hub-dividend-calculator__error {
+	margin: 0;
+	color: var(--col-negative);
+	font-weight: var(--fw-bold);
+}
+
+.hub-dividend-calculator__card {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	height: 100%;
+	background-color: var(--col-brand-yellow);
+	border-radius: var(--radius-lg);
+	padding: var(--space-4);
+	color: var(--col-black);
+	text-align: center;
+}
+
+.hub-dividend-calculator__card[hidden] {
+	display: none;
+}
+
+.hub-dividend-calculator__result .h2-data-l {
+	margin: 0;
+}
+
+.hub-dividend-calculator__divider {
+	border-top: 1px solid rgb(0 0 0 / 0.15);
+	margin-block: var(--space-3);
+}
+
+.hub-dividend-calculator__yield-note {
+	margin: var(--space-2) 0 0;
+}
+
+.hub-dividend-calculator__payments {
+	margin-top: var(--space-5);
+	overflow-x: auto;
+}
+
+/* Per-row share counts: fixed narrow width so the input doesn't stretch
+   the column (theme inputs default to width: 100%). */
+.hub-dividend-calculator__payments input[type="number"] {
+	width: 5.5rem;
+}
+
+/* Static row order (rows are only ever rebuilt wholesale), so plain
+   nth-child striping is safe — same lightest-grey as the other tables. */
+.hub-dividend-calculator__payments tbody tr:nth-child(even) td {
+	background-color: var(--col-lightest-grey);
+}
+
+.hub-dividend-calculator__note {
+	margin: var(--space-3) 0 0;
+	color: var(--col-grey-600);
+	font-size: var(--fs-small);
+}
+
 /* --- src/blocks/dividends.css --- */
 /* HUB Dividends — latest card, annual stacked chart, searchable history
    table. Table striping is class-based (.is-alt, re-applied to visible
