@@ -44,7 +44,12 @@ main {
 	display: flex;
 	align-items: center;
 	justify-content: space-between;
+	column-gap: var(--space-3);
 	height: var(--nav-height);
+}
+
+.navbar .btn {
+	text-align: center;
 }
  
 .navbar-brand {
@@ -70,12 +75,53 @@ main {
 	cursor: pointer;
 }
 
+/* Burger-to-X: three bars collapse into a cross when the menu opens,
+   driven purely by the aria-expanded state nav-toggle.js already flips —
+   the bordered box itself never moves. Outer bars travel 7px (5px gap +
+   2px bar) onto the middle row and rotate; the middle bar fades out. */
+.navbar-toggler__icon {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	gap: 5px;
+	width: 20px;
+	height: 20px;
+}
+
+.navbar-toggler__icon > span {
+	display: block;
+	height: 2px;
+	border-radius: 2px;
+	background-color: currentColor;
+	transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+.navbar-toggler[aria-expanded="true"] .navbar-toggler__icon > span:nth-child(1) {
+	transform: translateY(7px) rotate(45deg);
+}
+
+.navbar-toggler[aria-expanded="true"] .navbar-toggler__icon > span:nth-child(2) {
+	opacity: 0;
+}
+
+.navbar-toggler[aria-expanded="true"] .navbar-toggler__icon > span:nth-child(3) {
+	transform: translateY(-7px) rotate(-45deg);
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.navbar-toggler__icon > span {
+		transition: none;
+	}
+}
+
 .navbar-collapse {
 	display: none;
 }
 
 /* Overlays the page rather than pushing content down — positioned against
-   .navbar (position: relative above), not in normal document flow. */
+   .navbar (position: relative above), not in normal document flow. Fills
+   the remaining viewport height below the bar (dvh with a vh fallback),
+   scrolling internally when links overflow. */
 .navbar-collapse.is-open {
 	display: block;
 	position: absolute;
@@ -85,16 +131,29 @@ main {
 	background-color: var(--col-body-bg);
 	border-top: 1px solid var(--col-grey-300);
 	box-shadow: var(--shadow-lg);
-	padding: var(--space-3);
-	max-height: calc(100vh - 100%);
+	padding: var(--space-5) var(--space-3) var(--space-3);
+	height: calc(100vh - var(--nav-height));
+	height: calc(100dvh - var(--nav-height));
 	overflow-y: auto;
 	z-index: 20;
+}
+
+body.admin-bar .navbar-collapse.is-open {
+	height: calc(100vh - var(--nav-height) - 32px);
+	height: calc(100dvh - var(--nav-height) - 32px);
+}
+
+@media (max-width: 782px) {
+	body.admin-bar .navbar-collapse.is-open {
+		height: calc(100vh - var(--nav-height) - 46px);
+		height: calc(100dvh - var(--nav-height) - 46px);
+	}
 }
 
 .navbar-nav {
 	display: flex;
 	flex-direction: column;
-	align-items: center;
+	align-items: flex-start;
 	gap: var(--space-4);
 	margin: 0;
 	padding: 0;
@@ -110,6 +169,19 @@ main {
 	&.active,
 	&[aria-current="page"] {
 		font-weight: var(--fw-700);
+	}
+}
+
+/* Mobile links read as display-m — values mirrored from .display-m in
+   typography.css, keep them in sync. Scoped to mobile so desktop links
+   keep their own size. */
+@media (max-width: 991px) {
+	.navbar-collapse.is-open .nav-link {
+		font-family: var(--font-family-heading);
+		font-weight: var(--fw-regular);
+		font-size: clamp(32px, calc(26.36px + 2.04vw), 48px);
+		line-height: clamp(38px, calc(31.65px + 2.3vw), 56px);
+		letter-spacing: 0;
 	}
 }
 

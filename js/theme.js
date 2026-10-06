@@ -230,7 +230,7 @@
 	 * Primary Hero block: positions the background image so the chosen focal point
 	 * lands exactly under the crosshair.
 	 *
-	 * Below 768px the crosshair sits at a fixed spot (horizontally centred, a
+	 * Below 992px the crosshair sits at a fixed spot (horizontally centred, a
 	 * fixed distance from the top — src/blocks/primary-hero.css) rather than at
 	 * the focal point's own position. Moving an off-centre focal point to a
 	 * *different* target spot means the image has to be shifted sideways
@@ -256,17 +256,21 @@
 	  const style = getComputedStyle(media);
 	  const focalX = parseFloat(style.getPropertyValue('--focal-x')) || 0.5;
 	  const focalY = parseFloat(style.getPropertyValue('--focal-y')) || 0.5;
-	  const isSmall = window.matchMedia('(max-width: 767px)').matches;
+	  const isSmall = window.matchMedia('(max-width: 991px)').matches;
 	  const containerWidth = media.clientWidth;
 	  const containerHeight = media.clientHeight;
 
-	  // Below 768px the crosshair sits a fixed 6rem from the top, horizontally
-	  // centred, instead of at the focal point's own fraction — match that
-	  // here (as fractions of the container, like focalX/focalY) so the image
-	  // pans to keep the true focal point there.
+	  // Below 992px the crosshair is top-anchored 2rem down (not centred),
+	  // so the focal point lands at its vertical centre: 2rem plus half the
+	  // rendered graphic height (min(440px, 90vw) wide at the svg's 631:473
+	  // ratio — same geometry as the mobile padding in
+	  // src/blocks/primary-hero.css, keep them in sync). Match that here (as
+	  // fractions of the container, like focalX/focalY) so the image pans to
+	  // keep the true focal point there.
 	  const rootFontSize = parseFloat(getComputedStyle(document.documentElement).fontSize) || 16;
 	  const targetXFraction = isSmall ? 0.5 : focalX;
-	  const targetYFraction = isSmall ? rootFontSize * 6 / containerHeight : focalY;
+	  const crosshairHeight = isSmall ? Math.min(440, containerWidth * 0.9) / (631 / 473) : 0;
+	  const targetYFraction = isSmall ? (rootFontSize * 2 + crosshairHeight / 2) / containerHeight : focalY;
 
 	  // Falls back to the hardcoded test asset's own 1169×780 until it loads.
 	  const imageWidth = background.naturalWidth || 1169;

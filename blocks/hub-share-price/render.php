@@ -85,7 +85,7 @@ $wrapper_attributes = get_block_wrapper_attributes( array( 'class' => 'hub-share
 			<div class="hub-share-price__updated text-body">Last updated: <?= $hub_updated; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- wp_date() output plus an entity, no user input. ?></div>
 		</div>
 		<div class="row hub-share-price__grid">
-			<div class="col-12 col-md-6">
+			<div class="col-6">
 				<div class="hub-share-price__stat">
 					<div class="text-label text-uppercase">Opening price</div>
 					<div class="h3-data-m"><?= $hub_open; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- number_format() output plus an entity, no user input. ?></div>
@@ -102,7 +102,7 @@ $wrapper_attributes = get_block_wrapper_attributes( array( 'class' => 'hub-share
 					</div>
 				</div>
 			</div>
-			<div class="col-12 col-md-6">
+			<div class="col-6">
 				<div class="hub-share-price__stat">
 					<div class="text-label text-uppercase">Volume</div>
 					<div class="h3-data-m"><?= $hub_volume; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- number_format() output plus an entity, no user input. ?></div>
@@ -112,7 +112,7 @@ $wrapper_attributes = get_block_wrapper_attributes( array( 'class' => 'hub-share
 					<div class="h3-data-m"><?= $hub_mcap; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- number_format() output plus an entity, no user input. ?></div>
 				</div>
 				<div class="hub-share-price__stat">
-					<div class="text-label text-uppercase">52-week range</div>
+					<div class="text-label text-uppercase">52 Week Range</div>
 					<div class="hub-share-price__range" aria-hidden="false">
 						<span class="hub-share-price__range-line" aria-hidden="true"></span>
 						<span class="hub-share-price__range-values text-body"><span><?= $hub_year_low; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- number_format() output plus an entity, no user input. ?></span><span><?= $hub_year_high; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- number_format() output plus an entity, no user input. ?></span></span>

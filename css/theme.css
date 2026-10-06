@@ -742,7 +742,12 @@ main {
 	display: flex;
 	align-items: center;
 	justify-content: space-between;
+	column-gap: var(--space-3);
 	height: var(--nav-height);
+}
+
+.navbar .btn {
+	text-align: center;
 }
  
 .navbar-brand {
@@ -768,12 +773,53 @@ main {
 	cursor: pointer;
 }
 
+/* Burger-to-X: three bars collapse into a cross when the menu opens,
+   driven purely by the aria-expanded state nav-toggle.js already flips —
+   the bordered box itself never moves. Outer bars travel 7px (5px gap +
+   2px bar) onto the middle row and rotate; the middle bar fades out. */
+.navbar-toggler__icon {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	gap: 5px;
+	width: 20px;
+	height: 20px;
+}
+
+.navbar-toggler__icon > span {
+	display: block;
+	height: 2px;
+	border-radius: 2px;
+	background-color: currentColor;
+	transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+.navbar-toggler[aria-expanded="true"] .navbar-toggler__icon > span:nth-child(1) {
+	transform: translateY(7px) rotate(45deg);
+}
+
+.navbar-toggler[aria-expanded="true"] .navbar-toggler__icon > span:nth-child(2) {
+	opacity: 0;
+}
+
+.navbar-toggler[aria-expanded="true"] .navbar-toggler__icon > span:nth-child(3) {
+	transform: translateY(-7px) rotate(-45deg);
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.navbar-toggler__icon > span {
+		transition: none;
+	}
+}
+
 .navbar-collapse {
 	display: none;
 }
 
 /* Overlays the page rather than pushing content down — positioned against
-   .navbar (position: relative above), not in normal document flow. */
+   .navbar (position: relative above), not in normal document flow. Fills
+   the remaining viewport height below the bar (dvh with a vh fallback),
+   scrolling internally when links overflow. */
 .navbar-collapse.is-open {
 	display: block;
 	position: absolute;
@@ -783,16 +829,29 @@ main {
 	background-color: var(--col-body-bg);
 	border-top: 1px solid var(--col-grey-300);
 	box-shadow: var(--shadow-lg);
-	padding: var(--space-3);
-	max-height: calc(100vh - 100%);
+	padding: var(--space-5) var(--space-3) var(--space-3);
+	height: calc(100vh - var(--nav-height));
+	height: calc(100dvh - var(--nav-height));
 	overflow-y: auto;
 	z-index: 20;
+}
+
+body.admin-bar .navbar-collapse.is-open {
+	height: calc(100vh - var(--nav-height) - 32px);
+	height: calc(100dvh - var(--nav-height) - 32px);
+}
+
+@media (max-width: 782px) {
+	body.admin-bar .navbar-collapse.is-open {
+		height: calc(100vh - var(--nav-height) - 46px);
+		height: calc(100dvh - var(--nav-height) - 46px);
+	}
 }
 
 .navbar-nav {
 	display: flex;
 	flex-direction: column;
-	align-items: center;
+	align-items: flex-start;
 	gap: var(--space-4);
 	margin: 0;
 	padding: 0;
@@ -809,6 +868,19 @@ main {
 .nav-link.active,.nav-link[aria-current="page"] {
 		font-weight: var(--fw-700);
 	}
+
+/* Mobile links read as display-m — values mirrored from .display-m in
+   typography.css, keep them in sync. Scoped to mobile so desktop links
+   keep their own size. */
+@media (max-width: 991px) {
+	.navbar-collapse.is-open .nav-link {
+		font-family: var(--font-family-heading);
+		font-weight: var(--fw-regular);
+		font-size: clamp(32px, calc(26.36px + 2.04vw), 48px);
+		line-height: clamp(38px, calc(31.65px + 2.3vw), 56px);
+		letter-spacing: 0;
+	}
+}
 
 /* Submenus — nested, always visible on mobile; shown via click as a
    floating panel from "lg" up. */
@@ -3847,6 +3919,9 @@ a.hub-document-library-hero__card:focus-visible {
 	display: block;
 	width: 100%;
 	height: auto;
+	margin-inline: auto;
+	max-width: 100%;
+	max-height: auto;
 }
 
 .hub-holdings-geo-chart__center {
@@ -3964,10 +4039,14 @@ a.hub-document-library-hero__card:focus-visible {
 	overflow-x: auto;
 }
 
+/* NOTE: no table-layout: fixed here — fixed layout can never exceed the
+   container, so the overflow-x wrapper above would never engage and long
+   holding names would just get crushed. Auto layout lets wide content
+   overflow into the scroll wrapper instead, same as the
+   return-performance tables. */
 .hub-holdings__table {
 	width: 100%;
 	border-collapse: collapse;
-	table-layout: fixed;
 }
 
 .hub-holdings__table th,
@@ -4036,7 +4115,7 @@ a.hub-document-library-hero__card:focus-visible {
         border-radius: var(--radius-lg);
         box-shadow: var(--shadow-sm);
         padding: var(--space-5) var(--space-4);
-        margin-block-end: var(--space-5);
+        margin-block-end: var(--space-4);
     }
 :is(.hub-how-to-invest-full .hub-how-to-invest-full__vehicle) h4 {
             color: var(--col-black);
@@ -4071,13 +4150,14 @@ a.hub-document-library-hero__card:focus-visible {
     align-items: center;
     justify-content: center;
     padding: 1rem;
+    min-width: 0;
     transition: box-shadow 0.3s ease;
 }
 
 .hub-how-to-invest-full__platform img {
     max-width: 160px;
     max-height: 70px;
-    width: auto;
+    width: 100%;
     height: auto;
 }
 
@@ -4444,11 +4524,11 @@ a.hub-nav-cards__card:focus-visible {
    src/js/primary-hero.js multiplies them directly against lengths.
 
    Everything mobile-specific below is gated on the same single breakpoint
-   (max-width: 767px, the exact complement of the row-layout switch at
-   768px) — using a second, different breakpoint for just the crosshair
-   previously left a dead middle zone (576–767px) where the crosshair sat at
-   the plain focal-point position while the layout was still stacked with
-   no reserved clearance for it, so it could overlap the content under it.
+   (max-width: 991px, the exact complement of the row-layout switch at
+   992px) — using a second, different breakpoint for just the crosshair
+   previously left a dead middle zone where the crosshair sat at the plain
+   focal-point position while the layout was still stacked with no reserved
+   clearance for it, so it could overlap the content under it.
 
    The background image is an absolutely positioned backdrop filling the
    whole section (behind the text always, at any size) — the section itself
@@ -4457,7 +4537,7 @@ a.hub-nav-cards__card:focus-visible {
    grow the section taller instead of ever getting cropped or clipped.
    Content is positioned within that box via flex alignment on the section:
    toward the bottom on mobile, toward the right and vertically centred from
-   md up.
+   lg up.
 
    object-fit: cover can only place a source point at the SAME percentage
    position in its container (its point at X% always lands at X% of the
@@ -4590,34 +4670,61 @@ a.hub-nav-cards__card:focus-visible {
 	cursor: pointer;
 }
 
-/* Below 768px: crosshair moves to a fixed spot — horizontally centred
-   (capped at 90vw, above) and 6rem below the top of the image — instead of
-   the focal point's own position, so it doesn't collide with the
-   heading/intro/buttons stacked underneath (src/js/primary-hero.js reads this
-   same breakpoint and pans the image so the true focal point still lands
-   exactly there). The section's height here is just the content's own
-   height (.hub-primary-hero__media is an absolute backdrop, so it
-   doesn't contribute) — the crosshair (6rem down, min(300px, 90vw) wide at
-   its native ~2.19:1 ratio, so up to ~8.6rem tall, centred on that 6rem
-   mark) would otherwise overlap whatever's at the top of the content, so
-   this reserves just enough top padding to clear it. Net result: the
-   section ends up exactly "crosshair space + content + a bit of padding"
+/* Below 992px: crosshair moves to a fixed spot — horizontally centred
+   and top-anchored 2rem down — instead of the focal point's own position,
+   with reserved space above AND below it, so it doesn't collide with the
+   heading/intro/buttons stacked underneath (src/js/primary-hero.js reads
+   this same breakpoint and pans the image so the true focal point still
+   lands exactly at the graphic's centre). The section's height here is
+   just the content's own height (.hub-primary-hero__media is an absolute
+   backdrop, so it doesn't contribute) — the crosshair gets its own
+   reserved zone above the content via the content's top padding (see
+   below). Net result: the section ends up exactly "crosshair space +
+   content + a bit of padding"
    tall, never more. */
-@media (max-width: 767px) {
+@media (max-width: 991px) {
 	.hub-primary-hero__media {
 		--target-x: 0.5;
 	}
 
+	/* Own space above AND below the crosshair: it keeps its full
+	   min(440px, 90vw) size, top-anchored 2rem down so nothing clips —
+	   the svg is 631×473, so its full height is width / (631/473). The
+	   content padding below re-computes exactly that (2rem above +
+	   full height + 1.5rem below) at every viewport width, so the gaps
+	   stay constant while the zone grows and shrinks with the graphic.
+	   Keep the ratio, the 2rem anchor and the JS target in
+	   src/js/primary-hero.js in sync with this. Division by a plain
+	   number is valid calc() and fine at this project's browser
+	   baseline. */
 	.hub-primary-hero__crosshair {
-		top: 6rem;
+		top: 2rem;
+		transform: translate(-50%, 0);
 	}
 
 	.hub-primary-hero__content {
-		padding-top: 11rem;
+		padding-top: calc(3.5rem + min(440px, 90vw) / (631 / 473));
+	}
+
+	/* Stacked full-width buttons while collapsed — column direction with
+	   stretched, centred buttons instead of the side-by-side row. The
+	   container needs its own width:100% because the content column uses
+	   align-items:flex-start, which would otherwise shrink-wrap it to the
+	   widest button and leave width:100% on the buttons resolving
+	   against that narrow box. */
+	.hub-primary-hero__ctas {
+		flex-direction: column;
+		align-items: stretch;
+		width: 100%;
+	}
+
+	.hub-primary-hero__ctas .btn {
+		width: 100%;
+		text-align: center;
 	}
 }
 
-@media (min-width: 768px) {
+@media (min-width: 992px) {
 	.hub-primary-hero {
 		flex-direction: row;
 		align-items: center;
@@ -4988,6 +5095,16 @@ a.hub-nav-cards__card:focus-visible {
 	padding: 0;
 	list-style: none;
 	border-bottom: 1px solid var(--col-grey-200);
+}
+
+/* Below md the inline row wraps raggedly — switch to a tidy 2-per-row
+   grid instead. Active underlines etc. are untouched. */
+@media (max-width: 767px) {
+	.hub-sub-page-nav__list {
+		display: grid;
+		grid-template-columns: repeat(2, 1fr);
+		column-gap: var(--space-4);
+	}
 }
 
 .hub-sub-page-nav__link {

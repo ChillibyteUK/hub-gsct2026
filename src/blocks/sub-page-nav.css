@@ -16,6 +16,16 @@
 	border-bottom: 1px solid var(--col-grey-200);
 }
 
+/* Below md the inline row wraps raggedly — switch to a tidy 2-per-row
+   grid instead. Active underlines etc. are untouched. */
+@media (max-width: 767px) {
+	.hub-sub-page-nav__list {
+		display: grid;
+		grid-template-columns: repeat(2, 1fr);
+		column-gap: var(--space-4);
+	}
+}
+
 .hub-sub-page-nav__link {
 	display: inline-block;
 	position: relative;

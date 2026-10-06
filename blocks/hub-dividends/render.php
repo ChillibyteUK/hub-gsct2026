@@ -62,9 +62,27 @@ $wrapper_attributes = get_block_wrapper_attributes( array( 'class' => 'hub-divid
 			<div class="hub-dividends__canvas">
 				<canvas
 					data-div-chart
-					data-chart="<?= esc_attr( wp_json_encode( array_reverse( array_map( static function ( $year, $totals ) {
-						return array( 'year' => (string) $year, 'final' => $totals['final'], 'interim' => $totals['interim'] );
-					}, array_keys( $hub_annual ), $hub_annual ) ) ) ); ?>"
+					data-chart="
+					<?=
+					esc_attr(
+						wp_json_encode(
+							array_reverse(
+								array_map(
+									static function ( $year, $totals ) {
+										return array(
+											'year'    => (string) $year,
+											'final'   => $totals['final'],
+											'interim' => $totals['interim'],
+										);
+									},
+									array_keys( $hub_annual ),
+									$hub_annual
+								)
+							)
+						)
+					);
+					?>
+					"
 					role="img"
 					aria-label="Annual dividends chart"
 				></canvas>
@@ -81,9 +99,20 @@ $wrapper_attributes = get_block_wrapper_attributes( array( 'class' => 'hub-divid
 			<input type="search" id="<?= esc_attr( $hub_search_id ); ?>" class="hub-dividends__search-input" placeholder="Search by date or type" autocomplete="off" data-div-search>
 		</div>
 		<div class="hub-dividends__table-wrap">
-			<table class="hub-dividends__table" data-div-export='<?= esc_attr( wp_json_encode( array_map( static function ( $event ) {
-				return array( $event['exDate'], $event['payDate'], hub_gsct2026_dividend_type_label( $event['subType'] ), number_format( $event['value'], 2 ) );
-			}, $hub_events ) ) ); ?>'>
+			<table class="hub-dividends__table" data-div-export='
+			<?=
+			esc_attr(
+				wp_json_encode(
+					array_map(
+						static function ( $event ) {
+							return array( $event['exDate'], $event['payDate'], hub_gsct2026_dividend_type_label( $event['subType'] ), number_format( $event['value'], 2 ) );
+						},
+						$hub_events
+					)
+				)
+			);
+			?>
+			'>
 				<thead>
 					<tr>
 						<th scope="col">Ex-dividend date</th>

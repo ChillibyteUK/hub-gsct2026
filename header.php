@@ -27,9 +27,7 @@
 		<a href="/how-to-invest/" class="btn d-lg-none">How to Invest</a>
 
 		<button class="navbar-toggler" type="button" aria-expanded="false" aria-controls="primary-menu" aria-label="Toggle navigation">
-			<svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-				<path d="M2 5h16M2 10h16M2 15h16" />
-			</svg>
+			<span class="navbar-toggler__icon" aria-hidden="true"><span></span><span></span><span></span></span>
 		</button>
 
 		<div class="navbar-collapse" id="primary-menu">

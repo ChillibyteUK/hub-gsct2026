@@ -45,10 +45,14 @@
 	overflow-x: auto;
 }
 
+/* NOTE: no table-layout: fixed here — fixed layout can never exceed the
+   container, so the overflow-x wrapper above would never engage and long
+   holding names would just get crushed. Auto layout lets wide content
+   overflow into the scroll wrapper instead, same as the
+   return-performance tables. */
 .hub-holdings__table {
 	width: 100%;
 	border-collapse: collapse;
-	table-layout: fixed;
 }
 
 .hub-holdings__table th,

@@ -1199,6 +1199,9 @@ a.hub-document-library-hero__card:focus-visible {
 	display: block;
 	width: 100%;
 	height: auto;
+	margin-inline: auto;
+	max-width: 100%;
+	max-height: auto;
 }
 
 .hub-holdings-geo-chart__center {
@@ -1316,10 +1319,14 @@ a.hub-document-library-hero__card:focus-visible {
 	overflow-x: auto;
 }
 
+/* NOTE: no table-layout: fixed here — fixed layout can never exceed the
+   container, so the overflow-x wrapper above would never engage and long
+   holding names would just get crushed. Auto layout lets wide content
+   overflow into the scroll wrapper instead, same as the
+   return-performance tables. */
 .hub-holdings__table {
 	width: 100%;
 	border-collapse: collapse;
-	table-layout: fixed;
 }
 
 .hub-holdings__table th,
@@ -1391,7 +1398,7 @@ a.hub-document-library-hero__card:focus-visible {
         border-radius: var(--radius-lg);
         box-shadow: var(--shadow-sm);
         padding: var(--space-5) var(--space-4);
-        margin-block-end: var(--space-5);
+        margin-block-end: var(--space-4);
         h4 {
             color: var(--col-black);
         }
@@ -1428,13 +1435,14 @@ a.hub-document-library-hero__card:focus-visible {
     align-items: center;
     justify-content: center;
     padding: 1rem;
+    min-width: 0;
     transition: box-shadow 0.3s ease;
 }
 
 .hub-how-to-invest-full__platform img {
     max-width: 160px;
     max-height: 70px;
-    width: auto;
+    width: 100%;
     height: auto;
 }
 
@@ -1811,11 +1819,11 @@ a.hub-nav-cards__card:focus-visible {
    src/js/primary-hero.js multiplies them directly against lengths.
 
    Everything mobile-specific below is gated on the same single breakpoint
-   (max-width: 767px, the exact complement of the row-layout switch at
-   768px) — using a second, different breakpoint for just the crosshair
-   previously left a dead middle zone (576–767px) where the crosshair sat at
-   the plain focal-point position while the layout was still stacked with
-   no reserved clearance for it, so it could overlap the content under it.
+   (max-width: 991px, the exact complement of the row-layout switch at
+   992px) — using a second, different breakpoint for just the crosshair
+   previously left a dead middle zone where the crosshair sat at the plain
+   focal-point position while the layout was still stacked with no reserved
+   clearance for it, so it could overlap the content under it.
 
    The background image is an absolutely positioned backdrop filling the
    whole section (behind the text always, at any size) — the section itself
@@ -1824,7 +1832,7 @@ a.hub-nav-cards__card:focus-visible {
    grow the section taller instead of ever getting cropped or clipped.
    Content is positioned within that box via flex alignment on the section:
    toward the bottom on mobile, toward the right and vertically centred from
-   md up.
+   lg up.
 
    object-fit: cover can only place a source point at the SAME percentage
    position in its container (its point at X% always lands at X% of the
@@ -1957,34 +1965,61 @@ a.hub-nav-cards__card:focus-visible {
 	cursor: pointer;
 }
 
-/* Below 768px: crosshair moves to a fixed spot — horizontally centred
-   (capped at 90vw, above) and 6rem below the top of the image — instead of
-   the focal point's own position, so it doesn't collide with the
-   heading/intro/buttons stacked underneath (src/js/primary-hero.js reads this
-   same breakpoint and pans the image so the true focal point still lands
-   exactly there). The section's height here is just the content's own
-   height (.hub-primary-hero__media is an absolute backdrop, so it
-   doesn't contribute) — the crosshair (6rem down, min(300px, 90vw) wide at
-   its native ~2.19:1 ratio, so up to ~8.6rem tall, centred on that 6rem
-   mark) would otherwise overlap whatever's at the top of the content, so
-   this reserves just enough top padding to clear it. Net result: the
-   section ends up exactly "crosshair space + content + a bit of padding"
+/* Below 992px: crosshair moves to a fixed spot — horizontally centred
+   and top-anchored 2rem down — instead of the focal point's own position,
+   with reserved space above AND below it, so it doesn't collide with the
+   heading/intro/buttons stacked underneath (src/js/primary-hero.js reads
+   this same breakpoint and pans the image so the true focal point still
+   lands exactly at the graphic's centre). The section's height here is
+   just the content's own height (.hub-primary-hero__media is an absolute
+   backdrop, so it doesn't contribute) — the crosshair gets its own
+   reserved zone above the content via the content's top padding (see
+   below). Net result: the section ends up exactly "crosshair space +
+   content + a bit of padding"
    tall, never more. */
-@media (max-width: 767px) {
+@media (max-width: 991px) {
 	.hub-primary-hero__media {
 		--target-x: 0.5;
 	}
 
+	/* Own space above AND below the crosshair: it keeps its full
+	   min(440px, 90vw) size, top-anchored 2rem down so nothing clips —
+	   the svg is 631×473, so its full height is width / (631/473). The
+	   content padding below re-computes exactly that (2rem above +
+	   full height + 1.5rem below) at every viewport width, so the gaps
+	   stay constant while the zone grows and shrinks with the graphic.
+	   Keep the ratio, the 2rem anchor and the JS target in
+	   src/js/primary-hero.js in sync with this. Division by a plain
+	   number is valid calc() and fine at this project's browser
+	   baseline. */
 	.hub-primary-hero__crosshair {
-		top: 6rem;
+		top: 2rem;
+		transform: translate(-50%, 0);
 	}
 
 	.hub-primary-hero__content {
-		padding-top: 11rem;
+		padding-top: calc(3.5rem + min(440px, 90vw) / (631 / 473));
+	}
+
+	/* Stacked full-width buttons while collapsed — column direction with
+	   stretched, centred buttons instead of the side-by-side row. The
+	   container needs its own width:100% because the content column uses
+	   align-items:flex-start, which would otherwise shrink-wrap it to the
+	   widest button and leave width:100% on the buttons resolving
+	   against that narrow box. */
+	.hub-primary-hero__ctas {
+		flex-direction: column;
+		align-items: stretch;
+		width: 100%;
+	}
+
+	.hub-primary-hero__ctas .btn {
+		width: 100%;
+		text-align: center;
 	}
 }
 
-@media (min-width: 768px) {
+@media (min-width: 992px) {
 	.hub-primary-hero {
 		flex-direction: row;
 		align-items: center;
@@ -2355,6 +2390,16 @@ a.hub-nav-cards__card:focus-visible {
 	padding: 0;
 	list-style: none;
 	border-bottom: 1px solid var(--col-grey-200);
+}
+
+/* Below md the inline row wraps raggedly — switch to a tidy 2-per-row
+   grid instead. Active underlines etc. are untouched. */
+@media (max-width: 767px) {
+	.hub-sub-page-nav__list {
+		display: grid;
+		grid-template-columns: repeat(2, 1fr);
+		column-gap: var(--space-4);
+	}
 }
 
 .hub-sub-page-nav__link {
