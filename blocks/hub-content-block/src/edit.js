@@ -1,5 +1,5 @@
 import { __ } from '@wordpress/i18n';
-import { useBlockProps, MediaUpload, MediaUploadCheck, RichText } from '@wordpress/block-editor';
+import { useBlockProps, MediaUpload, MediaUploadCheck, RichText, URLInput } from '@wordpress/block-editor';
 import { TextControl, RadioControl, SelectControl, ToggleControl, TextareaControl, Button } from '@wordpress/components';
 import RepeaterField from '../../_shared/RepeaterField';
 import EditorBlockShell from '../../_shared/EditorBlockShell';
@@ -104,12 +104,13 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 					/>
 				</div>
 				<div style={ { flex: '50 1 0%' } }>
-					<TextControl
-						type="url"
-						label={ __( 'CTA URL', 'hub-gsct2026' ) }
-						value={ ctaUrl }
-						onChange={ ( value ) => setAttributes( { ctaUrl: value } ) }
-					/>
+					<div className="hub-editor-field">
+						<label className="hub-editor-field__label">{ __( 'CTA URL', 'hub-gsct2026' ) }</label>
+						<URLInput
+							value={ ctaUrl || '' }
+							onChange={ ( value ) => setAttributes( { ctaUrl: value } ) }
+						/>
+					</div>
 				</div>
 			</div>
 			<RadioControl
@@ -190,13 +191,13 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 			) }
 			{ ! isImage && ! isQuote && ! isList && ! isForm && (
 				<>
-					<TextControl
-						type="url"
-						label={ __( 'Vimeo URL', 'hub-gsct2026' ) }
-						value={ videoUrl }
-						onChange={ ( value ) => setAttributes( { videoUrl: value } ) }
-						help={ __( 'e.g. https://vimeo.com/123456789', 'hub-gsct2026' ) }
-					/>
+				<TextControl
+					type="url"
+					label={ __( 'Vimeo URL', 'hub-gsct2026' ) }
+					value={ videoUrl }
+					onChange={ ( value ) => setAttributes( { videoUrl: value } ) }
+					help={ __( 'e.g. https://vimeo.com/123456789', 'hub-gsct2026' ) }
+				/>
 					<div className="hub-editor-field">
 						<label className="hub-editor-field__label">{ __( 'Video thumbnail', 'hub-gsct2026' ) }</label>
 						<MediaUploadCheck>

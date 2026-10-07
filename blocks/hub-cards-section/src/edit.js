@@ -1,5 +1,5 @@
 import { __ } from '@wordpress/i18n';
-import { useBlockProps, MediaUpload, MediaUploadCheck } from '@wordpress/block-editor';
+import { useBlockProps, MediaUpload, MediaUploadCheck, URLInput } from '@wordpress/block-editor';
 import { TextControl, Button } from '@wordpress/components';
 import RepeaterField from '../../_shared/RepeaterField';
 import EditorBlockShell from '../../_shared/EditorBlockShell';
@@ -68,12 +68,13 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 					/>
 				</div>
 				<div style={ { flex: '50 1 0%' } }>
-					<TextControl
-						type="url"
-						label={ __( 'Link URL', 'hub-gsct2026' ) }
-						value={ linkUrl }
-						onChange={ ( value ) => setAttributes( { linkUrl: value } ) }
-					/>
+					<div className="hub-editor-field">
+						<label className="hub-editor-field__label">{ __( 'Link URL', 'hub-gsct2026' ) }</label>
+						<URLInput
+							value={ linkUrl || '' }
+							onChange={ ( value ) => setAttributes( { linkUrl: value } ) }
+						/>
+					</div>
 				</div>
 			</div>
 		</EditorBlockShell>

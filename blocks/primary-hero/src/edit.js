@@ -1,5 +1,5 @@
 import { __ } from '@wordpress/i18n';
-import { useBlockProps, InspectorControls, MediaUpload, MediaUploadCheck } from '@wordpress/block-editor';
+import { useBlockProps, InspectorControls, MediaUpload, MediaUploadCheck, URLInput } from '@wordpress/block-editor';
 import { TextControl, TextareaControl, Button, PanelBody, FocalPointPicker } from '@wordpress/components';
 import EditorBlockShell from '../../_shared/EditorBlockShell';
 
@@ -93,12 +93,13 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 						/>
 					</div>
 					<div style={ { flex: '50 1 0%' } }>
-						<TextControl
-							type="url"
-							label={ __( 'Primary CTA URL', 'hub-gsct2026' ) }
-							value={ primaryCtaUrl }
-							onChange={ ( value ) => setAttributes( { primaryCtaUrl: value } ) }
-						/>
+						<div className="hub-editor-field">
+							<label className="hub-editor-field__label">{ __( 'Primary CTA URL', 'hub-gsct2026' ) }</label>
+							<URLInput
+								value={ primaryCtaUrl || '' }
+								onChange={ ( value ) => setAttributes( { primaryCtaUrl: value } ) }
+							/>
+						</div>
 					</div>
 				</div>
 				<div style={ { display: 'flex', flexWrap: 'wrap', gap: '12px' } }>

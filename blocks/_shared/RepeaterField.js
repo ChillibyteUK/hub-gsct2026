@@ -1,5 +1,5 @@
 import { __ } from '@wordpress/i18n';
-import { MediaUpload, MediaUploadCheck, RichText } from '@wordpress/block-editor';
+import { MediaUpload, MediaUploadCheck, RichText, URLInput } from '@wordpress/block-editor';
 import { TextControl, TextareaControl, ToggleControl, Button, RadioControl } from '@wordpress/components';
 import { useEffect, useMemo } from '@wordpress/element';
 import { useSelect } from '@wordpress/data';
@@ -139,14 +139,14 @@ function renderRowField( field, row, index, updateRow, isColumn ) {
 					value={ row[ `${ field.name }Text` ] || '' }
 					onChange={ ( v ) => updateRow( index, { [ `${ field.name }Text` ]: v } ) }
 				/>
-				<TextControl
-					type="url"
-					label={ __( `${ field.label } URL`, 'hub-gsct2026' ) }
-					hideLabelFromVision={ ! isColumn && ! field.labelPerRow }
+				<span className={ isColumn || field.labelPerRow ? 'hub-editor-field__label' : 'screen-reader-text' }>
+					{ __( `${ field.label } URL`, 'hub-gsct2026' ) }
+				</span>
+				<URLInput
 					value={ row[ field.name ] || '' }
 					onChange={ ( v ) => updateRow( index, { [ field.name ]: v } ) }
-					help={ field.help }
 				/>
+				{ field.help && <p className="hub-editor-field__help">{ field.help }</p> }
 				{ field.linkTarget && (
 					<ToggleControl
 						label={ __( `Open ${ field.label } in a new tab`, 'hub-gsct2026' ) }
@@ -319,7 +319,9 @@ function renderRowField( field, row, index, updateRow, isColumn ) {
  *                                  companion key, unlike image/file).
  *                                  `linkTarget` (link fields only) adds an "open in new tab" toggle,
  *                                  storing `{name}Target` on the row — same opt-in shape as the
- *                                  top-level `link` field type's `link_target` option. `options`
+ *                                  top-level `link` field type's `link_target` option. The URL
+ *                                  half renders core's URLInput (type-ahead post/page search
+ *                                  with manual-URL fallback), not a plain TextControl. `options`
  *                                  (radio fields only) is `[ { label, value } ]`, mirroring the
  *                                  top-level `select`/`radio` field types' options shape.
  *                                  `className` (radio fields only) lands on the RadioControl's

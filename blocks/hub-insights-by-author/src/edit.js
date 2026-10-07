@@ -38,8 +38,9 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 			/>
 			{ null === people && <Spinner /> }
 			{ null !== people && (
-				<RadioControl
-					label={ __( 'Author', 'hub-gsct2026' ) }
+			<RadioControl
+				className="hub-radio-horizontal"
+				label={ __( 'Author', 'hub-gsct2026' ) }
 					selected={ String( authorId ?? 0 ) }
 					options={ options }
 					onChange={ ( value ) => setAttributes( { authorId: parseInt( value, 10 ) || 0 } ) }

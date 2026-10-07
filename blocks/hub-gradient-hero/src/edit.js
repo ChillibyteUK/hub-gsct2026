@@ -1,5 +1,5 @@
 import { __ } from '@wordpress/i18n';
-import { useBlockProps, MediaUpload, MediaUploadCheck } from '@wordpress/block-editor';
+import { useBlockProps, MediaUpload, MediaUploadCheck, URLInput } from '@wordpress/block-editor';
 import { TextControl, TextareaControl, RadioControl, Button } from '@wordpress/components';
 import EditorBlockShell from '../../_shared/EditorBlockShell';
 
@@ -52,11 +52,13 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 					value={ primaryCtaText }
 					onChange={ ( value ) => setAttributes( { primaryCtaText: value } ) }
 				/>
-				<TextControl
-					label={ __( 'Primary CTA URL', 'hub-gsct2026' ) }
-					value={ primaryCtaUrl }
-					onChange={ ( value ) => setAttributes( { primaryCtaUrl: value } ) }
-				/>
+				<div className="hub-editor-field">
+					<label className="hub-editor-field__label">{ __( 'Primary CTA URL', 'hub-gsct2026' ) }</label>
+					<URLInput
+						value={ primaryCtaUrl || '' }
+						onChange={ ( value ) => setAttributes( { primaryCtaUrl: value } ) }
+					/>
+				</div>
 			</div>
 			<div className="hub-fields-50-50">
 				<TextControl
@@ -64,11 +66,13 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 					value={ secondaryCtaText }
 					onChange={ ( value ) => setAttributes( { secondaryCtaText: value } ) }
 				/>
-				<TextControl
-					label={ __( 'Secondary CTA URL', 'hub-gsct2026' ) }
-					value={ secondaryCtaUrl }
-					onChange={ ( value ) => setAttributes( { secondaryCtaUrl: value } ) }
-				/>
+				<div className="hub-editor-field">
+					<label className="hub-editor-field__label">{ __( 'Secondary CTA URL', 'hub-gsct2026' ) }</label>
+					<URLInput
+						value={ secondaryCtaUrl || '' }
+						onChange={ ( value ) => setAttributes( { secondaryCtaUrl: value } ) }
+					/>
+				</div>
 			</div>
 			<div className="hub-editor-field">
 				<label className="hub-editor-field__label">{ __( 'Image', 'hub-gsct2026' ) }</label>

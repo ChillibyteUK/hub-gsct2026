@@ -241,6 +241,46 @@
 }
 
 /*
+ * Core's URLInput ships with a near-bare input (unlike TextControl, which
+ * gets .components-text-control__input treatment), so side by side the two
+ * read as different heights/borders. Mirror core's text-control input
+ * declarations here so URL fields align with text fields. Scoped to
+ * .hub-editor-field so the link-UI popover's own URLInput is untouched.
+ * Also collapses core's 300px min-width, which would burst 50%-width
+ * field cells.
+ */
+:where([class*="hub-"]) .hub-editor-field .block-editor-url-input {
+	min-width: 0;
+	width: 100%;
+	padding: 0;
+}
+
+:where([class*="hub-"]) .hub-editor-field .block-editor-url-input .components-input-control {
+	padding: 0;
+}
+
+:where([class*="hub-"]) .hub-editor-field .block-editor-url-input__input {
+	width: 100%;
+	height: 40px;
+	margin: 0;
+	padding: 6px 8px;
+	font-family: -apple-system, system-ui, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+	font-size: 13px;
+	line-height: normal;
+	color: #1e1e1e;
+	background: #fff;
+	border: 1px solid #949494;
+	border-radius: 2px;
+	box-shadow: 0 0 0 transparent;
+}
+
+:where([class*="hub-"]) .hub-editor-field .block-editor-url-input__input:focus {
+	border-color: var(--wp-admin-theme-color, #3858e9);
+	box-shadow: 0 0 0 0.5px var(--wp-admin-theme-color, #3858e9);
+	outline: 2px solid transparent;
+}
+
+/*
  * Matches native BaseControl help text (font-size/color) so RichText and
  * MediaUpload fields — which don't get the `help` prop TextControl/etc. use —
  * read consistently with the rest of a block's fields.
