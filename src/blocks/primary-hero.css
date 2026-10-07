@@ -214,6 +214,12 @@
 
 	.hub-primary-hero__content {
 		width: auto;
-		max-width: 45%;
+		/* 45% of the full-bleed section, but never wider than 45% of the
+		   container itself — otherwise the column outgrows the container
+		   on huge viewports. Inset from the section edge by the container
+		   offset so the whole column sits inside the logical container
+		   width instead of flush to the viewport. */
+		max-width: min(45%, calc(var(--container-max-width) * 0.45));
+		margin-inline-end: max(var(--container-padding), calc((100% - var(--container-max-width)) / 2 + var(--container-padding)));
 	}
 }
