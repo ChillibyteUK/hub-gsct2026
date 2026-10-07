@@ -1,0 +1,31 @@
+.hub-learning-posts-grid {
+    padding-block: var(--space-6);
+}
+/* Title spans highlight in brand-purple (bare <span> only — kses strips
+   attributes, so spans needing classes won't survive the title field). */
+.hub-learning-posts-grid__title {
+    text-align: center;
+    padding-bottom: var(--space-5);    
+    span {
+        color: var(--col-brand-purple);
+    }
+}
+
+.hub-learning-posts-grid__intro {
+    max-width: 820px;
+    padding-bottom: var(--space-5);
+}
+
+.hub-learning-posts-grid__more {
+    margin-top: var(--space-4);
+    display: block;
+    margin-inline: auto;
+
+    /* Author rules always beat the UA stylesheet's [hidden] { display: none },
+       so the JS's button.hidden = true (learning-posts-grid.js) would
+       otherwise leave the button visibly in place once all posts are
+       loaded — this restores the expected hide. */
+    &[hidden] {
+        display: none;
+    }
+}

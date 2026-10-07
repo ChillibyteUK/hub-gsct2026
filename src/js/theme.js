@@ -9,6 +9,7 @@ import { initSecondaryHero } from './secondary-hero';
 import { initCardsSections } from './cards-section';
 import { initThreePoints } from './three-points';
 import { initTimelines } from './timeline';
+import { initLearningGrids } from './learning-posts-grid';
 import { initShareButtons } from './share';
 import { initRelatedInsights } from './related-insights';
 import { initHoldings } from './holdings';
@@ -31,6 +32,7 @@ document.addEventListener('DOMContentLoaded', () => {
 	initCardsSections();
 	initThreePoints();
 	initTimelines();
+	initLearningGrids();
 	initShareButtons();
 	initRelatedInsights();
 	initHoldings();

@@ -31,15 +31,18 @@ $wrapper_attributes = get_block_wrapper_attributes( array( 'class' => 'hub-divid
 			<div class="col-12 col-md-6 col-lg-4">
 				<form class="hub-dividend-calculator__form" data-div-calc data-endpoint="<?= esc_attr( esc_url_raw( rest_url( 'hub/v1/dividend-calc' ) ) ); ?>" novalidate>
 					<div class="hub-dividend-calculator__field">
-						<label for="<?= esc_attr( $hub_start_id = wp_unique_id( 'hub-div-calc-start-' ) ); ?>">Start date of investment</label>
+						<?php $hub_start_id = wp_unique_id( 'hub-div-calc-start-' ); ?>
+						<label for="<?= esc_attr( $hub_start_id ); ?>">Start date of investment</label>
 						<input type="date" id="<?= esc_attr( $hub_start_id ); ?>" name="start" required max="<?= esc_attr( gmdate( 'Y-m-d' ) ); ?>">
 					</div>
 					<div class="hub-dividend-calculator__field">
-						<label for="<?= esc_attr( $hub_end_id = wp_unique_id( 'hub-div-calc-end-' ) ); ?>">End date of investment</label>
+						<?php $hub_end_id = wp_unique_id( 'hub-div-calc-end-' ); ?>
+						<label for="<?= esc_attr( $hub_end_id ); ?>">End date of investment</label>
 						<input type="date" id="<?= esc_attr( $hub_end_id ); ?>" name="end" required max="<?= esc_attr( gmdate( 'Y-m-d' ) ); ?>">
 					</div>
 					<div class="hub-dividend-calculator__field">
-						<label for="<?= esc_attr( $hub_shares_id = wp_unique_id( 'hub-div-calc-shares-' ) ); ?>">Number of shares</label>
+						<?php $hub_shares_id = wp_unique_id( 'hub-div-calc-shares-' ); ?>
+						<label for="<?= esc_attr( $hub_shares_id ); ?>">Number of shares</label>
 						<input type="number" id="<?= esc_attr( $hub_shares_id ); ?>" name="shares" required min="1" step="1" inputmode="numeric">
 					</div>
 					<div class="hub-dividend-calculator__actions">
