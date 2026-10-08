@@ -284,5 +284,95 @@ function hub_gsct2026_send_security_headers() {
 
 	header( 'Cross-Origin-Opener-Policy: same-origin-allow-popups' );
 	header( 'X-Frame-Options: SAMEORIGIN' );
+	header( 'X-Content-Type-Options: nosniff' );
+	header( 'Referrer-Policy: strict-origin-when-cross-origin' );
 }
 add_action( 'send_headers', 'hub_gsct2026_send_security_headers' );
+
+/**
+ * Strip version and discovery tags from wp_head: generator, RSD, WLW
+ * manifest, shortlink and pingback link. Runs at file load — everything
+ * it touches fires later, so no hook needed.
+ *
+ * @return void
+ */
+function hub_gsct2026_head_cleanup() {
+	remove_action( 'wp_head', 'wp_generator' );
+	remove_action( 'wp_head', 'rsd_link' );
+	remove_action( 'wp_head', 'wlwmanifest_link' );
+	remove_action( 'wp_head', 'wp_shortlink_wp_head' );
+	remove_action( 'wp_head', 'pingback_link' );
+	add_filter( 'wp_headers', 'hub_gsct2026_remove_pingback_header' );
+}
+hub_gsct2026_head_cleanup();
+
+/**
+ * Drop the X-Pingback response header (pairs with the pingback_link
+ * removal above).
+ *
+ * @param array $headers Response headers.
+ * @return array
+ */
+function hub_gsct2026_remove_pingback_header( $headers ) {
+	unset( $headers['X-Pingback'] );
+	return $headers;
+}
+
+/**
+ * Disable XML-RPC: closes the pingback/trackback abuse vector. Comments
+ * and pings are already forced off above, so nothing legitimate needs it.
+ *
+ * @return void
+ */
+function hub_gsct2026_disable_xmlrpc() {
+	add_filter( 'xmlrpc_enabled', '__return_false' );
+}
+hub_gsct2026_disable_xmlrpc();
+
+/**
+ * Return a generic login error so failed logins never reveal whether
+ * the username or the password was wrong.
+ *
+ * @return string
+ */
+function hub_gsct2026_generic_login_errors() {
+	return __( 'Invalid username or password.', 'hub-gsct2026' );
+}
+add_filter( 'login_errors', 'hub_gsct2026_generic_login_errors' );
+
+/**
+ * Block ?author=N user enumeration scans: author archives and plain
+ * author query vars redirect home instead of revealing usernames.
+ *
+ * @return void
+ */
+function hub_gsct2026_block_author_enumeration() {
+	if ( is_author() || isset( $_GET['author'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- value never used, presence alone triggers the redirect.
+		wp_safe_redirect( home_url( '/' ), 301 );
+		exit;
+	}
+}
+add_action( 'template_redirect', 'hub_gsct2026_block_author_enumeration' );
+
+/**
+ * Hide user routes (/wp/v2/users*) from the REST index for logged-out
+ * visitors so usernames cannot be harvested in bulk. Logged-in requests
+ * are untouched.
+ *
+ * @param array $endpoints Registered REST routes.
+ * @return array
+ */
+function hub_gsct2026_restrict_rest_users( $endpoints ) {
+	if ( is_user_logged_in() ) {
+		return $endpoints;
+	}
+
+	foreach ( array_keys( $endpoints ) as $route ) {
+		if ( 0 === strpos( $route, '/wp/v2/users' ) ) {
+			unset( $endpoints[ $route ] );
+		}
+	}
+
+	return $endpoints;
+}
+add_filter( 'rest_endpoints', 'hub_gsct2026_restrict_rest_users' );
