@@ -1531,6 +1531,7 @@ a.hub-document-library-hero__card:focus-visible {
     max-height: 70px;
     width: 100%;
     height: auto;
+    filter: grayscale(100%);
 }
 
 a.hub-how-to-invest-full__platform:hover,
@@ -1562,6 +1563,7 @@ a.hub-how-to-invest-full__platform:focus-visible {
             max-height: 70px;
             width: auto;
             height: auto;
+            filter: grayscale(100%);
         }
     }
 }
@@ -1933,7 +1935,7 @@ a.hub-nav-cards__card:focus-visible {
 }
 
 /* --- src/blocks/primary-hero.css --- */
-/* Practice block: responsive crosshair over an image background, positioned
+/* Responsive crosshair over an image background, positioned
    via the block's FocalPointPicker attribute. --focal-x/--focal-y (set
    inline by render.php) are plain fractions (0–1), not percentages —
    src/js/primary-hero.js multiplies them directly against lengths.

@@ -25,16 +25,15 @@ get_header();
 		if ( ! $hub_meta_avatar && $hub_has_author && has_post_thumbnail( $hub_author->ID ) ) {
 			$hub_meta_avatar = get_the_post_thumbnail( $hub_author->ID, 'thumbnail' );
 		}
-		if ( ! $hub_meta_avatar ) {
-			$hub_meta_avatar = get_avatar( get_the_author_meta( 'ID' ), 40 );
-		}
+		// No generic fallback: gravatars are disabled theme-wide, so
+		// get_avatar() would always return an empty string here.
 
 		$hub_author_bio = $hub_has_author ? get_post_meta( $hub_author->ID, 'author_bio', true ) : '';
 		if ( ! $hub_author_bio && $hub_has_author ) {
 			$hub_author_bio = wp_trim_words( wp_strip_all_tags( $hub_author->post_content ), 55, '…' );
 		}
 
-		$hub_minutes = estimate_reading_time_in_minutes( get_the_content(), 300, true );
+		$hub_minutes = estimate_reading_time_in_minutes( get_the_content(), 300, false );
 		?>
 		<article <?php post_class(); ?>>
 			<h1 class="display-xl pt-6 mb-6"><?php the_title(); ?></h1>

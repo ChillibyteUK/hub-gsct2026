@@ -72,6 +72,7 @@
     max-height: 70px;
     width: 100%;
     height: auto;
+    filter: grayscale(100%);
 }
 
 a.hub-how-to-invest-full__platform:hover,

@@ -2,7 +2,7 @@
 /**
  * Block template for Primary Hero.
  *
- * Practice block for a responsive crosshair over an image background,
+ * Responsive crosshair over an image background,
  * positioned via the FocalPointPicker. The crosshair graphic is a hardcoded
  * test asset (blocks/primary-hero/assets/crosshair.svg); the background image
  * is a real file field (backgroundId/backgroundUrl/backgroundAlt), falling

@@ -5,7 +5,7 @@
 	"title": "HUB Primary Hero",
 	"category": "hub-gsct2026",
 	"icon": "cover-image",
-	"description": "Practice block for a responsive crosshair over an image background, positioned with the focal point picker.",
+	"description": "Responsive crosshair over an image background, positioned with the focal point picker.",
 	"attributes": {
 		"focalPoint": {
 			"type": "object",

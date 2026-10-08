@@ -16,7 +16,7 @@ $disclaimers = hub_gsct2026_get_setting( 'footer_disclaimers' );
 
 <footer id="footer">
 	<div class="container">
-		<div class="mb-5"><img src="<?= esc_url( get_template_directory_uri() . '/img/gsct-logo-wo.svg' ); ?>" alt="<?php bloginfo( 'name' ); ?>"></div>
+		<div class="mb-5"><img src="<?= esc_url( get_template_directory_uri() . '/img/gsct-logo-wo.svg' ); ?>" alt="<?php echo esc_attr( get_bloginfo( 'name' ) ); ?>"></div>
 		<div class="row hub-footer-divided">
 			<div class="col-12 col-lg-4">
 				<?= esc_html( $tagline ); ?>

@@ -1,4 +1,4 @@
-/* Practice block: responsive crosshair over an image background, positioned
+/* Responsive crosshair over an image background, positioned
    via the block's FocalPointPicker attribute. --focal-x/--focal-y (set
    inline by render.php) are plain fractions (0–1), not percentages —
    src/js/primary-hero.js multiplies them directly against lengths.

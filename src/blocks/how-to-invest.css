@@ -21,6 +21,7 @@
             max-height: 70px;
             width: auto;
             height: auto;
+            filter: grayscale(100%);
         }
     }
 }
