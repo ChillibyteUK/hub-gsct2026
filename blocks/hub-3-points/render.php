@@ -9,7 +9,8 @@
  * delegated handlers in src/js/popover.js, everything else is native
  * (Esc/outside-click/× dismiss free). First marker wins; any others render
  * as plain words. Without the marker (or with empty popover fields) the
- * content renders untouched.
+ * content renders untouched. Shortcodes (e.g. [contact_phone]) expand in
+ * the intro and point content; popover title/body render as plain text.
  *
  * @package hub-gsct2026
  */
@@ -18,7 +19,7 @@ defined( 'ABSPATH' ) || exit;
 
 $eyebrow = $attributes['eyebrow'] ?? '';
 $btitle  = $attributes['title'] ?? '';
-$intro   = $attributes['intro'] ?? '';
+$intro   = do_shortcode( $attributes['intro'] ?? '' );
 $points  = $attributes['points'] ?? array();
 $lines   = $attributes['lines'] ?? 'on';
 
@@ -72,7 +73,7 @@ $wrapper_attributes = get_block_wrapper_attributes( array( 'class' => 'hub-3-poi
 							</h3>
 							<?php
 						}
-						$content = $item['content'] ?? '';
+						$content = do_shortcode( $item['content'] ?? '' );
 						if ( $content ) {
 							$popover_title     = $item['popoverTitle'] ?? '';
 							$popover_body      = $item['popoverContent'] ?? '';

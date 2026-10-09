@@ -12,7 +12,7 @@
 defined( 'ABSPATH' ) || exit;
 
 $btitle = $attributes['title'] ?? '';
-$intro  = $attributes['intro'] ?? '';
+$intro  = do_shortcode( $attributes['intro'] ?? '' );
 $points = $attributes['points'] ?? array();
 $lines  = $attributes['lines'] ?? 'on';
 
@@ -60,7 +60,7 @@ $wrapper_attributes = get_block_wrapper_attributes( array( 'class' => 'hub-3-poi
 							</h3>
 							<?php
 						}
-						$content = $item['content'] ?? '';
+						$content = do_shortcode( $item['content'] ?? '' );
 						if ( $content ) {
 							$popover_title     = $item['popoverTitle'] ?? '';
 							$popover_body      = $item['popoverContent'] ?? '';
