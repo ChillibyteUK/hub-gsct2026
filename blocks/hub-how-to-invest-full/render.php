@@ -71,7 +71,7 @@ $wrapper_attributes = get_block_wrapper_attributes( array( 'class' => 'hub-how-t
 					}
 					if ( $link_url ) {
 						?>
-						<a class="hub-how-to-invest-full__platform" href="<?= esc_url( $link_url ); ?>"><img src="<?= esc_url( $logo_url ); ?>" alt=""></a>
+						<a class="hub-how-to-invest-full__platform" href="<?= esc_url( $link_url ); ?>" target="_blank"><img src="<?= esc_url( $logo_url ); ?>" alt=""></a>
 						<?php
 					} else {
 						?>
