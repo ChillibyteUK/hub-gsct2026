@@ -23,7 +23,7 @@ get_header();
 		$hub_author     = $hub_author_id ? get_post( $hub_author_id ) : null;
 		$hub_has_author = $hub_author && 'person' === $hub_author->post_type && 'trash' !== $hub_author->post_status;
 
-		$hub_author_name = $hub_has_author ? get_the_title( $hub_author ) : get_the_author();
+		$hub_author_name = $hub_has_author ? get_the_title( $hub_author ) : __( 'GSCT', 'hub-gsct2026' );
 		$hub_author_role = $hub_has_author ? get_post_meta( $hub_author->ID, 'role', true ) : '';
 
 		$hub_author_thumb_id = $hub_has_author ? (int) get_post_meta( $hub_author->ID, 'author_thumbnail', true ) : 0;
