@@ -13,7 +13,13 @@ get_header();
 	while ( have_posts() ) {
 		the_post();
 
-		$hub_author_id  = (int) get_post_meta( get_the_ID(), 'author_person_id', true );
+		$hub_author_id = (int) get_post_meta( get_the_ID(), 'author_person_id', true );
+		if ( ! $hub_author_id ) {
+			$hub_default_author = get_page_by_path( 'gsct', OBJECT, 'person' );
+			if ( $hub_default_author ) {
+				$hub_author_id = (int) $hub_default_author->ID;
+			}
+		}
 		$hub_author     = $hub_author_id ? get_post( $hub_author_id ) : null;
 		$hub_has_author = $hub_author && 'person' === $hub_author->post_type && 'trash' !== $hub_author->post_status;
 
