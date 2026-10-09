@@ -1971,6 +1971,7 @@ a.hub-nav-cards__card:focus-visible {
 	display: flex;
 	flex-direction: column;
 	justify-content: flex-end;
+	background-color: var(--col-black);
 }
 
 .hub-primary-hero__media {
