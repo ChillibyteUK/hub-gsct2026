@@ -295,3 +295,42 @@ body.admin-bar .navbar-collapse.is-open {
 		columns: 1;
 	}
 }
+
+@media (min-width: 992px) {
+	.nav-item--cta {
+		margin-left: 1rem;
+		align-self: center;
+	}
+
+	.nav-item--cta {
+		display: inline-block;
+		padding: var(--space-3) var(--space-4);
+		border: 1px solid var(--col-black);
+		border-radius: 100vw;
+		background-color: var(--col-black);
+		color: var(--col-white);
+		text-decoration: none;
+		cursor: pointer;
+
+		font-family: var(--font-family-base);
+		font-size: var(--fs-400);
+		font-weight: var(--fw-bold);
+		line-height: normal;
+		text-transform: uppercase;
+		text-box-trim: trim-both;
+		text-box-edge: cap alphabetic;
+
+		transition: all 0.3s ease;
+
+		&:focus-visible {
+			outline: 2px solid var(--col-brand-yellow);
+			outline-offset: 2px;
+		}
+		&:hover, &:focus-visible {
+			background-color: var(--col-brand-purple);
+			color: var(--col-brand-yellow);
+			box-shadow: 0 4px 0 var(--col-brand-yellow);
+			transform: translateY(-4px);
+		}
+	}
+}

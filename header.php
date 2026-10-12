@@ -41,8 +41,8 @@
 					'walker'         => new Hub_GSCT_2026_Nav_Walker(),
 				)
 			);
+			// <!-- <a href="/how-to-invest/" class="btn d-none d-lg-block ms-4 align-self-center">How to Invest</a> -->
 			?>
-		<a href="/how-to-invest/" class="btn d-none d-lg-block ms-4 align-self-center">How to Invest</a>
 		</div>
 
 

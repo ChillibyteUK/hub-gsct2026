@@ -132,10 +132,10 @@ $wrapper_attributes = get_block_wrapper_attributes( array( 'class' => 'hub-docum
 							$hub_file_id = (int) get_post_meta( $hub_doc->ID, 'document_file', true );
 							$hub_url     = get_post_meta( $hub_doc->ID, 'document_url', true );
 
-							$hub_href       = '';
-							$hub_format     = '';
-							$hub_is_file    = false;
-							$hub_new_tab    = false;
+							$hub_href    = '';
+							$hub_format  = '';
+							$hub_is_file = false;
+							$hub_new_tab = false;
 
 							if ( $hub_file_id ) {
 								$hub_file_url = wp_get_attachment_url( $hub_file_id );
@@ -183,6 +183,7 @@ $wrapper_attributes = get_block_wrapper_attributes( array( 'class' => 'hub-docum
 										<a href="<?= esc_url( $hub_href ); ?>"<?= $hub_is_file ? ' download' : ' target="_blank" rel="noopener"'; ?>>
 											<svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 1v8m0 0 3-3M7 9 4 6M2 11v1.5A.5.5 0 0 0 2.5 13h9a.5.5 0 0 0 .5-.5V11"/></svg>
 											<?= esc_html( $hub_format ); ?>
+											<span class="visually-hidden">: <?= esc_html( get_the_title( $hub_doc ) ); ?></span>
 										</a>
 										<?php
 									} else {
