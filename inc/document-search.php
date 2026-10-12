@@ -227,6 +227,212 @@ add_action(
 );
 
 /**
+ * Document ids that have a file attached, oldest first.
+ *
+ * @param bool $only_unindexed Only those with no index state yet.
+ * @return int[]
+ */
+function hub_gsct2026_documents_with_files( $only_unindexed = false ) {
+	$meta_query = array(
+		'relation' => 'AND',
+		array(
+			'key'     => 'document_file',
+			'compare' => 'EXISTS',
+		),
+	);
+
+	if ( $only_unindexed ) {
+		$meta_query[] = array(
+			'key'     => HUB_GSCT2026_DOC_STATE_META,
+			'compare' => 'NOT EXISTS',
+		);
+	}
+
+	return array_map(
+		'intval',
+		get_posts(
+			array(
+				'post_type'      => 'document',
+				'post_status'    => array( 'publish', 'draft', 'pending', 'private' ),
+				'posts_per_page' => -1,
+				'orderby'        => 'ID',
+				'order'          => 'ASC',
+				'fields'         => 'ids',
+				'meta_query'     => $meta_query, // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_query -- small admin-only tool.
+			)
+		)
+	);
+}
+
+/**
+ * Documents > Search index: build the file-text index from the admin, in
+ * small AJAX batches (no WP-CLI needed).
+ */
+add_action(
+	'admin_menu',
+	static function () {
+		add_submenu_page(
+			'edit.php?post_type=document',
+			'Document search index',
+			'Search index',
+			'edit_posts',
+			'hub-document-index',
+			'hub_gsct2026_render_index_page'
+		);
+	}
+);
+
+/**
+ * Render the Search index admin page.
+ *
+ * @return void
+ */
+function hub_gsct2026_render_index_page() {
+	$all     = hub_gsct2026_documents_with_files();
+	$pending = hub_gsct2026_documents_with_files( true );
+	$empty   = array();
+
+	foreach ( $all as $id ) {
+		if ( 'empty' === get_post_meta( $id, HUB_GSCT2026_DOC_STATE_META, true ) ) {
+			$empty[] = $id;
+		}
+	}
+	?>
+	<div class="wrap">
+		<h1>Document search index</h1>
+		<p>The document library search looks inside each document's file as well as its title. That text is read when a file is attached; use this page to read it for documents that were uploaded earlier, or to re-read everything.</p>
+		<p>
+			<strong><?= esc_html( count( $all ) - count( $pending ) ); ?></strong> of <strong><?= esc_html( count( $all ) ); ?></strong> documents with a file are indexed.
+			<?php
+			if ( $empty ) {
+				?>
+				<?= esc_html( count( $empty ) ); ?> have no readable text (for example scanned documents) and can only be found by title.
+				<?php
+			}
+			?>
+		</p>
+		<p>
+			<label><input type="checkbox" id="hub-index-force"> Re-read every document, not just those not yet indexed</label>
+		</p>
+		<p>
+			<button type="button" class="button button-primary" id="hub-index-run">Build search index</button>
+			<span id="hub-index-status" style="margin-left:1em;" aria-live="polite"></span>
+		</p>
+		<progress id="hub-index-bar" value="0" max="1" style="width:320px;display:none;"></progress>
+		<ul id="hub-index-log"></ul>
+	</div>
+	<script>
+	( function () {
+		var run = document.getElementById( 'hub-index-run' );
+		var force = document.getElementById( 'hub-index-force' );
+		var status = document.getElementById( 'hub-index-status' );
+		var bar = document.getElementById( 'hub-index-bar' );
+		var log = document.getElementById( 'hub-index-log' );
+		var grand = 0;
+		var url = <?= wp_json_encode( admin_url( 'admin-ajax.php' ) ); ?>;
+		var nonce = <?= wp_json_encode( wp_create_nonce( 'hub_doc_index' ) ); ?>;
+
+		function step( after, done ) {
+			var body = new URLSearchParams( { action: 'hub_gsct2026_index_batch', _wpnonce: nonce, after: after, force: force.checked ? '1' : '0' } );
+
+			fetch( url, { method: 'POST', credentials: 'same-origin', body: body } )
+				.then( function ( r ) { return r.json(); } )
+				.then( function ( res ) {
+					if ( ! res.success ) {
+						throw new Error( ( res.data && res.data.message ) || 'Request failed' );
+					}
+
+					var d = res.data;
+					grand = grand || d.total;
+					bar.max = grand;
+					bar.value = grand - d.remaining;
+					status.textContent = ( grand - d.remaining ) + ' of ' + grand + ' done';
+
+					d.empty.forEach( function ( title ) {
+						var li = document.createElement( 'li' );
+						li.textContent = 'No readable text: ' + title;
+						log.appendChild( li );
+					} );
+
+					if ( d.remaining > 0 ) {
+						step( d.last, done );
+					} else {
+						done();
+					}
+				} )
+				.catch( function ( e ) {
+					status.textContent = 'Stopped: ' + e.message + ' — click the button to continue.';
+					run.disabled = false;
+				} );
+		}
+
+		run.addEventListener( 'click', function () {
+			run.disabled = true;
+			bar.style.display = '';
+			log.textContent = '';
+			grand = 0;
+			status.textContent = 'Working…';
+			step( 0, function () {
+				status.textContent = 'Finished. Reload this page to see the totals.';
+				run.disabled = false;
+			} );
+		} );
+	}() );
+	</script>
+	<?php
+}
+
+/**
+ * AJAX: index the next few documents after a given ID.
+ *
+ * @return void
+ */
+function hub_gsct2026_ajax_index_batch() {
+	check_ajax_referer( 'hub_doc_index' );
+
+	if ( ! current_user_can( 'edit_posts' ) ) {
+		wp_send_json_error( array( 'message' => 'Not allowed.' ), 403 );
+	}
+
+	if ( function_exists( 'set_time_limit' ) ) {
+		@set_time_limit( 120 ); // phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged -- may be disabled on the host.
+	}
+
+	$after = isset( $_POST['after'] ) ? absint( $_POST['after'] ) : 0;
+	$force = ! empty( $_POST['force'] );
+	$ids   = array_values(
+		array_filter(
+			hub_gsct2026_documents_with_files( ! $force ),
+			static function ( $id ) use ( $after ) {
+				return $id > $after;
+			}
+		)
+	);
+	$total = count( $ids );
+	$batch = array_slice( $ids, 0, 3 );
+	$empty = array();
+	$last  = $after;
+
+	foreach ( $batch as $id ) {
+		if ( 'empty' === hub_gsct2026_index_document( $id ) ) {
+			$empty[] = get_the_title( $id );
+		}
+
+		$last = $id;
+	}
+
+	wp_send_json_success(
+		array(
+			'total'     => $total,
+			'remaining' => $total - count( $batch ),
+			'last'      => $last,
+			'empty'     => $empty,
+		)
+	);
+}
+add_action( 'wp_ajax_hub_gsct2026_index_batch', 'hub_gsct2026_ajax_index_batch' );
+
+/**
  * REST: search inside the indexed document text.
  */
 add_action(
