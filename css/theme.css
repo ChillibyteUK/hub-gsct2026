@@ -261,6 +261,12 @@ ol {
 	align-self: center !important;
 }
 
+.error-page {
+	padding-block: 7rem;
+	background-color: var(--col-brand-blue-500);
+	color: var(--col-brand-yellow);
+}
+
 /* Figma type styles — class names match the Figma design supplied.
    Tokens (--font-family-*, --fs-*, --fw-*) live in tokens.css; this file is
    just the classes that consume them. Loaded on the frontend via theme.css
@@ -334,6 +340,14 @@ ol {
 /*==================================================================
   BODY
   ==================================================================*/
+
+.text-body-xxl {
+	font-family: var(--font-family-base);
+	font-size: clamp(24px, calc(19.76px + 1.13vw), 36px);
+	line-height: clamp(28px, calc(23.06px + 1.51vw), 42px);
+	font-weight: var(--fw-regular);
+
+}
 
 .text-body-xl {
 	font-family: var(--font-family-base);

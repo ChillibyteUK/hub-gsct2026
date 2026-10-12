@@ -7,11 +7,11 @@
 
 get_header();
 ?>
-
-<div class="container">
-	<h1><?php esc_html_e( 'Page not found', 'hub-gsct2026' ); ?></h1>
-	<p><?php esc_html_e( "The page you're looking for doesn't exist.", 'hub-gsct2026' ); ?></p>
-</div>
-
+<section class="error-page">
+	<div class="container">
+		<h1 class="display-xl">Page not found</h1>
+		<p class="text-body-xxl">The page you're looking for doesn't exist.</p>
+	</div>
+</section>
 <?php
 get_footer();
