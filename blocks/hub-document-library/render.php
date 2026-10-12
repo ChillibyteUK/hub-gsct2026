@@ -5,12 +5,12 @@
  * Every published document post in one table (title, category, release
  * date, format) — no pagination. Category pills single-select-toggle the
  * list; overflow categories live under the More dropdown; the search box
- * matches document titles only for now (hooking full file-content search
- * up later means swapping the client-side matcher in
- * src/js/document-library.js, not this template). All filtering is
- * instant client-side via data attributes; stripe classes are re-applied
- * to the visible rows on every pass so hiding rows can't break the
- * alternation (same approach as HUB Holdings).
+ * matches document titles instantly, then adds documents whose file text
+ * matches (hub/v1/doc-search, inc/document-search.php — the endpoint URL
+ * travels as data-search-endpoint, rows carry data-doc-id). Filtering is
+ * client-side via data attributes; stripe classes are re-applied to the
+ * visible rows on every pass so hiding rows can't break the alternation
+ * (same approach as HUB Holdings).
  *
  * @package hub-gsct2026
  */
@@ -46,7 +46,12 @@ if ( is_wp_error( $hub_terms ) ) {
 $hub_visible_terms = array_slice( $hub_terms, 0, $hub_pill_count );
 $hub_hidden_terms  = array_slice( $hub_terms, $hub_pill_count );
 
-$wrapper_attributes = get_block_wrapper_attributes( array( 'class' => 'hub-document-library' ) );
+$wrapper_attributes = get_block_wrapper_attributes(
+	array(
+		'class'                => 'hub-document-library',
+		'data-search-endpoint' => esc_url_raw( rest_url( 'hub/v1/doc-search' ) ),
+	)
+);
 ?>
 <section <?php echo $wrapper_attributes; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- get_block_wrapper_attributes() already escapes. ?>>
 	<div class="container">
@@ -169,6 +174,7 @@ $wrapper_attributes = get_block_wrapper_attributes( array( 'class' => 'hub-docum
 							?>
 							<tr
 								data-doc-row
+								data-doc-id="<?= (int) $hub_doc->ID; ?>"
 								data-cats="<?= esc_attr( implode( ' ', $hub_cat_slugs ) ); ?>"
 								data-title="<?= esc_attr( mb_strtolower( get_the_title( $hub_doc ) ) ); ?>"
 								<?= 0 === $hub_pos % 2 ? 'class="is-alt"' : ''; ?>

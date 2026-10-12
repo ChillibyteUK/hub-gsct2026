@@ -322,6 +322,10 @@ function hub_gsct2026_render_document_details_metabox( $post ) {
 		<button type="button" class="button" id="hub-doc-select-file">Select file</button>
 		<button type="button" class="button" id="hub-doc-remove-file"<?= $file_id ? '' : ' style="display:none;"'; ?>>Remove</button>
 	</p>
+	<p class="description" id="hub-doc-text-status"><?= hub_gsct2026_document_text_status( $post->ID ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- escaped in the helper. ?></p>
+	<p>
+		<label><input type="checkbox" name="hub_document_reindex" value="1"> Re-read the file's text when saving</label>
+	</p>
 	<p>
 		<label for="hub_document_url"><strong>External URL</strong></label><br>
 		<input type="url" id="hub_document_url" name="hub_document_url" value="<?= esc_attr( $url ); ?>" class="widefat">
@@ -376,6 +380,10 @@ function hub_gsct2026_save_document_details( $post_id ) {
 		update_post_meta( $post_id, 'document_url', $url );
 	} else {
 		delete_post_meta( $post_id, 'document_url' );
+	}
+
+	if ( $file_id && ! empty( $_POST['hub_document_reindex'] ) ) {
+		hub_gsct2026_index_document( $post_id );
 	}
 
 	$date = isset( $_POST['hub_release_date'] ) ? sanitize_text_field( wp_unslash( $_POST['hub_release_date'] ) ) : '';

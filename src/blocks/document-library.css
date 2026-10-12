@@ -177,3 +177,18 @@
 	text-decoration: underline;
 	text-underline-offset: 0.15em;
 }
+
+/* Full-text search: where in the document the words were found. */
+.hub-document-library__snippet {
+	margin: 0.25rem 0 0;
+	color: var(--col-medium-grey);
+	font-size: 0.875rem;
+	line-height: 1.4;
+}
+
+.hub-document-library__snippet mark {
+	padding: 0 0.15em;
+	border-radius: 2px;
+	background-color: var(--col-brand-yellow);
+	color: var(--col-black);
+}
