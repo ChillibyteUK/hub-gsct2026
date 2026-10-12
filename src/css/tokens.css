@@ -54,7 +54,7 @@
   --col-brand-pink: #ffaaeb;
 
   --col-positive: #1C771C;
-  --col-negative: #DA1A08;
+  --col-negative: #D41908;
 
   /* Fixed gradients — referenced by var() wherever a sunset/sunrise
      section background is needed (nav cards, document heroes, related
