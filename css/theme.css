@@ -1023,6 +1023,21 @@ footer .colophon {
     }
 
 
+:is(footer .colophon) nav {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            flex-wrap: wrap;
+            gap: var(--space-4);
+        }
+
+
+:is(:is(footer .colophon) nav) a {
+                text-decoration: underline;
+            }
+
+
 /* Vertical dividers between the tagline/nav/button columns — lg and
        up only, where the row actually splits; stacked below that, so no
        lines. Same light-grey as the colophon rule above. */

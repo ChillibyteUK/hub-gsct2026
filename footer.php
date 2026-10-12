@@ -42,11 +42,11 @@ $disclaimers = hub_gsct2026_get_setting( 'footer_disclaimers' );
 			<div class="mb-3"><?= esc_html( $colophon ); ?></div>
 			<div class="d-flex flex-wrap justify-content-between">
 				<div>&copy; <?php echo esc_html( gmdate( 'Y' ) ); ?> Global Smallers Trust</div>
-				<div>
-					<a href="/privacy-policy/">Privacy Policy</a>
-					<a href="/terms-of-use/">Terms of Use</a>
-					<a href="/cookie-policy/">Cookie Policy</a>
-				</div>
+				<nav>
+					<li><a href="/privacy-policy/">Privacy Policy</a></li>
+					<li><a href="/terms-of-use/">Terms of Use</a></li>
+					<li><a href="/cookie-policy/">Cookie Policy</a></li>
+				</nav>
 			</div>
 			<div class="mt-5"><?= wp_kses_post( $disclaimers ); ?></div>
 		</div>
