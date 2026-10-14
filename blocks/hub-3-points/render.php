@@ -24,9 +24,14 @@ $points  = $attributes['points'] ?? array();
 $lines   = $attributes['lines'] ?? 'on';
 
 $wrapper_attributes = get_block_wrapper_attributes( array( 'class' => 'hub-3-points' . ( 'off' === $lines ? ' hub-3-points--no-lines' : '' ) ) );
+
+// Editor "Additional CSS class(es)" apply to the inner container, replacing
+// the default py-6 — e.g. a custom spacing/background combo.
+$hub_extra_class     = trim( (string) ( $attributes['className'] ?? '' ) );
+$hub_container_class = $hub_extra_class ? 'container ' . $hub_extra_class : 'container py-6';
 ?>
 <section <?php echo $wrapper_attributes; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- get_block_wrapper_attributes() already escapes. ?>>
-	<div class="container py-6">
+	<div class="<?= esc_attr( $hub_container_class ); ?>">
 		<?php
 		if ( $eyebrow ) {
 			?>
