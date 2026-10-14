@@ -25,13 +25,11 @@ $filter_cats   = get_categories(
 
 $page_for_posts_id = get_option( 'page_for_posts' );
 
-if ( $is_filtered ) {
-	$hero_title = single_cat_title( '', false );
-	$hero_text  = category_description();
-} else {
-	$hero_title = 'Insights';
-	$hero_text  = get_the_content( null, false, $page_for_posts_id );
-}
+// Deliberate: category archives reuse the blog home h1/intro rather than
+// the category name/description — the active filter pill already signals
+// which category is shown.
+$hero_title = 'Insights';
+$hero_text  = get_the_content( null, false, $page_for_posts_id );
 ?>
 
 <section class="hub-insights-hero">
