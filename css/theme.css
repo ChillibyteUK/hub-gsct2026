@@ -1094,6 +1094,15 @@ body.admin-bar .navbar-collapse.is-open {
 			box-shadow: 0 4px 0 var(--col-brand-yellow);
 			transform: translateY(-4px);
 		}
+
+	/* Active CTA keeps the default button look (black fill, white text) —
+	   other .active link treatments must not restyle the pill. */
+	.nav-link.nav-item--cta.active,
+	.nav-item--cta .nav-link.active {
+		background-color: var(--col-black);
+		border-color: var(--col-black);
+		color: var(--col-white);
+	}
 }
 
 footer {

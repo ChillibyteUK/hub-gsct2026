@@ -83,23 +83,25 @@ function initDividendChart( section ) {
 
 		const render = ( count ) => {
 			const slice = 0 === count ? years : years.slice( -count );
-			chart.data.labels = slice.map( ( row ) => row.year );
-			chart.data.datasets = [
-				{
-					label: 'Final',
-					data: slice.map( ( row ) => row.final ),
-					backgroundColor: '#307eff',
-					borderRadius: 3,
-					borderSkipped: 'start',
-				},
-				{
-					label: 'Interim',
-					data: slice.map( ( row ) => row.interim ),
-					backgroundColor: '#7628d4',
-					borderRadius: 3,
-					borderSkipped: 'start',
-				},
-			];
+		chart.data.labels = slice.map( ( row ) => row.year );
+		// Stack order: first dataset sits at the bottom — Interim (purple)
+		// below, Final (blue) on top.
+		chart.data.datasets = [
+			{
+				label: 'Interim',
+				data: slice.map( ( row ) => row.interim ),
+				backgroundColor: '#7628d4',
+				borderRadius: 3,
+				borderSkipped: 'start',
+			},
+			{
+				label: 'Final',
+				data: slice.map( ( row ) => row.final ),
+				backgroundColor: '#307eff',
+				borderRadius: 3,
+				borderSkipped: 'start',
+			},
+		];
 			chart.update();
 		};
 
