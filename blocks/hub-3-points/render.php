@@ -23,11 +23,29 @@ $intro   = do_shortcode( $attributes['intro'] ?? '' );
 $points  = $attributes['points'] ?? array();
 $lines   = $attributes['lines'] ?? 'on';
 
+$hub_extra_class = trim( (string) ( $attributes['className'] ?? '' ) );
+
 $wrapper_attributes = get_block_wrapper_attributes( array( 'class' => 'hub-3-points' . ( 'off' === $lines ? ' hub-3-points--no-lines' : '' ) ) );
+
+if ( '' !== $hub_extra_class ) {
+	// Additional CSS applies to the inner container only — strip it back
+	// out of the section wrapper (core merges className there
+	// automatically, and the supports API reads the parsed block, so it
+	// can't be withheld up front).
+	$hub_extra_tokens   = preg_split( '/\s+/', $hub_extra_class, -1, PREG_SPLIT_NO_EMPTY );
+	$wrapper_attributes = (string) preg_replace_callback(
+		'/class="([^"]*)"/',
+		static function ( $hub_matches ) use ( $hub_extra_tokens ) {
+			$hub_kept = array_diff( preg_split( '/\s+/', $hub_matches[1], -1, PREG_SPLIT_NO_EMPTY ), $hub_extra_tokens );
+			return 'class="' . implode( ' ', $hub_kept ) . '"';
+		},
+		$wrapper_attributes,
+		1
+	);
+}
 
 // Editor "Additional CSS class(es)" apply to the inner container, replacing
 // the default py-6 — e.g. a custom spacing/background combo.
-$hub_extra_class     = trim( (string) ( $attributes['className'] ?? '' ) );
 $hub_container_class = $hub_extra_class ? 'container ' . $hub_extra_class : 'container py-6';
 ?>
 <section <?php echo $wrapper_attributes; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- get_block_wrapper_attributes() already escapes. ?>>
