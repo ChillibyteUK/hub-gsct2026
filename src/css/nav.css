@@ -48,6 +48,14 @@ main {
 	height: var(--nav-height);
 }
 
+/* Mobile nav height — one override retargets every --nav-height consumer
+   (navbar, main offset, collapse heights, scroll margins) at once. */
+@media (max-width: 991px) {
+	:root {
+		--nav-height: var(--nav-height-mobile);
+	}
+}
+
 .navbar .btn {
 	text-align: center;
 }

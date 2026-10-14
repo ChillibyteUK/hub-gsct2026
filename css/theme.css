@@ -134,8 +134,10 @@
 
   /* Fixed header height — .navbar is exactly this tall (see nav.css) and
      main is offset by the same amount, so the two can never drift apart.
-     Fits the 3rem logo with breathing room. */
+     Fits the 3rem logo with breathing room. Below lg, --nav-height takes
+     the mobile value instead (see the :root override in nav.css). */
   --nav-height: 6rem;
+  --nav-height-mobile: 64px;
 }
 
 /* Base element reset — the "reboot" equivalent. Deliberately small. */
@@ -792,6 +794,14 @@ main {
 	justify-content: space-between;
 	column-gap: var(--space-3);
 	height: var(--nav-height);
+}
+
+/* Mobile nav height — one override retargets every --nav-height consumer
+   (navbar, main offset, collapse heights, scroll margins) at once. */
+@media (max-width: 991px) {
+	:root {
+		--nav-height: var(--nav-height-mobile);
+	}
 }
 
 .navbar .btn {
