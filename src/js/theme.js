@@ -10,6 +10,7 @@ import { initCardsSections } from './cards-section';
 import { initThreePoints } from './three-points';
 import { initTimelines } from './timeline';
 import { initLearningGrids } from './learning-posts-grid';
+import { initInsightsMore } from './insights-more';
 import { initShareButtons } from './share';
 import { initRelatedInsights } from './related-insights';
 import { initHoldings } from './holdings';
@@ -33,6 +34,7 @@ document.addEventListener('DOMContentLoaded', () => {
 	initThreePoints();
 	initTimelines();
 	initLearningGrids();
+	initInsightsMore();
 	initShareButtons();
 	initRelatedInsights();
 	initHoldings();

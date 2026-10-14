@@ -66,12 +66,35 @@ $hero_text  = get_the_content( null, false, $page_for_posts_id );
 <div class="hub-insights-list">
 	<div class="container">
 		<?php
+		// See-more pagination (src/js/insights-more.js): how many the main
+		// query rendered on this page vs how many exist overall. Offset/total
+		// travel as data attributes on the grid; the button only prints when
+		// more exist.
+		global $wp_query;
+		$hub_rendered = isset( $wp_query->post_count ) ? (int) $wp_query->post_count : 0;
+		$hub_total    = isset( $wp_query->found_posts ) ? (int) $wp_query->found_posts : 0;
+		// Batch sizes: the initial render shows the featured + half-width
+		// pattern (8 posts), each see-more fetch appends full 3-card rows
+		// (9 posts). The main query itself is uncapped (posts_per_page
+		// 9999), so the loop below stops after the initial count — the rest
+		// load via REST.
+		$hub_initial_num = 8;
+		$hub_page_size   = 9;
+		$hub_initial     = min( $hub_rendered, $hub_initial_num );
 		if ( have_posts() ) {
 			?>
-		<div class="row">
+		<div
+			class="row"
+			data-insights-grid
+			data-category="<?= $current_cat_id ? esc_attr( (string) $current_cat_id ) : ''; ?>"
+			data-offset="<?= esc_attr( (string) $hub_initial ); ?>"
+			data-per-page="<?= esc_attr( (string) $hub_page_size ); ?>"
+			data-total="<?= esc_attr( (string) $hub_total ); ?>"
+			data-rest="<?= esc_url( rest_url( 'wp/v2/posts' ) ); ?>"
+		>
 			<?php
 			$hub_insight_index = 0;
-			while ( have_posts() ) {
+			while ( have_posts() && $hub_insight_index < $hub_initial_num ) {
 				the_post();
 				++$hub_insight_index;
 
@@ -164,6 +187,11 @@ $hero_text  = get_the_content( null, false, $page_for_posts_id );
 			?>
 		</div>
 			<?php
+			if ( $hub_total > $hub_initial ) {
+				?>
+		<button class="btn btn-outline hub-insights-more" type="button" data-insights-more><?= esc_html__( 'See more', 'hub-gsct2026' ); ?></button>
+				<?php
+			}
 		} else {
 			?>
 		<p><?php esc_html_e( 'Nothing found.', 'hub-gsct2026' ); ?></p>

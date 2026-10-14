@@ -2500,6 +2500,17 @@ select {
 }
 	}
 
+/* See-more button — centred below the grid, same pattern as the learning
+   grid's __more. Hidden for good once everything is loaded. */
+.hub-insights-more {
+	display: block;
+	margin-inline: auto;
+	margin-top: var(--space-4);
+}
+.hub-insights-more[hidden] {
+		display: none;
+	}
+
 /* Cards — the whole card is a single <a>: image, meta, title and excerpt.
    Hover zooms the image only; no colour or underline changes. */
 .hub-insight-card {
