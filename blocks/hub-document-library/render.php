@@ -3,7 +3,9 @@
  * Block template for HUB Document Library.
  *
  * Every published document post in one table (title, category, release
- * date, format) — no pagination. Category pills single-select-toggle the
+ * date, format) — no pagination. Rows are ordered by release date, newest
+ * first (YYYYMMDD key parsed from the release_date meta, title as
+ * tiebreak); unparseable dates sort last. Category pills single-select-toggle the
  * list; overflow categories live under the More dropdown; the search box
  * matches document titles instantly, then adds documents whose file text
  * matches (hub/v1/doc-search, inc/document-search.php — the endpoint URL
@@ -25,9 +27,35 @@ $hub_docs = get_posts(
 		'post_type'      => 'document',
 		'posts_per_page' => -1,
 		'post_status'    => 'publish',
-		'orderby'        => 'title',
-		'order'          => 'ASC',
+		'orderby'        => 'none',
 	)
+);
+
+// Newest release first. release_date is free text in UK format
+// ("01 Sep 2026"), so parse it to a YYYYMMDD key — it can't be sorted
+// as a meta_value. Unparseable dates sort last, ties break by title.
+$hub_date_key = static function ( $post_id ) {
+	$hub_raw = trim( (string) get_post_meta( $post_id, 'release_date', true ) );
+	$hub_dt  = DateTime::createFromFormat( 'd M Y', $hub_raw );
+
+	if ( ! $hub_dt ) {
+		$hub_dt = DateTime::createFromFormat( 'j M Y', $hub_raw );
+	}
+
+	return $hub_dt ? $hub_dt->format( 'Ymd' ) : '00000000';
+};
+
+usort(
+	$hub_docs,
+	static function ( $a, $b ) use ( $hub_date_key ) {
+		$hub_cmp = strcmp( $hub_date_key( $b->ID ), $hub_date_key( $a->ID ) );
+
+		if ( 0 !== $hub_cmp ) {
+			return $hub_cmp;
+		}
+
+		return strcasecmp( $a->post_title, $b->post_title );
+	}
 );
 
 $hub_terms = get_terms(
