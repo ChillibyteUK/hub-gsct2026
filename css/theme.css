@@ -2729,6 +2729,24 @@ article .wp-block-list {
 	background-color: var(--col-brand-red);
 }
 
+/* Small screens: stack without dividers — author full width, then
+   published/read-time left with the share button right. */
+@media (max-width: 767px) {
+	.hub-post-meta {
+		display: grid;
+		grid-template-columns: 1fr auto;
+		justify-content: start;
+	}
+
+	.hub-post-meta__author {
+		grid-column: 1 / -1;
+	}
+
+	.hub-post-meta__divider {
+		display: none;
+	}
+}
+
 .hub-post-meta__avatar {
 	display: inline-flex;
 }
@@ -4547,6 +4565,14 @@ a.hub-how-to-invest-full__platform:focus-visible {
 	aspect-ratio: 1 / 1;
 	object-fit: cover;
 	border-radius: 50%;
+}
+
+/* Stacked (below the md two-column switch): image above the copy — same
+   :last-child order flip as hub-pullquote. */
+@media (max-width: 767px) {
+	.hub-gradient-hero .row > :last-child {
+		order: -1;
+	}
 }
 
 /* --- src/blocks/hub-related-insights.css --- */

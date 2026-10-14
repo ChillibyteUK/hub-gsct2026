@@ -1677,6 +1677,14 @@ a.hub-how-to-invest-full__platform:focus-visible {
 	border-radius: 50%;
 }
 
+/* Stacked (below the md two-column switch): image above the copy — same
+   :last-child order flip as hub-pullquote. */
+@media (max-width: 767px) {
+	.hub-gradient-hero .row > :last-child {
+		order: -1;
+	}
+}
+
 /* --- src/blocks/hub-related-insights.css --- */
 /* HUB Related Insights — pink full-width section, three cards desktop,
    swipe carousel with dots on mobile. Full width comes from placement

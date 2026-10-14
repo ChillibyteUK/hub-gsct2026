@@ -37,6 +37,24 @@
 	background-color: var(--col-brand-red);
 }
 
+/* Small screens: stack without dividers — author full width, then
+   published/read-time left with the share button right. */
+@media (max-width: 767px) {
+	.hub-post-meta {
+		display: grid;
+		grid-template-columns: 1fr auto;
+		justify-content: start;
+	}
+
+	.hub-post-meta__author {
+		grid-column: 1 / -1;
+	}
+
+	.hub-post-meta__divider {
+		display: none;
+	}
+}
+
 .hub-post-meta__avatar {
 	display: inline-flex;
 }

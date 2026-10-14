@@ -33,3 +33,11 @@
 	object-fit: cover;
 	border-radius: 50%;
 }
+
+/* Stacked (below the md two-column switch): image above the copy — same
+   :last-child order flip as hub-pullquote. */
+@media (max-width: 767px) {
+	.hub-gradient-hero .row > :last-child {
+		order: -1;
+	}
+}
