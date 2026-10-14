@@ -95,6 +95,11 @@ select {
 	box-shadow: 0 4px 0 var(--col-brand-yellow);
 	transform: translateY(-4px);
 }
+.btn:active,
+.gform_button:active {
+	background-color: var(--col-brand-purple);
+	color: var(--col-brand-yellow);
+}
 .btn.btn-yellow:active {
 	background-color: var(--col-brand-purple);
 	color: var(--col-brand-yellow);
@@ -142,16 +147,40 @@ select {
 	color: var(--col-brand-yellow);
 }
 
+.btn.btn-purple {
+	background-color: var(--col-brand-purple);
+	border-color: var(--col-brand-purple);
+	color: var(--col-white);
+}
+.btn.btn-purple:hover, .btn.btn-purple:focus-visible {
+	background-color: var(--col-white);
+	border-color: var(--col-brand-purple);
+	color: var(--col-brand-purple);
+	box-shadow: 0 4px 0 var(--col-brand-purple);
+	transform: translateY(-4px);
+}
+.btn.btn-purple:active {
+	background-color: var(--col-white);
+	border-color: var(--col-brand-purple);
+	color: var(--col-brand-purple);
+}
+
 .btn.btn-outline {
 	background-color: transparent;
 	border-color: var(--col-black);
 	color: var(--col-black);
 }
 .btn.btn-outline:hover, .btn.btn-outline:focus-visible {
-	background-color: var(--col-black);
-	color: var(--col-white);
-	box-shadow: 0 4px 0 var(--col-grey-300);
+	background-color: var(--col-brand-yellow);
+	border-color: var(--col-brand-purple);
+	color: var(--col-black);
+	box-shadow: 0 4px 0 var(--col-brand-purple);
 	transform: translateY(-4px);
+}
+.btn.btn-outline:active {
+	background-color: var(--col-brand-yellow);
+	border-color: var(--col-brand-yellow);
+	color: var(--col-black);
 }
 
 .btn.btn-yellow-outline {
@@ -161,9 +190,15 @@ select {
 }
 .btn.btn-yellow-outline:hover, .btn.btn-yellow-outline:focus-visible {
 	background-color: var(--col-brand-yellow);
+	border-color: var(--col-brand-purple);
 	color: var(--col-black);
 	box-shadow: 0 4px 0 var(--col-brand-purple);
 	transform: translateY(-4px);
+}
+.btn.btn-yellow-outline:active {
+	background-color: var(--col-brand-yellow);
+	border-color: var(--col-brand-yellow);
+	color: var(--col-black);
 }
 
 .btn.btn-purple-outline {
@@ -173,7 +208,13 @@ select {
 }
 .btn.btn-purple-outline:hover, .btn.btn-purple-outline:focus-visible {
 	background-color: var(--col-brand-purple);
+	border-color: var(--col-brand-yellow);
 	color: var(--col-brand-yellow);
 	box-shadow: 0 4px 0 var(--col-black);
 	transform: translateY(-4px);
+}
+.btn.btn-purple-outline:active {
+	background-color: var(--col-brand-purple);
+	border-color: var(--col-brand-yellow);
+	color: var(--col-brand-yellow);
 }

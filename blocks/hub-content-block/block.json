@@ -38,6 +38,10 @@
 			"type": "string",
 			"default": "text-media"
 		},
+		"mobileOrder": {
+			"type": "string",
+			"default": ""
+		},
 		"mediaType": {
 			"type": "string",
 			"default": "image"

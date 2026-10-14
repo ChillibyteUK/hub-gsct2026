@@ -4,7 +4,10 @@
  *
  * 50/50 text + media row (stacked below lg). Column order comes from the
  * `order` attribute — the media column takes `order: -1` when media goes
- * first, so the markup stays in one place. Video embeds inline in a 16/9
+ * first, so the markup stays in one place. Stacking order on small screens
+ * comes from the separate `mobileOrder` attribute instead (empty means
+ * "follow column order", which is what blocks saved before the setting
+ * existed resolve to). Video embeds inline in a 16/9
  * frame via hub_gsct2026_get_vimeo_embed_url(); without a valid Vimeo URL
  * nothing renders in the media column. The Form media type renders a
  * shortcode (e.g. a Gravity Forms embed) verbatim via do_shortcode() —
@@ -30,12 +33,20 @@ $aspect      = $attributes['aspectRatio'] ?? '16/9';
 $video_embed = hub_gsct2026_get_vimeo_embed_url( $attributes['videoUrl'] ?? '' );
 
 $media_first  = 'media-text' === $order;
+$mobile_order = $attributes['mobileOrder'] ?? '';
+
+if ( '' === $mobile_order ) {
+	$mobile_order = $order;
+}
+
+$media_mobile_first = 'media-text' === $mobile_order;
 $full_bleed   = ! empty( $attributes['fullBleed'] ) && 'image' === $media_type && $image_url;
 $is_quote     = 'quote' === $media_type;
 $is_list      = 'list' === $media_type;
 $text_class   = $is_list ? 'col-12 col-lg-8 hub-content-block__text my-auto' : 'col-12 col-lg-6 hub-content-block__text my-auto';
 $media_class  = $is_list ? 'col-12 col-lg-4 hub-content-block__media my-auto' : 'col-12 col-lg-6 hub-content-block__media';
 $media_class .= $media_first ? ' hub-content-block__media--first' : '';
+$media_class .= $media_mobile_first ? ' hub-content-block__media--mobile-first' : '';
 if ( $full_bleed ) {
 	$media_class .= $media_first ? ' hub-content-block__media--bleed-left' : ' hub-content-block__media--bleed-right';
 }
@@ -87,10 +98,10 @@ $wrapper_attributes = get_block_wrapper_attributes( array( 'class' => 'hub-conte
 				}
 				if ( $cta_url ) {
 					$btns      = array(
-						'white'        => 'btn-black-outline',
+						'white'        => 'btn-outline',
 						'brand-yellow' => 'btn-purple-outline',
 					);
-					$btn_class = $btns[ $attributes['backgroundColor'] ?? '' ] ?? 'btn-black-outline';
+					$btn_class = $btns[ $attributes['backgroundColor'] ?? '' ] ?? 'btn-outline';
 					?>
 					<a class="mt-5 btn <?= esc_attr( $btn_class ); ?>" href="<?= esc_url( $cta_url ); ?>"><?= esc_html( $cta_text ? $cta_text : $cta_url ); ?></a>
 					<?php

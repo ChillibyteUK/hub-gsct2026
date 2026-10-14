@@ -19,6 +19,7 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 		ctaText,
 		ctaUrl,
 		order,
+		mobileOrder,
 		mediaType,
 		imageId,
 		imageUrl,
@@ -113,16 +114,33 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 					</div>
 				</div>
 			</div>
-			<RadioControl
-				className="hub-radio-horizontal"
-				label={ __( 'Column order', 'hub-gsct2026' ) }
-				selected={ order }
-				options={ [
-					{ label: __( 'Text | Media', 'hub-gsct2026' ), value: 'text-media' },
-					{ label: __( 'Media | Text', 'hub-gsct2026' ), value: 'media-text' },
-				] }
-				onChange={ ( value ) => setAttributes( { order: value } ) }
-			/>
+		<div style={ { display: 'flex', flexWrap: 'wrap', gap: '12px' } }>
+			<div style={ { flex: '50 1 0%' } }>
+				<RadioControl
+					className="hub-radio-horizontal"
+					label={ __( 'Column order', 'hub-gsct2026' ) }
+					selected={ order }
+					options={ [
+						{ label: __( 'Text | Media', 'hub-gsct2026' ), value: 'text-media' },
+						{ label: __( 'Media | Text', 'hub-gsct2026' ), value: 'media-text' },
+					] }
+					onChange={ ( value ) => setAttributes( { order: value } ) }
+				/>
+			</div>
+			<div style={ { flex: '50 1 0%' } }>
+				<RadioControl
+					className="hub-radio-horizontal"
+					label={ __( 'Mobile order', 'hub-gsct2026' ) }
+					selected={ mobileOrder || order }
+					options={ [
+						{ label: __( 'Text first', 'hub-gsct2026' ), value: 'text-media' },
+						{ label: __( 'Media first', 'hub-gsct2026' ), value: 'media-text' },
+					] }
+					onChange={ ( value ) => setAttributes( { mobileOrder: value } ) }
+					help={ __( 'Stacking order on small screens. Follows column order until changed.', 'hub-gsct2026' ) }
+				/>
+			</div>
+		</div>
 			<RadioControl
 				className="hub-radio-horizontal"
 				label={ __( 'Media type', 'hub-gsct2026' ) }

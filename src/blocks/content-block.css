@@ -1,8 +1,18 @@
 /* Media column fills its ratio box (aspect set inline from the block's
-   aspect-ratio attribute); video embeds in a fixed 16/9 frame. Order comes
-   from the block's order attribute via --first, so the markup never moves. */
-.hub-content-block__media--first {
-    order: -1;
+   aspect-ratio attribute); video embeds in a fixed 16/9 frame. Desktop
+   order comes from the block's order attribute via --first, mobile stacking
+   from mobileOrder via --mobile-first, so the markup never moves. Each is
+   scoped to its breakpoint (lg = 992px, same switch as the row layout). */
+@media (min-width: 992px) {
+    .hub-content-block__media--first {
+        order: -1;
+    }
+}
+
+@media (max-width: 991px) {
+    .hub-content-block__media--mobile-first {
+        order: -1;
+    }
 }
 
 /* --bleed-offset lives on the base section (with overflow containment
