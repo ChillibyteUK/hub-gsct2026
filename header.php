@@ -24,7 +24,7 @@
 			<img src="<?php echo esc_url( get_stylesheet_directory_uri() . '/img/gsct-logo.svg' ); ?>" alt="<?php echo esc_attr( get_bloginfo( 'name' ) ); ?>" width="173" height="48">
 		</a>
 
-		<a href="/how-to-invest/" class="btn d-lg-none">How to Invest</a>
+		<a href="/how-to-invest/" class="btn text-small-button d-lg-none">How to Invest</a>
 
 		<button class="navbar-toggler" type="button" aria-expanded="false" aria-controls="primary-menu" aria-label="Toggle navigation">
 			<span class="navbar-toggler__icon" aria-hidden="true"><span></span><span></span><span></span></span>

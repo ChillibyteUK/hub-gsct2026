@@ -139,7 +139,7 @@ $wrapper_attributes = get_block_wrapper_attributes( array( 'class' => 'hub-holdi
 							<td class="hub-holdings__rank-col"><?= esc_html( (string) ( $hub_index + 1 ) ); ?></td>
 							<td><?= esc_html( $hub_row['name'] ); ?></td>
 							<td><?= esc_html( $hub_row['sector'] ); ?></td>
-							<td class="hub-holdings__weight-col"><?= esc_html( $hub_row['weight'] ); ?></td>
+							<td class="hub-holdings__weight-col"><?= esc_html( $hub_row['weight'] ); ?>%</td>
 						</tr>
 						<?php
 					}

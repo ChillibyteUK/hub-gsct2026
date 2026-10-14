@@ -1260,6 +1260,12 @@ select {
 	background-color: var(--col-brand-purple);
 	color: var(--col-brand-yellow);
 }
+
+/* The .text-small-button type utility (typography.css) must win over .btn's
+   own font-size — same specificity, but forms.css loads later. */
+.btn.text-small-button {
+	font-size: 13px;
+}
 .btn.btn-yellow:active {
 	background-color: var(--col-brand-purple);
 	color: var(--col-brand-yellow);
