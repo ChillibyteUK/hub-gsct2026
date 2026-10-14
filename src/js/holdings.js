@@ -1,11 +1,65 @@
 /**
- * Holdings exclusion toggle — within each .hub-holdings section, keeps
- * exactly the first 10 rows visible, either unfiltered or skipping rows
- * tagged data-hub-holdings-excluded (sector 'Collective investments').
- * Scoped per section so multiple holdings blocks never interfere.
+ * Holdings block: exclusion toggle plus column-width locking. The toggle
+ * keeps exactly the first 10 rows visible, either unfiltered or skipping
+ * rows tagged data-hub-holdings-excluded (sector 'Collective
+ * investments'). Widths are locked as percentages derived from the full
+ * row set, so they stay fluid with the viewport yet identical filtered or
+ * unfiltered. Scoped per section so multiple holdings blocks never
+ * interfere.
  */
+function lockColumnWidths( section ) {
+	const table = section.querySelector( '.hub-holdings__table' );
+	const headCells = Array.from(
+		section.querySelectorAll( '.hub-holdings__table thead th' )
+	);
+
+	if ( ! table || ! headCells.length ) {
+		return;
+	}
+
+	const rows = Array.from(
+		section.querySelectorAll( '.hub-holdings__table tbody tr' )
+	);
+
+	// Reveal every row so the measured widths account for the full content
+	// set — not just the 10 currently visible — then restore. Synchronous,
+	// so nothing paints mid-way. Percentages keep the columns fluid with
+	// the viewport while staying identical filtered or unfiltered.
+	const hidden = rows.filter( ( row ) => row.hidden );
+	hidden.forEach( ( row ) => {
+		row.hidden = false;
+	} );
+
+	const tableWidth = table.getBoundingClientRect().width;
+	const widths = headCells.map(
+		( th ) => th.getBoundingClientRect().width
+	);
+
+	hidden.forEach( ( row ) => {
+		row.hidden = true;
+	} );
+
+	// Bail on a zero render (block inside a hidden container etc.) rather
+	// than locking everything to 0.
+	if ( ! tableWidth || widths.some( ( width ) => ! width ) ) {
+		return;
+	}
+
+	headCells.forEach( ( th, index ) => {
+		th.style.width = `${ ( widths[ index ] / tableWidth ) * 100 }%`;
+	} );
+}
+
 export function initHoldings() {
 	document.querySelectorAll( '.hub-holdings' ).forEach( ( section ) => {
+		lockColumnWidths( section );
+
+		// Re-lock once webfonts settle — a late font swap can change text
+		// widths after the first lock.
+		if ( document.fonts && document.fonts.ready ) {
+			document.fonts.ready.then( () => lockColumnWidths( section ) );
+		}
+
 		const toggle = section.querySelector( '.hub-holdings__toggle' );
 
 		if ( ! toggle ) {
