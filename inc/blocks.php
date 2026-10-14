@@ -81,7 +81,7 @@ function hub_gsct2026_core_block_type_args( $args, $name ) {
 	$GLOBALS['hub_gsct2026_original_block_categories'][ $name ] = isset( $args['category'] ) ? $args['category'] : '';
 
 	$theme_namespace = wp_get_theme()->get( 'TextDomain' ) . '/';
-	$wrapped_blocks  = array( 'core/paragraph', 'core/heading', 'core/list', 'core/separator' );
+	$wrapped_blocks  = array( 'core/paragraph', 'core/heading', 'core/list', 'core/separator', 'core/buttons' );
 
 	// Blocks editors expect in their natural categories — exempt from the
 	// Gutenberg-bucket regrouping below so they stay findable. core/quote

@@ -61,9 +61,13 @@ select {
 /* Gravity Forms' submit button renders as <input type="submit"
    class="gform_button">, not something we can add our own .btn class to
    without a PHP/JS filter (gform_submit_button) — sharing the selector
-   list here gets the identical look with zero extra code. */
+   list here gets the identical look with zero extra code. Core Buttons
+   blocks ride the same lists: plain .wp-block-button__link matches .btn,
+   .is-style-outline matches .btn-outline (see also the core/buttons entry
+   in $wrapped_blocks, inc/blocks.php, for the .container wrapper). */
 .btn,
-.gform_button {
+.gform_button,
+.wp-block-button__link {
 	display: inline-block;
 	padding: var(--space-3) var(--space-4);
 	border: 1px solid var(--col-black);
@@ -89,14 +93,16 @@ select {
 	}
 }
 .btn:hover, .btn:focus-visible,
-.gform_button:hover, .gform_button:focus-visible {
+.gform_button:hover, .gform_button:focus-visible,
+.wp-block-button__link:hover, .wp-block-button__link:focus-visible {
 	background-color: var(--col-brand-purple);
 	color: var(--col-brand-yellow);
 	box-shadow: 0 4px 0 var(--col-brand-yellow);
 	transform: translateY(-4px);
 }
 .btn:active,
-.gform_button:active {
+.gform_button:active,
+.wp-block-button__link:active {
 	background-color: var(--col-brand-purple);
 	color: var(--col-brand-yellow);
 }
@@ -165,19 +171,28 @@ select {
 	color: var(--col-brand-purple);
 }
 
-.btn.btn-outline {
+.btn.btn-outline,
+.wp-block-button.is-style-outline .wp-block-button__link {
 	background-color: transparent;
 	border-color: var(--col-black);
 	color: var(--col-black);
+	/* Pinned, not inherited: core's `:root :where(...is-style-outline...)`
+	   rule ties our base .btn specificity, so load order would otherwise
+	   decide the outline's padding and border width. */
+	padding: var(--space-3) var(--space-4);
+	border-width: 1px;
 }
-.btn.btn-outline:hover, .btn.btn-outline:focus-visible {
+.btn.btn-outline:hover, .btn.btn-outline:focus-visible,
+.wp-block-button.is-style-outline .wp-block-button__link:hover,
+.wp-block-button.is-style-outline .wp-block-button__link:focus-visible {
 	background-color: var(--col-brand-yellow);
 	border-color: var(--col-brand-purple);
 	color: var(--col-black);
 	box-shadow: 0 4px 0 var(--col-brand-purple);
 	transform: translateY(-4px);
 }
-.btn.btn-outline:active {
+.btn.btn-outline:active,
+.wp-block-button.is-style-outline .wp-block-button__link:active {
 	background-color: var(--col-brand-yellow);
 	border-color: var(--col-brand-yellow);
 	color: var(--col-black);
