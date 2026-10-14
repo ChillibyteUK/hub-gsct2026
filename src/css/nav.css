@@ -64,12 +64,21 @@ main {
 	max-height: 3rem;
 }
 
+/* Mobile nav (below lg): smaller brand mark. */
+@media (max-width: 991px) {
+	.navbar-brand img {
+		width: 115px;
+		height: 32px;
+		max-height: none;
+	}
+}
+
 .navbar-toggler {
 	display: inline-flex;
 	align-items: center;
 	gap: var(--space-1);
 	padding: var(--space-1) var(--space-2);
-	border: 1px solid var(--col-grey-300);
+	border: none;
 	border-radius: var(--radius-sm);
 	background: none;
 	cursor: pointer;
