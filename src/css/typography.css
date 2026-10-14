@@ -220,12 +220,12 @@
 	letter-spacing: -0.03em;
 }
 
-/* Pullquote L — desktop only */
+/* Pullquote L — 32px → 56px */
 .pullquote-l {
 	font-family: var(--font-family-base);
 	font-weight: var(--fw-medium);
-	font-size: 56px;
-	line-height: 64px;
+	font-size: clamp(32px, calc(24px + 2.22vw), 56px);
+	line-height: clamp(38px, calc(29.33px + 2.41vw), 64px);
 	letter-spacing: -0.03em;
 }
 
