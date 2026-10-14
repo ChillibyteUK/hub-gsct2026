@@ -3022,13 +3022,14 @@ article h2[id] {
         max-width: 11rem;
         height: auto;
         filter: grayscale(100%);
+        display: block;
     }
 
 @media (max-width: 767px) {
         .hub-3-points .hub-3-points__badge {
             position: static;
             transform: none;
-            display: block;
+            display: none;
             margin: 0 0 var(--space-3) auto;
             max-width: 8rem;
         }
