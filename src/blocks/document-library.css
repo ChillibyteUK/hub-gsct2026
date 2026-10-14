@@ -43,6 +43,12 @@
 	margin-bottom: var(--space-4);
 }
 
+/* Pills never shrink — the JS overflow balancing (see document-library.js)
+   measures natural widths, and shrinking would corrupt that. */
+.hub-document-library__filters > * {
+	flex: none;
+}
+
 .hub-document-library__pill {
 	display: inline-flex;
 	align-items: center;
@@ -131,6 +137,7 @@
 
 .hub-document-library__table {
 	width: 100%;
+	min-width: 40rem;
 	border-collapse: collapse;
 }
 

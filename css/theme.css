@@ -150,6 +150,10 @@
 
 html {
 	-webkit-text-size-adjust: 100%;
+	/* Never let the page itself scroll sideways — inner scroll wrappers
+	   (e.g. document/holdings tables) handle their own overflow. clip
+	   rather than hidden so future position:sticky keeps working. */
+	overflow-x: clip;
 }
 
 body {
@@ -771,6 +775,11 @@ h3,
 	right: 0;
 	z-index: 50;
 	background-color: var(--col-body-bg);
+	/* Backstop: a fixed left:0/right:0 bar sizes against the scrollable
+	   overflow width (not the viewport) once the page scrolls sideways for
+	   any reason — e.g. a min-width table in an internal scroll wrapper —
+	   stretching the nav with it. Viewport units are immune to that. */
+	max-width: 100vw;
 }
 
 body.admin-bar #masthead {
@@ -4106,6 +4115,12 @@ a.hub-document-library-hero__card:focus-visible {
 	margin-bottom: var(--space-4);
 }
 
+/* Pills never shrink — the JS overflow balancing (see document-library.js)
+   measures natural widths, and shrinking would corrupt that. */
+.hub-document-library__filters > * {
+	flex: none;
+}
+
 .hub-document-library__pill {
 	display: inline-flex;
 	align-items: center;
@@ -4194,6 +4209,7 @@ a.hub-document-library-hero__card:focus-visible {
 
 .hub-document-library__table {
 	width: 100%;
+	min-width: 40rem;
 	border-collapse: collapse;
 }
 

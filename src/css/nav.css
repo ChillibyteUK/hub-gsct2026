@@ -23,6 +23,11 @@
 	right: 0;
 	z-index: 50;
 	background-color: var(--col-body-bg);
+	/* Backstop: a fixed left:0/right:0 bar sizes against the scrollable
+	   overflow width (not the viewport) once the page scrolls sideways for
+	   any reason — e.g. a min-width table in an internal scroll wrapper —
+	   stretching the nav with it. Viewport units are immune to that. */
+	max-width: 100vw;
 }
 
 body.admin-bar #masthead {

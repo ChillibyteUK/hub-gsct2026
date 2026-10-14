@@ -1486,12 +1486,13 @@
 	/**
 	 * Document library filtering ([data-doc-row]) — one category pill at a
 	 * time (toggle off by clicking again), overflow categories under the More
-	 * dropdown, and a keyword search. The search matches titles instantly and,
-	 * after a short pause, asks the hub/v1/doc-search endpoint which documents
-	 * contain the words in their file text (shown with a snippet). Everything
-	 * combines client-side with no reload; visible rows are re-striped and
-	 * re-counted on every pass. Scoped per section so multiple libraries never
-	 * interfere.
+	 * dropdown, and a keyword search. Which pills show is rebalanced from the
+	 * available width on load, resize and font settle (the server split is only
+	 * the no-JS fallback). The search matches titles instantly and, after a
+	 * short pause, asks the hub/v1/doc-search endpoint which documents contain
+	 * the words in their file text (shown with a snippet). Everything combines
+	 * client-side with no reload; visible rows are re-striped and re-counted
+	 * on every pass. Scoped per section so multiple libraries never interfere.
 	 */
 	function initDocumentLibraries() {
 	  document.querySelectorAll('.hub-document-library').forEach(section => {
@@ -1578,11 +1579,11 @@
 	    };
 	    const selectCat = slug => {
 	      activeCat = activeCat === slug ? '' : slug;
-	      pills.forEach(pill => {
-	        setPressed(pill, pill.getAttribute('data-cat') === activeCat);
-	      });
-	      menuItems.forEach(item => {
-	        setPressed(item, item.getAttribute('data-cat') === activeCat);
+
+	      // Live query — rebalancing moves buttons between the row and
+	      // the menu, so the init-time arrays may be stale.
+	      section.querySelectorAll('[data-cat]').forEach(button => {
+	        setPressed(button, button.getAttribute('data-cat') === activeCat);
 	      });
 	      if (toggle) {
 	        const inMenu = menuItems.some(item => item.getAttribute('data-cat') === activeCat);
@@ -1601,6 +1602,16 @@
 	        closeMenu();
 	      });
 	    });
+
+	    // Pills moved into the menu by rebalancing keep their own listener
+	    // (selectCat) but not the menu's auto-close — delegate that.
+	    if (menu) {
+	      menu.addEventListener('click', event => {
+	        if (event.target.closest('[data-cat]')) {
+	          closeMenu();
+	        }
+	      });
+	    }
 	    if (toggle && menu) {
 	      toggle.addEventListener('click', event => {
 	        event.stopPropagation();
@@ -1619,6 +1630,51 @@
 	        }
 	      });
 	    }
+
+	    // Width-based pill overflow: fit as many pills as the row holds, the
+	    // rest go in the More menu (prepended in order). Moved nodes keep
+	    // their listeners; classes swap so each location's styling applies.
+	    // The server-rendered split is only the no-JS fallback.
+	    const filters = section.querySelector('.hub-document-library__filters');
+	    const rebalancePills = () => {
+	      if (!filters || !more || !menu) {
+	        return;
+	      }
+	      Array.from(menu.children).forEach(item => {
+	        item.classList.remove('hub-document-library__menu-item');
+	        item.classList.add('hub-document-library__pill');
+	        filters.insertBefore(item, more);
+	      });
+
+	      // Keep More in flow while measuring so its own width counts.
+	      more.hidden = false;
+	      for (;;) {
+	        const visible = Array.from(filters.querySelectorAll(':scope > .hub-document-library__pill[data-cat]'));
+	        if (!visible.length) {
+	          break;
+	        }
+	        const row = filters.getBoundingClientRect();
+	        const box = more.getBoundingClientRect();
+	        const fits = box.top <= row.top + 1 && box.right <= row.right + 1;
+	        if (fits) {
+	          break;
+	        }
+	        const last = visible[visible.length - 1];
+	        last.classList.remove('hub-document-library__pill');
+	        last.classList.add('hub-document-library__menu-item');
+	        menu.prepend(last);
+	      }
+	      more.hidden = !menu.children.length;
+	    };
+	    rebalancePills();
+	    if (document.fonts && document.fonts.ready) {
+	      document.fonts.ready.then(() => rebalancePills());
+	    }
+	    let rebalanceTimer = null;
+	    window.addEventListener('resize', () => {
+	      clearTimeout(rebalanceTimer);
+	      rebalanceTimer = setTimeout(() => rebalancePills(), 150);
+	    });
 
 	    // Ask the server which documents contain the words in their file text.
 	    const fetchContent = query => {

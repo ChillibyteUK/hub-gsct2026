@@ -8,6 +8,10 @@
 
 html {
 	-webkit-text-size-adjust: 100%;
+	/* Never let the page itself scroll sideways — inner scroll wrappers
+	   (e.g. document/holdings tables) handle their own overflow. clip
+	   rather than hidden so future position:sticky keeps working. */
+	overflow-x: clip;
 }
 
 body {

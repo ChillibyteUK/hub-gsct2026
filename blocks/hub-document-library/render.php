@@ -109,25 +109,26 @@ $wrapper_attributes = get_block_wrapper_attributes(
 						<button type="button" class="hub-document-library__pill" data-cat="<?= esc_attr( $hub_term->slug ); ?>" aria-pressed="false"><?= esc_html( $hub_term->name ); ?></button>
 						<?php
 					}
-					if ( $hub_hidden_terms ) {
-						?>
-						<div class="hub-document-library__more">
-							<button type="button" class="hub-document-library__pill hub-document-library__more-toggle" aria-expanded="false" aria-haspopup="true">
-								More
-								<svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2.5 4.5 6 8l3.5-3.5" /></svg>
-							</button>
-							<div class="hub-document-library__menu" hidden>
-								<?php
-								foreach ( $hub_hidden_terms as $hub_term ) {
-									?>
-									<button type="button" class="hub-document-library__menu-item" data-cat="<?= esc_attr( $hub_term->slug ); ?>" aria-pressed="false"><?= esc_html( $hub_term->name ); ?></button>
-									<?php
-								}
+					// Always rendered (hidden when empty) so the JS width
+					// rebalancing has a More dropdown to use even when every
+					// category fits the server-side pill count.
+					?>
+					<div class="hub-document-library__more"<?= $hub_hidden_terms ? '' : ' hidden'; ?>>
+						<button type="button" class="hub-document-library__pill hub-document-library__more-toggle" aria-expanded="false" aria-haspopup="true">
+							More
+							<svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2.5 4.5 6 8l3.5-3.5" /></svg>
+						</button>
+						<div class="hub-document-library__menu" hidden>
+							<?php
+							foreach ( $hub_hidden_terms as $hub_term ) {
 								?>
-							</div>
+								<button type="button" class="hub-document-library__menu-item" data-cat="<?= esc_attr( $hub_term->slug ); ?>" aria-pressed="false"><?= esc_html( $hub_term->name ); ?></button>
+								<?php
+							}
+							?>
 						</div>
-						<?php
-					}
+					</div>
+					<?php
 					?>
 				</div>
 				<?php
