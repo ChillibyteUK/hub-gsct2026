@@ -1,6 +1,6 @@
 import { __ } from '@wordpress/i18n';
-import { useBlockProps } from '@wordpress/block-editor';
-import { TextControl, TextareaControl, RadioControl } from '@wordpress/components';
+import { useBlockProps, MediaUpload, MediaUploadCheck } from '@wordpress/block-editor';
+import { TextControl, TextareaControl, RadioControl, Button } from '@wordpress/components';
 import RepeaterField from '../../_shared/RepeaterField';
 import EditorBlockShell from '../../_shared/EditorBlockShell';
 
@@ -17,7 +17,7 @@ const pointsFields = [
 const pointsEmptyRow = { bigStat: '', subtitle: '', content: '', popover: '', popoverTitle: '', popoverContent: '', popoverImage: 0, popoverImageUrl: '' };
 
 export default function Edit( { attributes, setAttributes, clientId } ) {
-	const { eyebrow, lines, title, titleColour, intro, points } = attributes;
+	const { eyebrow, lines, title, titleColour, intro, badgeId, badgeUrl, badgeAlt, points } = attributes;
 	const blockProps = useBlockProps( { className: 'container hub-editor-block' } );
 
 	return (
@@ -64,11 +64,56 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 					/>
 				</div>
 			</div>
-			<TextareaControl
-				label={ __( 'Intro', 'hub-gsct2026' ) }
-				value={ intro }
-				onChange={ ( value ) => setAttributes( { intro: value } ) }
-			/>
+		<div style={ { display: 'flex', flexWrap: 'wrap', gap: '12px' } }>
+			<div style={ { flex: '75 1 0%' } }>
+				<TextareaControl
+					label={ __( 'Intro', 'hub-gsct2026' ) }
+					value={ intro }
+					onChange={ ( value ) => setAttributes( { intro: value } ) }
+				/>
+			</div>
+			<div style={ { flex: '25 1 0%' } }>
+				<div className="hub-editor-field">
+					<label className="hub-editor-field__label">{ __( 'Badge', 'hub-gsct2026' ) }</label>
+					<MediaUploadCheck>
+						<MediaUpload
+							onSelect={ ( media ) =>
+								setAttributes( {
+									badgeId: media.id,
+									badgeUrl: media.url,
+									badgeAlt: media.alt || '',
+								} )
+							}
+							allowedTypes={ [ 'image' ] }
+							value={ badgeId }
+							render={ ( { open } ) => (
+								<div className="hub-editor-field__control">
+									{ badgeUrl && (
+										<img
+											src={ badgeUrl }
+											alt={ badgeAlt }
+											style={ { maxWidth: '200px', display: 'block', marginBottom: '8px' } }
+										/>
+									) }
+									<Button variant="secondary" onClick={ open }>
+										{ badgeUrl ? __( 'Replace badge', 'hub-gsct2026' ) : __( 'Select badge', 'hub-gsct2026' ) }
+									</Button>
+									{ badgeUrl && (
+										<Button
+											variant="tertiary"
+											isDestructive
+											onClick={ () => setAttributes( { badgeId: 0, badgeUrl: '', badgeAlt: '' } ) }
+										>
+											{ __( 'Remove', 'hub-gsct2026' ) }
+										</Button>
+									) }
+								</div>
+							) }
+						/>
+					</MediaUploadCheck>
+				</div>
+			</div>
+		</div>
 			<RepeaterField
 				label={ __( 'Points', 'hub-gsct2026' ) }
 				value={ points }

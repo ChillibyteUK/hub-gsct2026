@@ -874,6 +874,9 @@ function Edit({
     title,
     titleColour,
     intro,
+    badgeId,
+    badgeUrl,
+    badgeAlt,
     points
   } = attributes;
   const blockProps = (0,_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_1__.useBlockProps)({
@@ -959,12 +962,72 @@ function Edit({
           })
         })
       })]
-    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.TextareaControl, {
-      label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Intro', 'hub-gsct2026'),
-      value: intro,
-      onChange: value => setAttributes({
-        intro: value
-      })
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
+      style: {
+        display: 'flex',
+        flexWrap: 'wrap',
+        gap: '12px'
+      },
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("div", {
+        style: {
+          flex: '75 1 0%'
+        },
+        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.TextareaControl, {
+          label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Intro', 'hub-gsct2026'),
+          value: intro,
+          onChange: value => setAttributes({
+            intro: value
+          })
+        })
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("div", {
+        style: {
+          flex: '25 1 0%'
+        },
+        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
+          className: "hub-editor-field",
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("label", {
+            className: "hub-editor-field__label",
+            children: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Badge', 'hub-gsct2026')
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_1__.MediaUploadCheck, {
+            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_1__.MediaUpload, {
+              onSelect: media => setAttributes({
+                badgeId: media.id,
+                badgeUrl: media.url,
+                badgeAlt: media.alt || ''
+              }),
+              allowedTypes: ['image'],
+              value: badgeId,
+              render: ({
+                open
+              }) => /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
+                className: "hub-editor-field__control",
+                children: [badgeUrl && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("img", {
+                  src: badgeUrl,
+                  alt: badgeAlt,
+                  style: {
+                    maxWidth: '200px',
+                    display: 'block',
+                    marginBottom: '8px'
+                  }
+                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.Button, {
+                  variant: "secondary",
+                  onClick: open,
+                  children: badgeUrl ? (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Replace badge', 'hub-gsct2026') : (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Select badge', 'hub-gsct2026')
+                }), badgeUrl && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.Button, {
+                  variant: "tertiary",
+                  isDestructive: true,
+                  onClick: () => setAttributes({
+                    badgeId: 0,
+                    badgeUrl: '',
+                    badgeAlt: ''
+                  }),
+                  children: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Remove', 'hub-gsct2026')
+                })]
+              })
+            })
+          })]
+        })
+      })]
     }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(_shared_RepeaterField__WEBPACK_IMPORTED_MODULE_3__["default"], {
       label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Points', 'hub-gsct2026'),
       value: points,
@@ -1086,7 +1149,7 @@ module.exports = window["wp"]["i18n"];
   \****************************************/
 (module) {
 
-module.exports = /*#__PURE__*/JSON.parse('{"$schema":"https://schemas.wp.org/trunk/block.json","apiVersion":3,"name":"hub-gsct2026/hub-3-points","title":"HUB 3 Points","category":"hub-gsct2026","icon":"cover-image","attributes":{"eyebrow":{"type":"string","default":""},"lines":{"type":"string","default":"on"},"title":{"type":"string","default":""},"titleColour":{"type":"string","default":"Red"},"intro":{"type":"string","default":""},"points":{"type":"array","default":[]}},"supports":{"anchor":true,"className":true,"align":true},"editorScript":"file:./build/index.js","render":"file:./render.php"}');
+module.exports = /*#__PURE__*/JSON.parse('{"$schema":"https://schemas.wp.org/trunk/block.json","apiVersion":3,"name":"hub-gsct2026/hub-3-points","title":"HUB 3 Points","category":"hub-gsct2026","icon":"cover-image","attributes":{"eyebrow":{"type":"string","default":""},"lines":{"type":"string","default":"on"},"title":{"type":"string","default":""},"titleColour":{"type":"string","default":"Red"},"intro":{"type":"string","default":""},"badgeId":{"type":"number","default":0},"badgeUrl":{"type":"string","default":""},"badgeAlt":{"type":"string","default":""},"points":{"type":"array","default":[]}},"supports":{"anchor":true,"className":true,"align":true},"editorScript":"file:./build/index.js","render":"file:./render.php"}');
 
 /***/ }
 

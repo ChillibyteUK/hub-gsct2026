@@ -26,6 +26,18 @@
 			"type": "string",
 			"default": ""
 		},
+		"badgeId": {
+			"type": "number",
+			"default": 0
+		},
+		"badgeUrl": {
+			"type": "string",
+			"default": ""
+		},
+		"badgeAlt": {
+			"type": "string",
+			"default": ""
+		},
 		"points": {
 			"type": "array",
 			"default": []

@@ -40,7 +40,38 @@
     }
 
     .hub-3-points__intro {
-        max-width: 600px;
+        max-width: 75%;
+    }
+
+    /* Badge: right-aligned, centred on the title underline. The head wraps
+       title + badge so bottom:0 is the underline itself; translateY(50%)
+       straddles it. */
+    .hub-3-points__head {
+        position: relative;
+    }
+
+    .hub-3-points__badge {
+        position: absolute;
+        right: 0;
+        bottom: 0;
+        transform: translateY(50%);
+        max-width: 11rem;
+        height: auto;
+        filter: grayscale(100%);
+    }
+
+    @media (max-width: 767px) {
+        .hub-3-points__badge {
+            position: static;
+            transform: none;
+            display: block;
+            margin: 0 0 var(--space-3) auto;
+            max-width: 8rem;
+        }
+
+        .hub-3-points__intro {
+            max-width: none;
+        }
     }
 
     a {

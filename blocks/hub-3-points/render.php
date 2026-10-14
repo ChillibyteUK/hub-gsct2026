@@ -11,6 +11,8 @@
  * as plain words. Without the marker (or with empty popover fields) the
  * content renders untouched. Shortcodes (e.g. [contact_phone]) expand in
  * the intro and point content; popover title/body render as plain text.
+ * The optional Badge image sits right-aligned, centred on the title
+ * underline (see .hub-3-points__badge in src/blocks/3-points.css).
  *
  * @package hub-gsct2026
  */
@@ -22,6 +24,9 @@ $btitle  = $attributes['title'] ?? '';
 $intro   = do_shortcode( $attributes['intro'] ?? '' );
 $points  = $attributes['points'] ?? array();
 $lines   = $attributes['lines'] ?? 'on';
+
+$badge_url = $attributes['badgeUrl'] ?? '';
+$badge_alt = $attributes['badgeAlt'] ?? '';
 
 $hub_extra_class = trim( (string) ( $attributes['className'] ?? '' ) );
 
@@ -56,10 +61,23 @@ $hub_container_class = $hub_extra_class ? 'container ' . $hub_extra_class : 'con
 			<div class="text-eyebrow mb-4"><?= esc_html( $eyebrow ); ?></div>
 			<?php
 		}
-		if ( $btitle ) {
+		if ( $btitle || $badge_url ) {
 			$title_class = 'Black' === ( $attributes['titleColour'] ?? '' ) ? 'has-black-color' : 'has-brand-red-color';
 			?>
-			<h2 class="h2-data-l <?= esc_attr( $title_class ); ?>"><?= esc_html( $btitle ); ?></h2>
+			<div class="hub-3-points__head">
+				<?php
+				if ( $btitle ) {
+					?>
+					<h2 class="h2-data-l <?= esc_attr( $title_class ); ?>"><?= esc_html( $btitle ); ?></h2>
+					<?php
+				}
+				if ( $badge_url ) {
+					?>
+					<img class="hub-3-points__badge" src="<?= esc_url( $badge_url ); ?>" alt="<?= esc_attr( $badge_alt ); ?>">
+					<?php
+				}
+				?>
+			</div>
 			<?php
 		}
 		if ( $intro ) {
