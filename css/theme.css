@@ -975,6 +975,14 @@ body.admin-bar .navbar-collapse.is-open {
 		background-color: var(--col-brand-red);
 	}
 
+	/* The CTA button carries its own pill styling — the active bar
+	   would clash with it, so never draw it there. The walker merges
+	   menu-admin classes onto the link itself, hence both selectors. */
+	.nav-link.nav-item--cta.active::after,
+	.nav-item--cta .nav-link.active::after {
+		content: none;
+	}
+
 	.dropdown {
 		position: relative;
 	}
