@@ -233,3 +233,20 @@ select {
 	border-color: var(--col-brand-yellow);
 	color: var(--col-brand-yellow);
 }
+
+/* Small screens: core Buttons blocks stack full width. */
+@media (max-width: 767px) {
+	.wp-block-buttons {
+		flex-direction: column;
+		align-items: stretch;
+	}
+
+	.wp-block-buttons .wp-block-button {
+		width: 100%;
+	}
+
+	.wp-block-buttons .wp-block-button__link {
+		display: block;
+		width: 100%;
+	}
+}
