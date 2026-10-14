@@ -34,6 +34,10 @@
 			"type": "string",
 			"default": ""
 		},
+		"ctaStyle": {
+			"type": "string",
+			"default": "button"
+		},
 		"order": {
 			"type": "string",
 			"default": "text-media"

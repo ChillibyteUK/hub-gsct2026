@@ -7,7 +7,9 @@
  * first, so the markup stays in one place. Stacking order on small screens
  * comes from the separate `mobileOrder` attribute instead (empty means
  * "follow column order", which is what blocks saved before the setting
- * existed resolve to). Video embeds inline in a 16/9
+ * existed resolve to). The CTA renders as a button by default
+ * (`ctaStyle: button`); `ctaStyle: link` renders a cards-section-style
+ * text link with arrow in black instead. Video embeds inline in a 16/9
  * frame via hub_gsct2026_get_vimeo_embed_url(); without a valid Vimeo URL
  * nothing renders in the media column. The Form media type renders a
  * shortcode (e.g. a Gravity Forms embed) verbatim via do_shortcode() —
@@ -102,9 +104,19 @@ $wrapper_attributes = get_block_wrapper_attributes( array( 'class' => 'hub-conte
 						'brand-yellow' => 'btn-purple-outline',
 					);
 					$btn_class = $btns[ $attributes['backgroundColor'] ?? '' ] ?? 'btn-outline';
-					?>
-					<a class="mt-5 btn <?= esc_attr( $btn_class ); ?>" href="<?= esc_url( $cta_url ); ?>"><?= esc_html( $cta_text ? $cta_text : $cta_url ); ?></a>
-					<?php
+
+					if ( 'link' === ( $attributes['ctaStyle'] ?? 'button' ) ) {
+						?>
+						<a class="mt-5 text-link hub-cards-section__link hub-content-block__link" href="<?= esc_url( $cta_url ); ?>">
+							<span class="hub-cards-section__link-text"><?= esc_html( $cta_text ? $cta_text : $cta_url ); ?></span>
+							<svg class="hub-cards-section__link-arrow" width="18" height="15" viewBox="0 0 18 15" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M1 7.4H17M9 13.8L17 7.4L9 1" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+						</a>
+						<?php
+					} else {
+						?>
+						<a class="mt-5 btn <?= esc_attr( $btn_class ); ?>" href="<?= esc_url( $cta_url ); ?>"><?= esc_html( $cta_text ? $cta_text : $cta_url ); ?></a>
+						<?php
+					}
 				}
 				?>
 			</div>

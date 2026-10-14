@@ -18,6 +18,7 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 		content,
 		ctaText,
 		ctaUrl,
+		ctaStyle,
 		order,
 		mobileOrder,
 		mediaType,
@@ -96,24 +97,36 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 					onChange={ ( value ) => setAttributes( { content: value } ) }
 				/>
 			</div>
-			<div style={ { display: 'flex', flexWrap: 'wrap', gap: '12px' } }>
-				<div style={ { flex: '50 1 0%' } }>
-					<TextControl
-						label={ __( 'CTA text', 'hub-gsct2026' ) }
-						value={ ctaText }
-						onChange={ ( value ) => setAttributes( { ctaText: value } ) }
+		<div style={ { display: 'flex', flexWrap: 'wrap', gap: '12px' } }>
+			<div style={ { flex: '40 1 0%' } }>
+				<TextControl
+					label={ __( 'CTA text', 'hub-gsct2026' ) }
+					value={ ctaText }
+					onChange={ ( value ) => setAttributes( { ctaText: value } ) }
+				/>
+			</div>
+			<div style={ { flex: '40 1 0%' } }>
+				<div className="hub-editor-field">
+					<label className="hub-editor-field__label">{ __( 'CTA URL', 'hub-gsct2026' ) }</label>
+					<URLInput
+						value={ ctaUrl || '' }
+						onChange={ ( value ) => setAttributes( { ctaUrl: value } ) }
 					/>
 				</div>
-				<div style={ { flex: '50 1 0%' } }>
-					<div className="hub-editor-field">
-						<label className="hub-editor-field__label">{ __( 'CTA URL', 'hub-gsct2026' ) }</label>
-						<URLInput
-							value={ ctaUrl || '' }
-							onChange={ ( value ) => setAttributes( { ctaUrl: value } ) }
-						/>
-					</div>
-				</div>
 			</div>
+			<div style={ { flex: '20 1 0%' } }>
+				<RadioControl
+					className="hub-radio-horizontal"
+					label={ __( 'CTA style', 'hub-gsct2026' ) }
+					selected={ ctaStyle || 'button' }
+					options={ [
+						{ label: __( 'Button', 'hub-gsct2026' ), value: 'button' },
+						{ label: __( 'Link', 'hub-gsct2026' ), value: 'link' },
+					] }
+					onChange={ ( value ) => setAttributes( { ctaStyle: value } ) }
+				/>
+			</div>
+		</div>
 		<div style={ { display: 'flex', flexWrap: 'wrap', gap: '12px' } }>
 			<div style={ { flex: '50 1 0%' } }>
 				<RadioControl

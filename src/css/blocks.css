@@ -647,6 +647,20 @@ body.has-investis-tool a.active {
 	margin: 0 0 var(--space-3);
 }
 
+/* Link-style CTA (ctaStyle "link") — cards-section link layout (flex row,
+   text + arrow) in black rather than white, left-aligned with the copy
+   rather than pushed right. */
+.hub-content-block__link {
+	color: var(--col-black);
+	justify-content: flex-start;
+}
+
+.hub-content-block__link .hub-cards-section__link-text {
+	color: var(--col-black);
+	text-decoration: underline;
+	text-underline-offset: 0.15em;
+}
+
 /* --- src/blocks/definition-list.css --- */
 /* Facts render in order, pairing consecutive rows on desktop and
    stacking the same sequence on mobile — no reordering CSS anywhere. The
