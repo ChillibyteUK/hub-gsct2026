@@ -63,22 +63,34 @@ $wrapper_attributes = get_block_wrapper_attributes( array( 'class' => 'hub-how-t
 			?>
 			<div class="hub-how-to-invest-full__platforms mb-5">
 				<?php
-				foreach ( $platforms as $platform ) {
-					$logo_url  = $platform['logoUrl'] ?? '';
-					$link_url  = $platform['linkUrl'] ?? '';
-					if ( ! $logo_url ) {
-						continue;
-					}
-					if ( $link_url ) {
-						?>
-						<a class="hub-how-to-invest-full__platform" href="<?= esc_url( $link_url ); ?>" target="_blank"><img src="<?= esc_url( $logo_url ); ?>" alt=""></a>
-						<?php
-					} else {
-						?>
-						<span class="hub-how-to-invest-full__platform"><img src="<?= esc_url( $logo_url ); ?>" alt=""></span>
-						<?php
-					}
+			foreach ( $platforms as $platform ) {
+				$logo_id   = absint( $platform['logo'] ?? 0 );
+				$logo_url  = $platform['logoUrl'] ?? '';
+				$link_url  = $platform['linkUrl'] ?? '';
+				if ( ! $logo_url ) {
+					continue;
 				}
+				// Accessible name for the logo — and for the link wrapping
+				// it, which contains nothing else. Media library alt first;
+				// filename-derived fallback so a linked logo is never
+				// announced as nothing when the attachment alt is empty.
+				$logo_alt = $logo_id ? trim( (string) get_post_meta( $logo_id, '_wp_attachment_image_alt', true ) ) : '';
+				if ( '' === $logo_alt ) {
+					$logo_alt = pathinfo( (string) $logo_url, PATHINFO_FILENAME );
+					$logo_alt = preg_replace( '/[-_]+/', ' ', $logo_alt );
+					$logo_alt = preg_replace( '/\s+\d+$/', '', trim( (string) $logo_alt ) );
+					$logo_alt = ucwords( (string) $logo_alt );
+				}
+				if ( $link_url ) {
+					?>
+					<a class="hub-how-to-invest-full__platform" href="<?= esc_url( $link_url ); ?>" target="_blank" rel="noopener"><img src="<?= esc_url( $logo_url ); ?>" alt="<?= esc_attr( $logo_alt ); ?>"></a>
+					<?php
+				} else {
+					?>
+					<span class="hub-how-to-invest-full__platform"><img src="<?= esc_url( $logo_url ); ?>" alt="<?= esc_attr( $logo_alt ); ?>"></span>
+					<?php
+				}
+			}
 				?>
 			</div>
 			<?php
