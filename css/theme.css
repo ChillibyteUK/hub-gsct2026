@@ -3477,6 +3477,7 @@ body.has-investis-tool a.active {
     }
 .hub-contact .number {
         margin-inline: auto;
+        margin-bottom: var(--space-3);
     }
 @media (max-width: 767px) {
         .hub-contact .hub-contact__num {

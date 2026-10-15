@@ -516,6 +516,7 @@ body.has-investis-tool a.active {
 
     .number {
         margin-inline: auto;
+        margin-bottom: var(--space-3);
     }
 
     @media (max-width: 767px) {
