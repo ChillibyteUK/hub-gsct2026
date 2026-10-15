@@ -1,8 +1,8 @@
-/* HUB Share Price — live price card on brand-yellow. Layout reuses the
+/* HUB Share Price — live price card. Layout reuses the
    theme .row/.col grid; everything else is scoped here. */
 
 .hub-share-price__card {
-	background-color: var(--col-brand-yellow);
+	background-color: var(--col-lightest-grey);
 	border-radius: var(--radius-lg);
 	padding: var(--space-5) var(--space-4);
 	color: var(--col-black);
