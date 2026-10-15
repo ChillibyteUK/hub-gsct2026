@@ -21,3 +21,20 @@
 		scroll-snap-align: start;
 	}
 }
+
+/* Mobile: the track sits in its own .container-width slider but drops the
+   container padding on both sides, so cards scroll edge to edge. The left
+   indent moves onto the track itself (padding + matching scroll-padding so
+   snapping lands on it), keeping the first card aligned with the title;
+   the track's ::after spacer (related-insights) supplies the end-of-scroll
+   breathing room. */
+@media (max-width: 991px) {
+	.hub-latest-posts-docs__slider {
+		padding-inline: 0;
+	}
+
+	.hub-latest-posts-docs__slider .hub-related-insights__track {
+		padding-left: var(--container-padding);
+		scroll-padding-left: var(--container-padding);
+	}
+}

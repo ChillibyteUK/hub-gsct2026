@@ -4875,10 +4875,13 @@ a.hub-how-to-invest-full__platform:focus-visible {
 		border-radius: 50%;
 		background-color: var(--col-black);
 		cursor: pointer;
+
+		transition: transform 150ms ease;
 	}
 
 		.hub-related-insights__dot.is-active {
 			background-color: var(--col-brand-purple);
+			transform: scale(1.4);
 		}
 }
 
@@ -4904,6 +4907,23 @@ a.hub-how-to-invest-full__platform:focus-visible {
 	.hub-latest-posts-docs .hub-document-library-hero__card[data-hub-carousel-card] {
 		flex: 0 0 78%;
 		scroll-snap-align: start;
+	}
+}
+
+/* Mobile: the track sits in its own .container-width slider but drops the
+   container padding on both sides, so cards scroll edge to edge. The left
+   indent moves onto the track itself (padding + matching scroll-padding so
+   snapping lands on it), keeping the first card aligned with the title;
+   the track's ::after spacer (related-insights) supplies the end-of-scroll
+   breathing room. */
+@media (max-width: 991px) {
+	.hub-latest-posts-docs__slider {
+		padding-inline: 0;
+	}
+
+	.hub-latest-posts-docs__slider .hub-related-insights__track {
+		padding-left: var(--container-padding);
+		scroll-padding-left: var(--container-padding);
 	}
 }
 
@@ -5003,6 +5023,59 @@ a.hub-nav-cards__card:focus-visible {
             object-fit: cover;
             margin-bottom: var(--space-4);
         }
+/* Mobile: same swipe treatment as HUB Latest Posts and Documents — the
+   track sits in a .container-width slider that drops its side padding so
+   cards run edge to edge; the left indent moves onto the track (padding +
+   scroll-padding) to keep the first card aligned with the intro. Dots
+   reuse the Related Insights dot styles and are driven by the shared
+   dot-carousel JS (related-insights.js). Desktop keeps the grid. */
+.hub-people-cards__footer {
+	display: none;
+}
+
+@media (max-width: 991px) {
+	.hub-people-cards__slider {
+		padding-inline: 0;
+	}
+
+	.hub-people-cards__track {
+		display: flex;
+		overflow-x: auto;
+		scroll-snap-type: x mandatory;
+		scrollbar-width: none;
+		padding-left: var(--container-padding);
+		scroll-padding-left: var(--container-padding);
+	}
+
+		.hub-people-cards__track::-webkit-scrollbar {
+			display: none;
+		}
+
+		/* Trailing breathing room as a real flex item (trailing padding on
+		   a scroll container isn't reliably scrollable-to). */
+		.hub-people-cards__track::after {
+			content: "";
+			flex: 0 0 var(--container-padding);
+		}
+
+	.hub-people-cards__card {
+		flex: 0 0 78%;
+		scroll-snap-align: start;
+	}
+
+	.hub-people-cards__role {
+		color: var(--col-medium-grey);
+	}
+
+	.hub-people-cards .hub-related-insights__dot.is-active {
+		background-color: var(--col-brand-red);
+	}
+
+	.hub-people-cards__footer {
+		display: flex;
+		margin-top: var(--space-4);
+	}
+}
 
 /* --- src/blocks/primary-hero.css --- */
 /* Responsive crosshair over an image background, positioned

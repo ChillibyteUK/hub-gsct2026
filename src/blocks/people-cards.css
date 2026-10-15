@@ -17,3 +17,56 @@
         }
     }
 }
+/* Mobile: same swipe treatment as HUB Latest Posts and Documents — the
+   track sits in a .container-width slider that drops its side padding so
+   cards run edge to edge; the left indent moves onto the track (padding +
+   scroll-padding) to keep the first card aligned with the intro. Dots
+   reuse the Related Insights dot styles and are driven by the shared
+   dot-carousel JS (related-insights.js). Desktop keeps the grid. */
+.hub-people-cards__footer {
+	display: none;
+}
+
+@media (max-width: 991px) {
+	.hub-people-cards__slider {
+		padding-inline: 0;
+	}
+
+	.hub-people-cards__track {
+		display: flex;
+		overflow-x: auto;
+		scroll-snap-type: x mandatory;
+		scrollbar-width: none;
+		padding-left: var(--container-padding);
+		scroll-padding-left: var(--container-padding);
+
+		&::-webkit-scrollbar {
+			display: none;
+		}
+
+		/* Trailing breathing room as a real flex item (trailing padding on
+		   a scroll container isn't reliably scrollable-to). */
+		&::after {
+			content: "";
+			flex: 0 0 var(--container-padding);
+		}
+	}
+
+	.hub-people-cards__card {
+		flex: 0 0 78%;
+		scroll-snap-align: start;
+	}
+
+	.hub-people-cards__role {
+		color: var(--col-medium-grey);
+	}
+
+	.hub-people-cards .hub-related-insights__dot.is-active {
+		background-color: var(--col-brand-red);
+	}
+
+	.hub-people-cards__footer {
+		display: flex;
+		margin-top: var(--space-4);
+	}
+}

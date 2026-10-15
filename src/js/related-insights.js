@@ -15,7 +15,7 @@ export function initRelatedInsights() {
 		.querySelectorAll( '.hub-related-insights, [data-hub-carousel]' )
 		.forEach( ( section ) => {
 			const track = section.querySelector(
-				'.hub-related-insights__track'
+				'.hub-related-insights__track, [data-hub-carousel-track]'
 			);
 			const cards = Array.from(
 				section.querySelectorAll( '[data-hub-carousel-card]' )

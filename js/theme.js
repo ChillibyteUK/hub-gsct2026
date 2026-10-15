@@ -863,7 +863,7 @@
 	function initRelatedInsights() {
 	  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 	  document.querySelectorAll('.hub-related-insights, [data-hub-carousel]').forEach(section => {
-	    const track = section.querySelector('.hub-related-insights__track');
+	    const track = section.querySelector('.hub-related-insights__track, [data-hub-carousel-track]');
 	    const cards = Array.from(section.querySelectorAll('[data-hub-carousel-card]'));
 	    const dots = Array.from(section.querySelectorAll('[data-hub-related-dot]'));
 	    if (!track || cards.length === 0 || dots.length === 0) return;

@@ -50,18 +50,20 @@ if ( ! $hub_posts && ! $hub_docs ) {
 $wrapper_attributes = get_block_wrapper_attributes( array( 'class' => 'hub-latest-posts-docs' ) );
 ?>
 <section <?php echo $wrapper_attributes; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- get_block_wrapper_attributes() already escapes. ?>>
-	<div class="container">
-		<?php
+	<?php
 		if ( $hub_posts ) {
 			?>
 			<div data-hub-carousel>
 				<?php
 				if ( '' !== trim( $posts_title ) ) {
 					?>
-					<h2 class="hub-related-insights__title"><?= esc_html( $posts_title ); ?></h2>
+					<div class="container">
+						<h2 class="hub-related-insights__title"><?= esc_html( $posts_title ); ?></h2>
+					</div>
 					<?php
 				}
 				?>
+				<div class="container hub-latest-posts-docs__slider">
 				<div class="hub-related-insights__track">
 					<?php
 					foreach ( $hub_posts as $hub_post ) {
@@ -102,6 +104,8 @@ $wrapper_attributes = get_block_wrapper_attributes( array( 'class' => 'hub-lates
 					}
 					?>
 				</div>
+				</div>
+				<div class="container">
 				<div class="hub-related-insights__footer">
 					<div class="hub-related-insights__dots" aria-hidden="true">
 						<?php
@@ -117,6 +121,7 @@ $wrapper_attributes = get_block_wrapper_attributes( array( 'class' => 'hub-lates
 						<svg class="hub-related-insights__link-arrow" width="18" height="15" viewBox="0 0 18 15" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M1 7.4H17M9 13.8L17 7.4L9 1" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
 					</a>
 				</div>
+				</div>
 			</div>
 			<?php
 		}
@@ -126,10 +131,13 @@ $wrapper_attributes = get_block_wrapper_attributes( array( 'class' => 'hub-lates
 				<?php
 				if ( '' !== trim( $docs_title ) ) {
 					?>
-					<h2 class="hub-related-insights__title"><?= esc_html( $docs_title ); ?></h2>
+					<div class="container">
+						<h2 class="hub-related-insights__title"><?= esc_html( $docs_title ); ?></h2>
+					</div>
 					<?php
 				}
 				?>
+				<div class="container hub-latest-posts-docs__slider">
 				<div class="hub-related-insights__track">
 					<?php
 					foreach ( $hub_docs as $card ) {
@@ -189,6 +197,8 @@ $wrapper_attributes = get_block_wrapper_attributes( array( 'class' => 'hub-lates
 					}
 					?>
 				</div>
+				</div>
+				<div class="container">
 				<div class="hub-related-insights__footer">
 					<div class="hub-related-insights__dots" aria-hidden="true">
 						<?php
@@ -204,9 +214,9 @@ $wrapper_attributes = get_block_wrapper_attributes( array( 'class' => 'hub-lates
 						<svg class="hub-related-insights__link-arrow" width="18" height="15" viewBox="0 0 18 15" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M1 7.4H17M9 13.8L17 7.4L9 1" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
 					</a>
 				</div>
+				</div>
 			</div>
 			<?php
 		}
-		?>
-	</div>
+	?>
 </section>

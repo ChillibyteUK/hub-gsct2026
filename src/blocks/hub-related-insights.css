@@ -146,8 +146,11 @@
 		background-color: var(--col-black);
 		cursor: pointer;
 
+		transition: transform 150ms ease;
+
 		&.is-active {
 			background-color: var(--col-brand-purple);
+			transform: scale(1.4);
 		}
 	}
 }
