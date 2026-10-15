@@ -48,7 +48,7 @@ $disclaimers = hub_gsct2026_get_setting( 'footer_disclaimers' );
 					<li><a href="/cookie-policy/">Cookie Policy</a></li>
 				</nav>
 			</div>
-			<div class="mt-5"><?= wp_kses_post( $disclaimers ); ?></div>
+			<div class="mt-5"><?= wp_kses_post( wpautop( $disclaimers ) ); ?></div>
 		</div>
 	</div>
 </footer>
