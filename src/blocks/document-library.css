@@ -132,6 +132,7 @@
 }
 
 .hub-document-library__table-wrap {
+	position: relative;
 	overflow-x: auto;
 }
 

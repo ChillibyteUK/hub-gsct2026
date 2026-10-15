@@ -4237,6 +4237,7 @@ a.hub-document-library-hero__card:focus-visible {
 }
 
 .hub-document-library__table-wrap {
+	position: relative;
 	overflow-x: auto;
 }
 
@@ -4566,7 +4567,7 @@ a.hub-document-library-hero__card:focus-visible {
 }
 
 .hub-how-to-invest-full__platform img {
-    max-width: 160px;
+    max-width: min(160px, 100%);
     max-height: 70px;
     width: auto;
     height: auto;
@@ -4596,7 +4597,7 @@ a.hub-how-to-invest-full__platform:focus-visible {
         padding: 1rem;
     }
 :is(.hub-how-to-invest .logos__logo) img {
-            max-width: 160px;
+            max-width: min(160px, 100%);
             max-height: 70px;
             width: auto;
             height: auto;
