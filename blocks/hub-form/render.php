@@ -24,7 +24,7 @@ $wrapper_attributes = get_block_wrapper_attributes( array( 'class' => 'hub-form'
 <section <?php echo $wrapper_attributes; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- get_block_wrapper_attributes() already escapes. ?>>
 	<div class="container py-6">
 		<div class="row">
-			<div class="col-md-8 offset-md-2 col-lg-6 offset-lg-3">
+			<div class="col-12 col-md-8 offset-md-2 col-lg-6 offset-lg-3">
 				<div class="hub-content-block__form">
 					<?php
 					if ( $form_title ) {

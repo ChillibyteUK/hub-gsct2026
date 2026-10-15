@@ -3462,6 +3462,36 @@ body.has-investis-tool a.active {
     text-decoration: underline;
 }
 
+/* --- src/blocks/contact.css --- */
+/* HUB Contact — shares the hub-3-points layout (see 3-points.css). Desktop
+   shows the numbered circles; below md the numbers swap for icons, the
+   points centre and the rules between them drop. */
+.hub-contact h1 {
+        border-bottom: none;
+    }
+.hub-contact .hub-contact__icon {
+        display: none;
+    }
+.hub-contact .hub-3-points__point {
+        text-align: center;
+    }
+.hub-contact .number {
+        margin-inline: auto;
+    }
+@media (max-width: 767px) {
+        .hub-contact .hub-contact__num {
+            display: none;
+        }
+
+        .hub-contact .hub-contact__icon {
+            display: flex;
+        }
+
+        .hub-contact .hub-3-points__points {
+            row-rule: none;
+        }
+    }
+
 /* --- src/blocks/content-block.css --- */
 /* Media column fills its ratio box (aspect set inline from the block's
    aspect-ratio attribute); video embeds in a fixed 16/9 frame. Desktop
