@@ -78,7 +78,7 @@ $wrapper_attributes = get_block_wrapper_attributes( array( 'class' => 'hub-multi
 						}
 						if ( $video_subtitle ) {
 							?>
-							<p class="text-body"><?= esc_html( $video_subtitle ); ?></p>
+							<p class="text-body"><?= esc_html( preg_replace( '/\s+[-–—]\s+/u', ' · ', $video_subtitle ) ); ?></p>
 							<?php
 						}
 						?>

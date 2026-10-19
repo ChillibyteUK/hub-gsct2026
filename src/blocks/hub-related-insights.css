@@ -69,7 +69,7 @@
 .hub-related-insights__meta {
 	display: block;
 	margin-top: var(--space-1);
-	color: var(--col-grey-600);
+	color: var(--col-black);
 	font-size: var(--fs-small);
 }
 
@@ -152,5 +152,46 @@
 			background-color: var(--col-brand-purple);
 			transform: scale(1.4);
 		}
+	}
+}
+
+/* Mobile card spec (Figma Homepage-Mobile): 320px cards with a 16:9 image
+   (320x180), text inset 16px from the image edge, date above the title.
+   Markup stays title-then-date for desktop, so the order swaps here with
+   flex. Spacing: image to date 12px, date to title 8px. Below md only —
+   the carousel is a plain grid above it. */
+@media (max-width: 767px) {
+	.hub-related-insights__card {
+		display: flex;
+		flex-direction: column;
+		flex: 0 0 320px;
+	}
+
+	.hub-related-insights__media {
+		aspect-ratio: 16 / 9;
+	}
+
+	.hub-related-insights__meta {
+		order: 1;
+		margin-top: 0.75rem;
+		padding-inline: 1rem;
+		color: var(--col-black);
+		font-size: var(--fs-400);
+		line-height: 1.5;
+	}
+
+	.hub-related-insights__card-title {
+		order: 2;
+		margin-top: var(--space-2);
+		padding-inline: 1rem;
+		font-weight: var(--fw-medium);
+		letter-spacing: -0.03em;
+	}
+
+	/* Dots take the same 1rem inset so they line up with the card text.
+	   Scoped to the section so other blocks borrowing the dot styles
+	   (People Cards, Document Library Hero) keep their own alignment. */
+	.hub-related-insights .hub-related-insights__dots {
+		margin-left: 1rem;
 	}
 }

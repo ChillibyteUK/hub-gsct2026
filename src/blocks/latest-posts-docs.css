@@ -19,6 +19,13 @@
 	.hub-latest-posts-docs .hub-document-library-hero__card[data-hub-carousel-card] {
 		flex: 0 0 78%;
 		scroll-snap-align: start;
+		/* height:100% (from the hero card) can't resolve against a track
+		   that sizes to its tallest card, so the cards stayed at their own
+		   heights: a short first card left its dots further below it than
+		   the posts' dots. auto lets the flex row stretch them all to the
+		   tallest, so the dots sit the same distance below the cards as
+		   they do under the posts. */
+		height: auto;
 	}
 }
 
@@ -36,5 +43,15 @@
 	.hub-latest-posts-docs__slider .hub-related-insights__track {
 		padding-left: var(--container-padding);
 		scroll-padding-left: var(--container-padding);
+	}
+}
+
+/* Mobile: the post cards' text is inset 1rem from the image edge (see
+   hub-related-insights.css), so the dots take the same inset — in both
+   groups, so the document dots line up with the post dots and with the
+   left edge of the card title/meta. */
+@media (max-width: 767px) {
+	.hub-latest-posts-docs .hub-related-insights__dots {
+		margin-left: 1rem;
 	}
 }

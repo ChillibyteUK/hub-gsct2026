@@ -2691,6 +2691,61 @@ select {
 	color: var(--col-grey-700);
 }
 
+/* Mobile card spec (Figma Insights-Mobile): text inset 16px from the image
+   edge, image to date 16px, date to title 8px, 64px between cards (3rem
+   margin + the grid's 1rem gap). Date is
+   16/24 #333333. Secondary cards drop the excerpt and take a 24px Medium
+   title (-3% tracking); the featured card keeps its excerpt at 20/28
+   #333333. Below md only. */
+@media (max-width: 767px) {
+	/* 3rem + the grid's own 1rem row gap = the 64px Figma gap. */
+	.hub-insight-card {
+		margin-bottom: 3rem;
+	}
+
+	.hub-insight-card__meta {
+		margin-top: var(--space-3);
+		padding-inline: var(--space-3);
+		color: var(--col-dark-grey);
+		font-size: var(--fs-400);
+		line-height: 1.5;
+	}
+
+	.hub-insight-card__title {
+		margin-top: var(--space-2);
+		padding-inline: var(--space-3);
+	}
+
+	.hub-insight-card:not(.hub-insight-card--featured) .hub-insight-card__title {
+		font-size: 24px;
+		line-height: 32px;
+		font-weight: var(--fw-medium);
+		letter-spacing: -0.03em;
+	}
+
+	.hub-insight-card:not(.hub-insight-card--featured) .hub-insight-card__excerpt {
+		display: none;
+	}
+
+	.hub-insight-card__body {
+		margin-top: var(--space-2);
+		padding-inline: var(--space-3);
+	}
+
+	/* The body wrapper already carries the inset; the title and excerpt
+	   inside it must not double it. */
+	.hub-insight-card__body .hub-insight-card__title {
+		margin-top: 0;
+		padding-inline: 0;
+	}
+
+	.hub-insight-card--featured .hub-insight-card__excerpt {
+		color: var(--col-dark-grey);
+		font-size: 20px;
+		line-height: 28px;
+	}
+}
+
 /*
  * Featured card title/excerpt split — deliberately NOT .row/.col-*: that
  * body sits inside <article>, not directly in the listing grid, so the
@@ -5024,7 +5079,7 @@ a.hub-how-to-invest-full__platform:focus-visible {
 .hub-related-insights__meta {
 	display: block;
 	margin-top: var(--space-1);
-	color: var(--col-grey-600);
+	color: var(--col-black);
 	font-size: var(--fs-small);
 }
 
@@ -5110,6 +5165,47 @@ a.hub-how-to-invest-full__platform:focus-visible {
 		}
 }
 
+/* Mobile card spec (Figma Homepage-Mobile): 320px cards with a 16:9 image
+   (320x180), text inset 16px from the image edge, date above the title.
+   Markup stays title-then-date for desktop, so the order swaps here with
+   flex. Spacing: image to date 12px, date to title 8px. Below md only —
+   the carousel is a plain grid above it. */
+@media (max-width: 767px) {
+	.hub-related-insights__card {
+		display: flex;
+		flex-direction: column;
+		flex: 0 0 320px;
+	}
+
+	.hub-related-insights__media {
+		aspect-ratio: 16 / 9;
+	}
+
+	.hub-related-insights__meta {
+		order: 1;
+		margin-top: 0.75rem;
+		padding-inline: 1rem;
+		color: var(--col-black);
+		font-size: var(--fs-400);
+		line-height: 1.5;
+	}
+
+	.hub-related-insights__card-title {
+		order: 2;
+		margin-top: var(--space-2);
+		padding-inline: 1rem;
+		font-weight: var(--fw-medium);
+		letter-spacing: -0.03em;
+	}
+
+	/* Dots take the same 1rem inset so they line up with the card text.
+	   Scoped to the section so other blocks borrowing the dot styles
+	   (People Cards, Document Library Hero) keep their own alignment. */
+	.hub-related-insights .hub-related-insights__dots {
+		margin-left: 1rem;
+	}
+}
+
 /* --- src/blocks/latest-posts-docs.css --- */
 /* HUB Latest Posts and Documents — two swipeable groups (posts as
    Related Insights cards, documents as Document Library Hero cards) on
@@ -5132,6 +5228,13 @@ a.hub-how-to-invest-full__platform:focus-visible {
 	.hub-latest-posts-docs .hub-document-library-hero__card[data-hub-carousel-card] {
 		flex: 0 0 78%;
 		scroll-snap-align: start;
+		/* height:100% (from the hero card) can't resolve against a track
+		   that sizes to its tallest card, so the cards stayed at their own
+		   heights: a short first card left its dots further below it than
+		   the posts' dots. auto lets the flex row stretch them all to the
+		   tallest, so the dots sit the same distance below the cards as
+		   they do under the posts. */
+		height: auto;
 	}
 }
 
@@ -5149,6 +5252,16 @@ a.hub-how-to-invest-full__platform:focus-visible {
 	.hub-latest-posts-docs__slider .hub-related-insights__track {
 		padding-left: var(--container-padding);
 		scroll-padding-left: var(--container-padding);
+	}
+}
+
+/* Mobile: the post cards' text is inset 1rem from the image edge (see
+   hub-related-insights.css), so the dots take the same inset — in both
+   groups, so the document dots line up with the post dots and with the
+   left edge of the card title/meta. */
+@media (max-width: 767px) {
+	.hub-latest-posts-docs .hub-related-insights__dots {
+		margin-left: 1rem;
 	}
 }
 

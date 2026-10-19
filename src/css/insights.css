@@ -177,6 +177,61 @@
 	color: var(--col-grey-700);
 }
 
+/* Mobile card spec (Figma Insights-Mobile): text inset 16px from the image
+   edge, image to date 16px, date to title 8px, 64px between cards (3rem
+   margin + the grid's 1rem gap). Date is
+   16/24 #333333. Secondary cards drop the excerpt and take a 24px Medium
+   title (-3% tracking); the featured card keeps its excerpt at 20/28
+   #333333. Below md only. */
+@media (max-width: 767px) {
+	/* 3rem + the grid's own 1rem row gap = the 64px Figma gap. */
+	.hub-insight-card {
+		margin-bottom: 3rem;
+	}
+
+	.hub-insight-card__meta {
+		margin-top: var(--space-3);
+		padding-inline: var(--space-3);
+		color: var(--col-dark-grey);
+		font-size: var(--fs-400);
+		line-height: 1.5;
+	}
+
+	.hub-insight-card__title {
+		margin-top: var(--space-2);
+		padding-inline: var(--space-3);
+	}
+
+	.hub-insight-card:not(.hub-insight-card--featured) .hub-insight-card__title {
+		font-size: 24px;
+		line-height: 32px;
+		font-weight: var(--fw-medium);
+		letter-spacing: -0.03em;
+	}
+
+	.hub-insight-card:not(.hub-insight-card--featured) .hub-insight-card__excerpt {
+		display: none;
+	}
+
+	.hub-insight-card__body {
+		margin-top: var(--space-2);
+		padding-inline: var(--space-3);
+	}
+
+	/* The body wrapper already carries the inset; the title and excerpt
+	   inside it must not double it. */
+	.hub-insight-card__body .hub-insight-card__title {
+		margin-top: 0;
+		padding-inline: 0;
+	}
+
+	.hub-insight-card--featured .hub-insight-card__excerpt {
+		color: var(--col-dark-grey);
+		font-size: 20px;
+		line-height: 28px;
+	}
+}
+
 /*
  * Featured card title/excerpt split — deliberately NOT .row/.col-*: that
  * body sits inside <article>, not directly in the listing grid, so the
