@@ -190,7 +190,6 @@
 	.hub-related-insights__meta {
 		order: 1;
 		margin-top: 0.75rem;
-		padding-inline: 1rem;
 		color: var(--col-black);
 		font-size: var(--fs-400);
 		line-height: 1.5;
@@ -199,14 +198,23 @@
 	.hub-related-insights__card-title {
 		order: 2;
 		margin-top: var(--space-2);
-		padding-inline: 1rem;
 		font-weight: var(--fw-medium);
 		letter-spacing: -0.03em;
 	}
 
-	/* Dots take the same 1rem inset so they line up with the card text.
-	   Scoped to the section so other blocks borrowing the dot styles
-	   (People Cards, Document Library Hero) keep their own alignment. */
+}
+
+/* Card text sits 1rem in from the image edge at every width (Figma), and
+   the dots — visible wherever the track is a slider, up to 991px — take the
+   same inset so they line up with it. Dots scoped to the section so other
+   blocks borrowing the dot styles (People Cards, Document Library Hero)
+   keep their own alignment. */
+.hub-related-insights__meta,
+.hub-related-insights__card-title {
+	padding-inline: 1rem;
+}
+
+@media (max-width: 991px) {
 	.hub-related-insights .hub-related-insights__dots {
 		margin-left: 1rem;
 	}

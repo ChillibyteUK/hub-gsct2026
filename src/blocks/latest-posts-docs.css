@@ -46,11 +46,11 @@
 	}
 }
 
-/* Mobile: the post cards' text is inset 1rem from the image edge (see
-   hub-related-insights.css), so the dots take the same inset — in both
-   groups, so the document dots line up with the post dots and with the
-   left edge of the card title/meta. */
-@media (max-width: 767px) {
+/* The post cards' text is inset 1rem from the image edge (see
+   hub-related-insights.css), so the dots (visible up to 991px) take the
+   same inset — in both groups, so the document dots line up with the post
+   dots and with the left edge of the card title/meta. */
+@media (max-width: 991px) {
 	.hub-latest-posts-docs .hub-related-insights__dots {
 		margin-left: 1rem;
 	}

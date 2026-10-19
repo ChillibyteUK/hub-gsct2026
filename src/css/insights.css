@@ -177,8 +177,17 @@
 	color: var(--col-grey-700);
 }
 
-/* Mobile card spec (Figma Insights-Mobile): text inset 16px from the image
-   edge, image to date 16px, date to title 8px, 64px between cards (3rem
+/* Text sits 16px in from the image edge at every width (Figma). The
+   featured card's body wrapper carries the inset for the title/excerpt
+   inside it, so those are only padded when they're direct children. */
+.hub-insight-card > .hub-insight-card__meta,
+.hub-insight-card > .hub-insight-card__title,
+.hub-insight-card > .hub-insight-card__excerpt,
+.hub-insight-card__body {
+	padding-inline: var(--space-3);
+}
+
+/* Mobile card spec (Figma Insights-Mobile): image to date 16px, date to title 8px, 64px between cards (3rem
    margin + the grid's 1rem gap). Date is
    16/24 #333333. Secondary cards drop the excerpt and take a 24px Medium
    title (-3% tracking); the featured card keeps its excerpt at 20/28
@@ -191,7 +200,6 @@
 
 	.hub-insight-card__meta {
 		margin-top: var(--space-3);
-		padding-inline: var(--space-3);
 		color: var(--col-dark-grey);
 		font-size: var(--fs-400);
 		line-height: 1.5;
@@ -199,7 +207,6 @@
 
 	.hub-insight-card__title {
 		margin-top: var(--space-2);
-		padding-inline: var(--space-3);
 	}
 
 	.hub-insight-card:not(.hub-insight-card--featured) .hub-insight-card__title {
@@ -215,14 +222,10 @@
 
 	.hub-insight-card__body {
 		margin-top: var(--space-2);
-		padding-inline: var(--space-3);
 	}
 
-	/* The body wrapper already carries the inset; the title and excerpt
-	   inside it must not double it. */
 	.hub-insight-card__body .hub-insight-card__title {
 		margin-top: 0;
-		padding-inline: 0;
 	}
 
 	.hub-insight-card--featured .hub-insight-card__excerpt {
