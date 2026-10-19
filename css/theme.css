@@ -3906,8 +3906,9 @@ body.has-investis-tool a.active {
 }
 
 .hub-dividends__pills button {
-	padding: var(--space-1) var(--space-3);
-	border: 1px solid var(--col-brand-purple);
+	min-width: 65px;
+	padding: 1rem;
+	border: 1.5px solid var(--col-brand-purple);
 	border-radius: 100vw;
 	background-color: transparent;
 	color: var(--col-brand-purple);
@@ -3916,13 +3917,17 @@ body.has-investis-tool a.active {
 	font-size: var(--fs-400);
 	font-weight: var(--fw-bold);
 	line-height: normal;
-	transition: background-color 200ms ease, color 200ms ease;
+	transition: background-color 200ms ease, color 200ms ease, box-shadow 200ms ease;
 }
 
-.hub-dividends__pills button:hover,
-.hub-dividends__pills button:focus-visible {
-	background-color: var(--col-brand-purple);
-	color: var(--col-white);
+/* Hover rings are inset box-shadows (inside the 1.5px border, no layout
+   shift): off + hover = white fill with a 1.5px purple inner ring;
+   on + hover = stays purple with a 3px white inner ring. */
+@media (hover: hover) {
+	.hub-dividends__pills button:hover {
+		background-color: var(--col-white);
+		box-shadow: inset 0 0 0 1.5px var(--col-brand-purple);
+	}
 }
 
 .hub-dividends__pills button:focus-visible {
@@ -3933,6 +3938,13 @@ body.has-investis-tool a.active {
 .hub-dividends__pills button.is-active {
 	background-color: var(--col-brand-purple);
 	color: var(--col-white);
+}
+
+@media (hover: hover) {
+	.hub-dividends__pills button.is-active:hover {
+		background-color: var(--col-brand-purple);
+		box-shadow: inset 0 0 0 3px var(--col-white);
+	}
 }
 
 .hub-dividends__chart-wrap {
