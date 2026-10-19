@@ -139,3 +139,14 @@
   --nav-height: 6rem;
   --nav-height-mobile: 64px;
 }
+
+/* Mobile page gutter: 24px, up from the 16px used at md and above. Only the
+   container padding changes — --grid-gutter (the gap between columns) stays
+   at 16px. 767px is just under the md breakpoint (768, see
+   src/build/tokens.config.js). Everything that aligns to the page edge
+   reads this token, so the sliders' indents and bleeds follow it. */
+@media (max-width: 767px) {
+  :root {
+    --container-padding: 1.5rem;
+  }
+}

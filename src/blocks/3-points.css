@@ -103,7 +103,33 @@
     }
 }
 
-/* Lines [off] — strips the title's border-bottom and the gap decorations
+/* HUB 3 Points: the title line and the divider lines are separate options.
+   Title line off strips the heading's border-bottom at every size; divider
+   lines are per breakpoint (mobile is max-width 767px, matching the rest
+   of this file) and only strip the gap decorations between the points. */
+.hub-3-points--no-title-line {
+
+    h1,
+    h2 {
+        border-bottom: none;
+    }
+}
+
+@media (min-width: 768px) {
+    .hub-3-points--no-lines-desktop .hub-3-points__points {
+        column-rule: none;
+        row-rule: none;
+    }
+}
+
+@media (max-width: 767px) {
+    .hub-3-points--no-lines-mobile .hub-3-points__points {
+        column-rule: none;
+        row-rule: none;
+    }
+}
+
+/* Lines [off] (HUB 3 Points Hero, single option) — strips the title's border-bottom and the gap decorations
    above when the block's "Lines" field is set to Off. */
 .hub-3-points--no-lines {
 

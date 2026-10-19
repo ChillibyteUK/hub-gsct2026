@@ -24,13 +24,19 @@ $btitle  = $attributes['title'] ?? '';
 $intro   = do_shortcode( $attributes['intro'] ?? '' );
 $points  = $attributes['points'] ?? array();
 $lines   = $attributes['lines'] ?? 'on';
+// Mobile lines: '' (never set, e.g. blocks saved before the option existed)
+// follows the desktop setting, so existing blocks look exactly as before.
+$lines_mobile = '' === ( $attributes['linesMobile'] ?? '' ) ? $lines : $attributes['linesMobile'];
+// Title line (the rule under the heading) is its own on/off, both breakpoints.
+// Unset follows the old combined behaviour: off only when Lines was off.
+$title_line = '' === ( $attributes['titleLine'] ?? '' ) ? ( 'off' === $lines ? 'off' : 'on' ) : $attributes['titleLine'];
 
 $badge_url = $attributes['badgeUrl'] ?? '';
 $badge_alt = $attributes['badgeAlt'] ?? '';
 
 $hub_extra_class = trim( (string) ( $attributes['className'] ?? '' ) );
 
-$wrapper_attributes = get_block_wrapper_attributes( array( 'class' => 'hub-3-points' . ( 'off' === $lines ? ' hub-3-points--no-lines' : '' ) ) );
+$wrapper_attributes = get_block_wrapper_attributes( array( 'class' => 'hub-3-points' . ( 'off' === $lines ? ' hub-3-points--no-lines-desktop' : '' ) . ( 'off' === $lines_mobile ? ' hub-3-points--no-lines-mobile' : '' ) . ( 'off' === $title_line ? ' hub-3-points--no-title-line' : '' ) ) );
 
 if ( '' !== $hub_extra_class ) {
 	// Additional CSS applies to the inner container only — strip it back

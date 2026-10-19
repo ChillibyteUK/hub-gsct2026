@@ -17,7 +17,7 @@ const pointsFields = [
 const pointsEmptyRow = { bigStat: '', subtitle: '', content: '', popover: '', popoverTitle: '', popoverContent: '', popoverImage: 0, popoverImageUrl: '' };
 
 export default function Edit( { attributes, setAttributes, clientId } ) {
-	const { eyebrow, lines, title, titleColour, intro, badgeId, badgeUrl, badgeAlt, points } = attributes;
+	const { eyebrow, lines, linesMobile, titleLine, title, titleColour, intro, badgeId, badgeUrl, badgeAlt, points } = attributes;
 	const blockProps = useBlockProps( { className: 'container hub-editor-block' } );
 
 	return (
@@ -33,13 +33,23 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 				<div style={ { flex: '25 1 0%' } }>
 					<RadioControl
 						className="hub-radio-horizontal"
-						label={ __( 'Lines', 'hub-gsct2026' ) }
+						label={ __( 'Divider lines (desktop)', 'hub-gsct2026' ) }
 						selected={ lines }
 						options={ [
 							{ label: 'On', value: 'on' },
 							{ label: 'Off', value: 'off' },
 						] }
 						onChange={ ( value ) => setAttributes( { lines: value } ) }
+					/>
+					<RadioControl
+						className="hub-radio-horizontal"
+						label={ __( 'Divider lines (mobile)', 'hub-gsct2026' ) }
+						selected={ linesMobile || lines }
+						options={ [
+							{ label: 'On', value: 'on' },
+							{ label: 'Off', value: 'off' },
+						] }
+						onChange={ ( value ) => setAttributes( { linesMobile: value } ) }
 					/>
 				</div>
 			</div>
@@ -61,6 +71,16 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 							{ label: 'Black', value: 'Black' },
 						] }
 						onChange={ ( value ) => setAttributes( { titleColour: value } ) }
+					/>
+					<RadioControl
+						className="hub-radio-horizontal"
+						label={ __( 'Title line', 'hub-gsct2026' ) }
+						selected={ titleLine || ( 'off' === lines ? 'off' : 'on' ) }
+						options={ [
+							{ label: 'On', value: 'on' },
+							{ label: 'Off', value: 'off' },
+						] }
+						onChange={ ( value ) => setAttributes( { titleLine: value } ) }
 					/>
 				</div>
 			</div>
