@@ -2230,6 +2230,9 @@ a.hub-nav-cards__card:focus-visible {
 
 .hub-primary-hero__intro {
 	max-width: 530px;
+	font-size: var(--fs-500);
+	font-weight: var(--fw-medium);
+	line-height: 27px;
 }
 
 .hub-primary-hero__ctas {
