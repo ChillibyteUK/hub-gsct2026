@@ -115,7 +115,7 @@ $wrapper_attributes = get_block_wrapper_attributes(
 					?>
 					<div class="hub-document-library__more"<?= $hub_hidden_terms ? '' : ' hidden'; ?>>
 						<button type="button" class="hub-document-library__pill hub-document-library__more-toggle" aria-expanded="false" aria-haspopup="true">
-							More
+							<span class="hub-document-library__more-toggle-label">More</span>
 							<svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2.5 4.5 6 8l3.5-3.5" /></svg>
 						</button>
 						<div class="hub-document-library__menu" hidden>

@@ -50,11 +50,11 @@
 }
 
 .hub-document-library__pill {
-	display: inline-flex;
-	align-items: center;
-	gap: 0.375rem;
-	padding: var(--space-2) var(--space-3);
-	border: 1px solid var(--col-brand-purple);
+	display: inline-block;
+	text-align: center;
+	min-width: 65px;
+	padding: 1rem;
+	border: 1.5px solid var(--col-brand-purple);
 	border-radius: 100vw;
 	background-color: transparent;
 	color: var(--col-brand-purple);
@@ -63,13 +63,34 @@
 	font-size: var(--fs-400);
 	font-weight: var(--fw-bold);
 	line-height: normal;
-	transition: background-color 200ms ease, color 200ms ease;
+	/* Trim the font's built-in leading so the 1rem padding measures from
+	   cap height to baseline, not from the line box. */
+	text-box: trim-both cap alphabetic;
+	transition: background-color 200ms ease, color 200ms ease, box-shadow 200ms ease;
 }
 
-.hub-document-library__pill:hover,
-.hub-document-library__pill:focus-visible {
-	background-color: var(--col-brand-purple);
-	color: var(--col-white);
+/* More toggle: label + chevron sit in a flex row; the label is its own
+   block (a flex item) so it can be text-trimmed like the other pills. */
+.hub-document-library__more-toggle {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	gap: 0.375rem;
+}
+
+.hub-document-library__more-toggle-label {
+	text-box: trim-both cap alphabetic;
+}
+
+/* Same pill treatment as the HUB Dividends year pills. Hover rings are
+   inset box-shadows inside the 1.5px border (no layout shift): off +
+   hover = white fill with a 1.5px purple inner ring; on + hover = stays
+   purple with a 3px white inner ring. */
+@media (hover: hover) {
+	.hub-document-library__pill:hover {
+		background-color: var(--col-white);
+		box-shadow: inset 0 0 0 1.5px var(--col-brand-purple);
+	}
 }
 
 .hub-document-library__pill:focus-visible {
@@ -80,6 +101,28 @@
 .hub-document-library__pill.active {
 	background-color: var(--col-brand-purple);
 	color: var(--col-white);
+}
+
+@media (hover: hover) {
+	.hub-document-library__pill.active:hover {
+		background-color: var(--col-brand-purple);
+		box-shadow: inset 0 0 0 3px var(--col-white);
+	}
+}
+
+/* The More toggle is never shown as "on" — a selected overflow category
+   is marked inside the menu instead — so it only ever gets the off look
+   and the doubled-border hover, even when the JS flags it .active. */
+.hub-document-library__more-toggle.active {
+	background-color: transparent;
+	color: var(--col-brand-purple);
+}
+
+@media (hover: hover) {
+	.hub-document-library__more-toggle.active:hover {
+		background-color: var(--col-white);
+		box-shadow: inset 0 0 0 1.5px var(--col-brand-purple);
+	}
 }
 
 .hub-document-library__more {

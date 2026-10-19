@@ -46,6 +46,9 @@
 	font-size: var(--fs-400);
 	font-weight: var(--fw-bold);
 	line-height: normal;
+	/* Trim the font's built-in leading so the 1rem padding measures from
+	   cap height to baseline, not from the line box. */
+	text-box: trim-both cap alphabetic;
 	transition: background-color 200ms ease, color 200ms ease, box-shadow 200ms ease;
 }
 
