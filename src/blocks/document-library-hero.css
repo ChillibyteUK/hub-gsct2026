@@ -130,3 +130,11 @@ a.hub-document-library-hero__card:focus-visible {
 		flex: 0 0 calc((100% - 2 * var(--space-3) - 4rem) / 2);
 	}
 }
+
+/* Three-column grid (lg and up): 24px between columns (the row's gap-5 is
+   48px). Below lg the cards are a swipe track with its own gap. */
+@media (min-width: 992px) {
+	.hub-document-library-hero .hub-document-library-hero__cards {
+		gap: var(--space-4);
+	}
+}

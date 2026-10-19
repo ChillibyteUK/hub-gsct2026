@@ -51,3 +51,10 @@ a.hub-nav-cards__card:focus-visible {
 		gap: var(--space-3);
 	}
 }
+
+/* Side by side (md and up): 24px between columns (the row's gap-5 is 48px). */
+@media (min-width: 768px) {
+	.hub-nav-cards .row {
+		gap: var(--space-4);
+	}
+}
