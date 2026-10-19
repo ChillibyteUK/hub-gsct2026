@@ -57,6 +57,23 @@
     padding-inline-end: var(--bleed-offset);
 }
 
+/* Stacked layout (below lg, same switch as the row): drop back into the
+   container so the coloured box and bleed images keep the page margin on
+   both sides; the inner quote's own px-5 supplies the text inset. */
+@media (max-width: 991px) {
+    .hub-content-block__quote--left,
+    .hub-content-block__quote--right {
+        margin-inline: 0;
+        padding-inline: 0;
+    }
+
+    .hub-content-block__media--bleed-left .hub-content-block__image,
+    .hub-content-block__media--bleed-right .hub-content-block__image {
+        width: 100%;
+        margin-inline: 0;
+    }
+}
+
 .hub-content-block__image {
     display: block;
     width: 100%;
