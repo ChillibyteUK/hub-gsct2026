@@ -15,6 +15,8 @@
 .hub-document-library-hero__intro {
 	margin-block: 0 var(--space-5);
 	max-width: 34rem;
+	font-size: var(--fs-500);
+	line-height: 27px;
 }
 
 .hub-document-library-hero__cards-title {
