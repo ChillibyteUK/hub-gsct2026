@@ -122,7 +122,7 @@
   --transition: 150ms ease-in-out;
 
   /* Layout */
-  --container-max-width: 1320px;
+  --container-max-width: 1200px;
   --container-padding: var(--space-3);
   --grid-columns: 12;
   --grid-gutter: var(--space-3);
