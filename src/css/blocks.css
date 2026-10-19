@@ -45,6 +45,8 @@
 
     .hub-3-points__intro {
         max-width: 75%;
+        font-size: var(--fs-500);
+    	line-height: 27px;
     }
 
     /* Badge: right-aligned, centred on the title underline. The head wraps
