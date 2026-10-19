@@ -1219,6 +1219,32 @@
 	      const free = instance.width - axisWidth - count * (bar + gap);
 	      instance.options.layout.padding.right = Math.max(0, free);
 	    },
+	    // The plot area stops short of the canvas edge, so carry the y gridlines
+	    // (including the zero baseline) on across the spare width — the chart
+	    // reads as full width while the bars stay left-aligned.
+	    beforeDatasetsDraw(instance) {
+	      const {
+	        ctx,
+	        chartArea,
+	        scales,
+	        width
+	      } = instance;
+	      const y = scales.y;
+	      if (!y || chartArea.right >= width - 0.5) {
+	        return;
+	      }
+	      ctx.save();
+	      ctx.strokeStyle = y.options.grid.color;
+	      ctx.lineWidth = 1;
+	      ctx.beginPath();
+	      y.ticks.forEach(tick => {
+	        const py = Math.round(y.getPixelForValue(tick.value)) + 0.5;
+	        ctx.moveTo(chartArea.right, py);
+	        ctx.lineTo(width, py);
+	      });
+	      ctx.stroke();
+	      ctx.restore();
+	    },
 	    afterLayout(instance) {
 	      const actual = instance.scales.y ? instance.scales.y.width : axisWidth;
 	      if (Math.abs(actual - axisWidth) > 0.5) {
