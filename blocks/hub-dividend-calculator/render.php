@@ -88,6 +88,9 @@ $wrapper_attributes = get_block_wrapper_attributes( array( 'class' => 'hub-divid
 			<?php
 		}
 		?>
+		<p class="hub-dividend-calculator__provider text-body">
+			Service provided by <img src="<?= esc_url( get_template_directory_uri() . '/img/idx-logo.svg' ); ?>" alt="IDX" width="43" height="10">
+		</p>
 		<div class="screen-reader-text" aria-live="polite" data-div-calc-live></div>
 	</div>
 </section>

@@ -3854,6 +3854,20 @@ body.has-investis-tool a.active {
 	font-size: var(--fs-small);
 }
 
+.hub-dividend-calculator__provider {
+	display: flex;
+	align-items: center;
+	gap: var(--space-1);
+	margin: var(--space-2) 0 0;
+	color: var(--col-grey-600);
+	font-size: var(--fs-small);
+}
+
+.hub-dividend-calculator__provider img {
+	display: block;
+	flex: none;
+}
+
 /* --- src/blocks/dividends.css --- */
 /* HUB Dividends — latest card, annual stacked chart, searchable history
    table. Table striping is class-based (.is-alt, re-applied to visible
