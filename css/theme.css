@@ -2526,27 +2526,52 @@ select {
 
 .hub-filter-pill {
 	display: inline-block;
-	padding: 0.5rem 1.125rem;
-	border: 1px solid var(--col-brand-purple);
+	min-width: 65px;
+	padding: 1rem;
+	border: 1.5px solid var(--col-brand-purple);
 	border-radius: 100vw;
 	background-color: transparent;
 	color: var(--col-brand-purple);
+	text-align: center;
 	text-decoration: none;
 	font-family: var(--font-family-base);
 	font-size: var(--fs-400);
 	font-weight: var(--fw-bold);
 	line-height: normal;
-	transition: background-color var(--transition), color var(--transition);
+	/* Trim the font's built-in leading so the 1rem padding measures from
+	   cap height to baseline, not from the line box. */
+	text-box: trim-both cap alphabetic;
+	transition: background-color var(--transition), color var(--transition), box-shadow var(--transition);
+
+	/* Same pill treatment as HUB Dividends / Document Library, except the
+	   off state stays transparent on hover (these sit on the sunset
+	   hero, so a white fill would punch a hole in it). Hover rings are
+	   inset box-shadows inside the border: off + hover = 1.5px purple
+	   inner ring; on + hover = 3px white inner ring. */
 }
 
-.hub-filter-pill:hover {
-		background-color: color-mix(in srgb, var(--col-brand-purple) 12%, white);
-		color: var(--col-brand-purple);
+@media (hover: hover) {
+		.hub-filter-pill:hover {
+			background-color: transparent;
+			color: var(--col-brand-purple);
+			box-shadow: inset 0 0 0 1.5px var(--col-brand-purple);
+		}
+	}
+
+.hub-filter-pill:focus-visible {
+		outline: 2px solid var(--col-brand-yellow);
+		outline-offset: 2px;
 	}
 
 .hub-filter-pill.is-active {
 		background-color: var(--col-brand-purple);
 		color: var(--col-white);
+	}
+
+@media (hover: hover) {
+		.hub-filter-pill.is-active:hover {
+			box-shadow: inset 0 0 0 3px var(--col-white);
+		}
 	}
 
 /* Overlaps the hero so the featured image sits half on pink, half on white. */
