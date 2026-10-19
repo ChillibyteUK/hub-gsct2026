@@ -33,7 +33,7 @@ $wrapper_attributes = get_block_wrapper_attributes( array( 'class' => 'hub-timel
 	if ( $years ) {
 		?>
 		<div class="hub-timeline__track-wrap">
-			<div class="hub-timeline__track" tabindex="0" role="region" aria-label="<?= esc_attr__( 'Company history timeline', 'hub-gsct2026' ); ?>" data-lenis-prevent>
+			<div class="hub-timeline__track" tabindex="0" role="region" aria-label="<?= esc_attr__( 'Company history timeline', 'hub-gsct2026' ); ?>">
 				<?php
 				foreach ( $years as $item ) {
 					$tyear   = $item['year'] ?? '';

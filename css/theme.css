@@ -5720,15 +5720,12 @@ a.hub-nav-cards__card:focus-visible {
     margin-bottom: 0;
 }
 
-/* data-lenis-prevent in the markup keeps Lenis from swallowing wheel input
-   over the track — but Lenis's own stylesheet then forces
-   overscroll-behavior: contain onto every [data-lenis-prevent] element,
-   which traps gestures here instead of chaining them to the page (dead
-   wheel on desktop, stuck swipe on mobile). Undo it: html.lenis
-   out-specifies Lenis's .lenis selector whatever the load order. */
-html.lenis .hub-timeline__track {
-    overscroll-behavior: auto;
-}
+/* No data-lenis-prevent on the track: it made Lenis ignore *all* wheel
+   input over the row, so the page scrolled natively while Lenis kept
+   easing towards its own stale target — the "friction" when scrolling
+   down through this section. Lenis only takes vertical deltas
+   (gestureOrientation: vertical), so horizontal swipes/shift-wheel still
+   reach the track natively, and vertical wheel stays smooth. */
 
 .hub-timeline__track-wrap {
     position: relative;
@@ -5748,6 +5745,9 @@ html.lenis .hub-timeline__track {
        last card lands fully inside the container instead of kissing the
        viewport edge. */
     padding-inline-end: max(var(--container-padding), calc((100% - var(--container-max-width)) / 2 + var(--container-padding)));
+    /* Horizontal only: don't trap vertical scroll chaining, but keep a
+       sideways swipe at the ends from triggering browser back/forward. */
+    overscroll-behavior-x: contain;
 }
 
 @media (min-width: 768px) {
@@ -5861,6 +5861,7 @@ html.lenis .hub-timeline__track {
     .hub-timeline__track {
         display: block;
         overflow: visible;
+        scroll-snap-type: none;
     }
 
     .hub-timeline__prev,
