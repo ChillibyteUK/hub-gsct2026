@@ -44,3 +44,10 @@ a.hub-nav-cards__card:focus-visible {
 .hub-nav-cards__card-content > *:last-child {
 	margin-bottom: 0;
 }
+
+/* Mobile (Figma): stacked cards sit 16px apart (the row's gap-5 is 48px). */
+@media (max-width: 767px) {
+	.hub-nav-cards .row {
+		gap: var(--space-3);
+	}
+}
