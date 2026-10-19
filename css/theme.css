@@ -3014,7 +3014,7 @@ article h2[id] {
         display: flex;
         align-items: center;
         justify-content: center;
-        margin-bottom: var(--space-2);
+        margin-bottom: var(--space-3);
     }
 
 .hub-3-points h1 {
