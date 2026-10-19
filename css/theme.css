@@ -5490,16 +5490,16 @@ a.hub-nav-cards__card:focus-visible {
 
 .hub-secondary-hero__image--1,
 .hub-secondary-hero__image--5 {
-    height: 300px;
+    height: 315px;
 }
 
 .hub-secondary-hero__image--2,
 .hub-secondary-hero__image--4 {
-    height: 240px;
+    height: 255px;
 }
 
 .hub-secondary-hero__image--primary {
-    height: 345px;
+    height: 360px;
     z-index: 3;
 }
 
