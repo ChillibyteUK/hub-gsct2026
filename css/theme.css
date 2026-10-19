@@ -5113,6 +5113,19 @@ a.hub-how-to-invest-full__platform:focus-visible {
    the footer row. 992px is the lg breakpoint — keep in sync with
    src/build/tokens.config.js. */
 @media (max-width: 991px) {
+	/* The track sits in its own .container-width slider that drops its side
+	   padding, so the cards scroll edge to edge; the left indent moves onto
+	   the track (padding + scroll-padding so snapping lands on it) to keep
+	   the first card aligned with the title. */
+	.hub-related-insights__slider {
+		padding-inline: 0;
+	}
+
+	.hub-related-insights__slider .hub-related-insights__track {
+		padding-left: var(--container-padding);
+		scroll-padding-left: var(--container-padding);
+	}
+
 	.hub-related-insights__track {
 		display: flex;
 		overflow-x: auto;
@@ -5174,7 +5187,10 @@ a.hub-how-to-invest-full__platform:focus-visible {
 	.hub-related-insights__card {
 		display: flex;
 		flex-direction: column;
-		flex: 0 0 320px;
+		/* 320px, but never wider than the track less one gutter, so on a
+		   320px viewport (400% zoom) the card still fits with a sliver of
+		   the next one showing. */
+		flex: 0 0 min(320px, calc(100% - var(--container-padding)));
 	}
 
 	.hub-related-insights__media {

@@ -55,6 +55,8 @@ $archive_url        = get_post_type_archive_link( 'post' );
 <section <?= $wrapper_attributes; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- get_block_wrapper_attributes() already escapes. ?>>
 	<div class="container">
 		<h2 class="hub-related-insights__title"><?= esc_html( $title ); ?></h2>
+	</div>
+	<div class="container hub-related-insights__slider">
 		<div class="hub-related-insights__track">
 			<?php
 			foreach ( $related as $hub_post ) {
@@ -95,6 +97,8 @@ $archive_url        = get_post_type_archive_link( 'post' );
 			}
 			?>
 		</div>
+	</div>
+	<div class="container">
 		<div class="hub-related-insights__footer">
 			<div class="hub-related-insights__dots" aria-hidden="true">
 				<?php
