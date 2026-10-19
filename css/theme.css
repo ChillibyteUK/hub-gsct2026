@@ -2504,11 +2504,7 @@ select {
 
 /* Full-bleed pink hero; the listing below overlaps its bottom edge. */
 .hub-insights-hero {
-	background: linear-gradient(
-		180deg,
-		color-mix(in srgb, var(--col-brand-pink) 55%, white) 0%,
-		var(--col-brand-pink) 100%
-	);
+	background: var(--gradient-sunset);
 	padding-block: var(--space-5) 9rem;
 }
 
