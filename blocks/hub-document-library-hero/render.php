@@ -50,9 +50,14 @@ $wrapper_attributes = get_block_wrapper_attributes( array( 'class' => 'hub-docum
 			<h2 class="hub-document-library-hero__cards-title h2-data-l"><?= esc_html( $cards_title ); ?></h2>
 			<?php
 		}
-		if ( $cards ) {
-			?>
-			<div class="row gap-5 hub-document-library-hero__cards">
+		?>
+	</div>
+	<?php
+	if ( $cards ) {
+		?>
+	<div data-hub-carousel>
+		<div class="container hub-document-library-hero__slider">
+			<div class="row gap-5 hub-document-library-hero__cards" data-hub-carousel-track>
 				<?php
 				foreach ( $cards as $card ) {
 					$card        = (array) $card;
@@ -90,7 +95,7 @@ $wrapper_attributes = get_block_wrapper_attributes( array( 'class' => 'hub-docum
 					$href  = $file_url ? ' href="' . esc_url( $file_url ) . '" download' : '';
 					$label = $card_title ? sprintf( 'Download %s', $card_title ) : 'Download document';
 					?>
-					<div class="col-12 col-md-4">
+					<div class="col-12 col-md-4 hub-document-library-hero__col" data-hub-carousel-card>
 						<<?= $tag; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- hardcoded 'a' or 'div', not stored input. ?> class="hub-document-library-hero__card"<?= $href; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- escaped above. ?><?= $file_url ? ' aria-label="' . esc_attr( $label ) . '"' : ''; ?>>
 						<?php
 						if ( '' !== trim( (string) $card_title ) ) {
@@ -118,8 +123,28 @@ $wrapper_attributes = get_block_wrapper_attributes( array( 'class' => 'hub-docum
 				}
 				?>
 			</div>
+		</div>
+		<?php
+		if ( count( $cards ) > 1 ) {
+			?>
+		<div class="container">
+			<div class="hub-document-library-hero__footer">
+				<div class="hub-related-insights__dots" aria-hidden="true">
+					<?php
+					foreach ( array_keys( $cards ) as $hub_dot_index ) {
+						?>
+					<button type="button" class="hub-related-insights__dot<?= 0 === $hub_dot_index ? ' is-active' : ''; ?>" data-hub-related-dot="<?= esc_attr( $hub_dot_index ); ?>" tabindex="-1"></button>
+						<?php
+					}
+					?>
+				</div>
+			</div>
+		</div>
 			<?php
 		}
 		?>
 	</div>
+		<?php
+	}
+	?>
 </section>

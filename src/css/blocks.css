@@ -1224,6 +1224,65 @@ a.hub-document-library-hero__card:focus-visible {
 	text-underline-offset: 0.15em;
 }
 
+/* Mobile: same swipe treatment as HUB People Cards / Latest Posts and
+   Documents — the grid becomes an edge-to-edge scroll-snap track inside a
+   .container-width slider that drops its side padding; the left indent
+   moves onto the track (padding + scroll-padding) so the first card lines
+   up with the title. Dots reuse the Related Insights dot styles and the
+   shared dot-carousel JS. Desktop keeps the three-column grid. */
+.hub-document-library-hero__footer {
+	display: none;
+}
+
+@media (max-width: 991px) {
+	.hub-document-library-hero__slider {
+		padding-inline: 0;
+	}
+
+	.hub-document-library-hero .hub-document-library-hero__cards {
+		display: flex;
+		overflow-x: auto;
+		scroll-snap-type: x mandatory;
+		scrollbar-width: none;
+		padding-left: var(--container-padding);
+		scroll-padding-left: var(--container-padding);
+		/* The row's gap-5 stays (3rem is wide for a swipe track). */
+		gap: var(--space-3);
+
+		&::-webkit-scrollbar {
+			display: none;
+		}
+
+		/* Trailing breathing room as a real flex item (trailing padding on
+		   a scroll container isn't reliably scrollable-to). */
+		&::after {
+			content: "";
+			flex: 0 0 var(--container-padding);
+		}
+	}
+
+	.hub-document-library-hero__col {
+		flex: 0 0 78%;
+		scroll-snap-align: start;
+	}
+
+	.hub-document-library-hero__footer {
+		display: flex;
+		margin-top: var(--space-4);
+	}
+}
+
+/* Tablet: two full cards plus a 4rem peek of the third, so it still reads
+   as a swipe track like the mobile one. Percentages resolve against the
+   track's content box, which already excludes the left indent: take off two
+   gaps (between the cards, and before the peeking one) and the peek, then
+   split what's left between the two cards. */
+@media (min-width: 768px) and (max-width: 991px) {
+	.hub-document-library-hero__col {
+		flex: 0 0 calc((100% - 2 * var(--space-3) - 4rem) / 2);
+	}
+}
+
 /* --- src/blocks/document-library.css --- */
 /* HUB Document Library — full document table with keyword search,
    category pills (+ More dropdown for overflow categories) and a
