@@ -2514,10 +2514,13 @@ a.hub-nav-cards__card:focus-visible {
 }
 
 /* --- src/blocks/secondary-hero.css --- */
-/* Cover-flow row: fixed portrait heights (widths follow from 2/3),
-   spread across the container with space-between. Side images tilt in 3D
-   (left pair positive, right pair negative); the primary faces forward and
-   layers above the rest. */
+/* Cover-flow row: a fixed gap between images, with widths that share
+   whatever width is left in proportion (--u units: outer 200, inner 160,
+   primary 230 — i.e. the old 300/240/345px heights at 2/3). Because the
+   gaps are fixed and the images flex with the container, the row always
+   fills it exactly: no overflow between breakpoints, no gap drift.
+   Side images tilt in 3D (left pair positive, right pair negative); the
+   primary faces forward and layers above the rest. */
 .hub-secondary-hero {
     background: var(--gradient-sunrise);
     padding-block: var(--space-5);
@@ -2531,30 +2534,31 @@ a.hub-nav-cards__card:focus-visible {
 }
 
 .hub-secondary-hero__media {
+    --gap: 24px;
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    justify-content: center;
+    gap: var(--gap);
     perspective: 1200px;
 }
 
 .hub-secondary-hero__image {
+    --u: 200;
+    flex: 0 0 auto;
+    /* 4 gaps, 950 units across the five images. */
+    width: calc((100% - 4 * var(--gap)) * var(--u) / 950);
     aspect-ratio: 2 / 3;
     object-fit: cover;
     border-radius: var(--radius-lg);
 }
 
-.hub-secondary-hero__image--1,
-.hub-secondary-hero__image--5 {
-    height: 300px;
-}
-
 .hub-secondary-hero__image--2,
 .hub-secondary-hero__image--4 {
-    height: 240px;
+    --u: 160;
 }
 
 .hub-secondary-hero__image--primary {
-    height: 345px;
+    --u: 230;
     z-index: 3;
 }
 
@@ -2578,22 +2582,17 @@ a.hub-nav-cards__card:focus-visible {
     transform: rotateY(-30deg);
 }
 
-/* Mobile: outer two drop away, keeping the middle three, sized by width
-   again (fixed heights would overflow narrow screens). The chained
-   selectors only match when all five are present — fewer images degrade
-   to showing everything. */
+/* Mobile: outer two drop away, keeping the middle three (160/230/160
+   units) with a tighter 16px gap, sharing 87% of the row so they stay the
+   size they were. The chained selectors only match when all five are
+   present — fewer images degrade to showing everything. */
 @media (max-width: 991px) {
     .hub-secondary-hero__media {
-        justify-content: center;
+        --gap: 16px;
     }
 
     .hub-secondary-hero__image {
-        height: auto;
-        width: 27%;
-    }
-
-    .hub-secondary-hero__image--primary {
-        width: 33%;
+        width: calc((87% - 2 * var(--gap)) * var(--u) / 550);
     }
 
     .hub-secondary-hero__image:first-child:nth-last-child(5),
