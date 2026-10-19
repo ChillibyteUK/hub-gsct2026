@@ -52,7 +52,11 @@ if ( ! $video_button_text ) {
 	$video_button_text = __( 'Play video', 'hub-gsct2026' );
 }
 
-$wrapper_attributes = get_block_wrapper_attributes( array( 'class' => 'hub-primary-hero' ) );
+// Front page keeps the big display-xxl heading and the 45% content column;
+// every other page runs a step down (display-xl) and a wider (50%) column.
+$is_front = is_front_page();
+
+$wrapper_attributes = get_block_wrapper_attributes( array( 'class' => 'hub-primary-hero' . ( $is_front ? '' : ' hub-primary-hero--inner' ) ) );
 ?>
 <section <?php echo $wrapper_attributes; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- get_block_wrapper_attributes() already escapes. ?>>
 	<?php /* --focal-x/--focal-y are plain fractions (0–1), not percentages — src/blocks/primary-hero.css and src/js/primary-hero.js multiply them directly against lengths. */ ?>
@@ -68,7 +72,7 @@ $wrapper_attributes = get_block_wrapper_attributes( array( 'class' => 'hub-prima
 			<?php
 			if ( $heading ) {
 				?>
-				<h1 class="hub-primary-hero__heading display-xxl has-brand-yellow-color"><?= wp_kses_post( $heading ); ?></h1>
+				<h1 class="hub-primary-hero__heading <?= $is_front ? 'display-xxl' : 'display-xl'; ?> has-brand-yellow-color"><?= wp_kses_post( $heading ); ?></h1>
 				<?php
 			}
 			if ( $intro_text ) {

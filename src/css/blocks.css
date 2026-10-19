@@ -2490,6 +2490,8 @@ a.hub-nav-cards__card:focus-visible {
 
 	.hub-primary-hero__content {
 		padding-top: calc(3.5rem + min(440px, 90vw) / (631 / 473));
+		/* Line the text up with the page container, not the base 2rem. */
+		padding-inline: var(--container-padding);
 	}
 
 	/* Stacked full-width buttons while collapsed — column direction with
@@ -2527,6 +2529,11 @@ a.hub-nav-cards__card:focus-visible {
 		   width instead of flush to the viewport. */
 		max-width: min(45%, calc(var(--container-max-width) * 0.45));
 		margin-inline-end: max(var(--container-padding), calc((100% - var(--container-max-width)) / 2 + var(--container-padding)));
+	}
+
+	/* Not the front page: same rule at a 50% multiplier. */
+	.hub-primary-hero--inner .hub-primary-hero__content {
+		max-width: min(50%, calc(var(--container-max-width) * 0.5));
 	}
 }
 
