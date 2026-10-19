@@ -1620,6 +1620,30 @@
 	      button.classList.toggle('active', on);
 	      button.setAttribute('aria-pressed', String(on));
 	    };
+
+	    // The menu opens under the More button, which usually sits at the far
+	    // right of the row, so shift it just far enough to stay inside the
+	    // viewport (one rem of breathing room each side). Measured from its
+	    // natural left:0 position every time, so a resize while open re-fits.
+	    const fitMenu = () => {
+	      if (!menu || menu.hidden) {
+	        return;
+	      }
+	      menu.style.left = '';
+	      const rect = menu.getBoundingClientRect();
+	      const viewport = document.documentElement.clientWidth;
+	      const margin = parseFloat(getComputedStyle(document.documentElement).fontSize) || 16;
+	      let shift = 0;
+	      if (rect.right > viewport - margin) {
+	        shift = viewport - margin - rect.right;
+	      }
+	      if (rect.left + shift < margin) {
+	        shift = margin - rect.left;
+	      }
+	      if (0 !== shift) {
+	        menu.style.left = `${shift}px`;
+	      }
+	    };
 	    const closeMenu = () => {
 	      if (!menu || !toggle || menu.hidden) {
 	        return;
@@ -1721,7 +1745,9 @@
 	        const open = menu.hidden;
 	        menu.hidden = !open;
 	        toggle.setAttribute('aria-expanded', String(open));
+	        fitMenu();
 	      });
+	      window.addEventListener('resize', fitMenu);
 	      document.addEventListener('click', event => {
 	        if (more && !more.contains(event.target)) {
 	          closeMenu();

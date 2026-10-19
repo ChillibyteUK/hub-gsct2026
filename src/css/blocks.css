@@ -1355,6 +1355,10 @@ a.hub-document-library-hero__card:focus-visible {
 	transition: background-color 200ms ease, color 200ms ease, box-shadow 200ms ease;
 }
 
+.hub-document-library__more {
+	position: relative;
+}
+
 /* More toggle: label + chevron sit in a flex row; the label is its own
    block (a flex item) so it can be text-trimmed like the other pills. */
 .hub-document-library__more-toggle {
@@ -1411,14 +1415,10 @@ a.hub-document-library-hero__card:focus-visible {
 	}
 }
 
-.hub-document-library__more {
-	position: relative;
-}
-
 .hub-document-library__menu {
 	position: absolute;
 	top: calc(100% + var(--space-1));
-	left: 0;
+	left: 0; /* nudged back inside the viewport by document-library.js */
 	z-index: 10;
 	display: flex;
 	flex-direction: column;
