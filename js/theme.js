@@ -1187,15 +1187,61 @@
 	  if (!years.length) {
 	    return;
 	  }
+
+	  // Bar geometry: bars max out at 40px (26px on mobile) with 32px between
+	  // them, so a category "pitch" tops out at 72px (58px). With plenty of
+	  // width the plot area is narrowed to years x pitch and left-aligned to
+	  // the axis (the spare width goes into the chart's right padding), so the
+	  // spacing never exceeds 32px. When there are more years than fit (the
+	  // All view) the plot fills the width and bars shrink in the same
+	  // bar:gap proportion.
+	  const mobileQuery = window.matchMedia('(max-width: 767px)');
+	  const geometry = () => mobileQuery.matches ? {
+	    bar: 26,
+	    gap: 32
+	  } : {
+	    bar: 40,
+	    gap: 32
+	  };
+	  let axisWidth = 60; // y-axis width from the previous layout pass.
+
+	  const fitPlotArea = {
+	    id: 'hubDividendsFit',
+	    beforeLayout(instance) {
+	      const count = instance.data.labels.length;
+	      if (!count) {
+	        return;
+	      }
+	      const {
+	        bar,
+	        gap
+	      } = geometry();
+	      const free = instance.width - axisWidth - count * (bar + gap);
+	      instance.options.layout.padding.right = Math.max(0, free);
+	    },
+	    afterLayout(instance) {
+	      const actual = instance.scales.y ? instance.scales.y.width : axisWidth;
+	      if (Math.abs(actual - axisWidth) > 0.5) {
+	        axisWidth = actual;
+	        window.requestAnimationFrame(() => instance.update('none'));
+	      }
+	    }
+	  };
 	  const chart = new window.Chart(canvas, {
 	    type: 'bar',
 	    data: {
 	      labels: [],
 	      datasets: []
 	    },
+	    plugins: [fitPlotArea],
 	    options: {
 	      responsive: true,
 	      maintainAspectRatio: false,
+	      layout: {
+	        padding: {
+	          right: 0
+	        }
+	      },
 	      plugins: {
 	        legend: {
 	          display: false
@@ -1244,6 +1290,16 @@
 	      }
 	    }
 	  });
+
+	  // Scriptable so a viewport change between mobile and desktop picks up
+	  // the right bar:pitch ratio on the next layout without a rebuild.
+	  const barShare = () => {
+	    const {
+	      bar,
+	      gap
+	    } = geometry();
+	    return bar / (bar + gap);
+	  };
 	  const render = count => {
 	    const slice = 0 === count ? years : years.slice(-count);
 	    chart.data.labels = slice.map(row => row.year);
@@ -1253,12 +1309,16 @@
 	      label: 'Interim',
 	      data: slice.map(row => row.interim),
 	      backgroundColor: '#7628d4',
+	      categoryPercentage: 1,
+	      barPercentage: barShare,
 	      borderRadius: 3,
 	      borderSkipped: 'start'
 	    }, {
 	      label: 'Final',
 	      data: slice.map(row => row.final),
 	      backgroundColor: '#307eff',
+	      categoryPercentage: 1,
+	      barPercentage: barShare,
 	      borderRadius: 3,
 	      borderSkipped: 'start'
 	    }];
