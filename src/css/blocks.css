@@ -1535,6 +1535,21 @@ a.hub-document-library-hero__card:focus-visible {
 	color: var(--col-white);
 }
 
+/* Hover/focus fills the pill like the other black pills (e.g. Dividends
+   "Show more"); when already pressed it inverts back to outline, hinting
+   that a click clears the filter. */
+@media (hover: hover) {
+	.hub-holdings__toggle:hover {
+		background-color: var(--col-black);
+		color: var(--col-white);
+	}
+
+	.hub-holdings__toggle[aria-pressed="true"]:hover {
+		background-color: transparent;
+		color: var(--col-black);
+	}
+}
+
 .hub-holdings__toggle:focus-visible {
 	outline: 2px solid var(--col-brand-yellow);
 	outline-offset: 2px;
