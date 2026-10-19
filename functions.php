@@ -28,6 +28,7 @@ require_once HUB_GSCT2026_DIR . '/inc/editor.php';
 require_once HUB_GSCT2026_DIR . '/inc/options.php';
 require_once HUB_GSCT2026_DIR . '/inc/social-icons.php';
 require_once HUB_GSCT2026_DIR . '/inc/head-tags.php';
+require_once HUB_GSCT2026_DIR . '/inc/social.php';
 require_once HUB_GSCT2026_DIR . '/inc/block-usage.php';
 require_once HUB_GSCT2026_DIR . '/inc/utilities.php';
 require_once HUB_GSCT2026_DIR . '/inc/helpers.php';

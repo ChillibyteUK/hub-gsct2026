@@ -59,7 +59,7 @@ if ( $is_quote ) {
 $wrapper_attributes = get_block_wrapper_attributes( array( 'class' => 'hub-content-block' ) );
 ?>
 <section <?= $wrapper_attributes; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- get_block_wrapper_attributes() already escapes. ?>>
-	<div class="container py-5">
+	<div class="container py-7">
 		<div class="row gap-6">
 			<div class="<?= esc_attr( $text_class ); ?>">
 				<?php
