@@ -89,7 +89,7 @@ $archive_url        = get_post_type_archive_link( 'post' );
 
 				$hub_meta = sprintf(
 					__( '%s · Article', 'hub-gsct2026' ),
-					get_the_date( 'j M Y', $hub_post->ID )
+					get_the_date( 'd M Y', $hub_post->ID )
 				);
 				?>
 			<a class="hub-related-insights__card" data-hub-carousel-card href="<?= esc_url( get_permalink( $hub_post->ID ) ); ?>">

@@ -12,6 +12,44 @@
 defined( 'ABSPATH' ) || exit;
 
 /**
+ * Site-wide date format: DD Mon YYYY, e.g. 02 Nov 2026.
+ *
+ * For dates typed as free text (document release dates, featured document
+ * cards): tries the day-first formats people actually enter and re-formats
+ * to the standard. Anything it can't read is returned untouched, so odd
+ * text ("Autumn 2026") is never mangled. Real post dates should use
+ * get_the_date( 'd M Y' ) directly.
+ *
+ * @param string $raw Date as entered.
+ * @return string
+ */
+function hub_gsct2026_format_date( $raw ) {
+	$raw = trim( (string) $raw );
+
+	if ( '' === $raw ) {
+		return '';
+	}
+
+	// Two-digit-year formats come before their four-digit twins: PHP's "Y"
+	// happily reads "26" as the year 26.
+	$formats = array( 'd M y', 'j M y', 'd M Y', 'j M Y', 'd F Y', 'j F Y', 'd/m/y', 'j/n/y', 'd/m/Y', 'j/n/Y', 'd-m-y', 'j-n-y', 'd-m-Y', 'j-n-Y', 'd.m.y', 'j.n.y', 'd.m.Y', 'j.n.Y', 'Y-m-d', 'M j, Y', 'M j Y', 'F j, Y', 'F j Y' );
+	$utc     = new DateTimeZone( 'UTC' );
+	// "Sept" is common in UK text but isn't a PHP month abbreviation.
+	$clean   = preg_replace( '/\bSept\b/i', 'Sep', $raw );
+
+	foreach ( $formats as $format ) {
+		$date   = DateTimeImmutable::createFromFormat( '!' . $format, $clean, $utc );
+		$errors = DateTimeImmutable::getLastErrors();
+
+		if ( $date && ( ! $errors || ( 0 === $errors['warning_count'] && 0 === $errors['error_count'] ) ) ) {
+			return $date->format( 'd M Y' );
+		}
+	}
+
+	return $raw;
+}
+
+/**
  * Excerpt derived from the post's own content, ignoring the manual excerpt
  * field entirely.
  *
@@ -93,7 +131,7 @@ function hub_gsct2026_learning_card( $post, $span = 'col-12 col-md-6 col-lg-4' )
 				}
 				?>
 			</div>
-			<p class="hub-insight-card__meta"><?= esc_html( sprintf( '%s · Article', get_the_date( 'j M Y', $post ) ) ); ?></p>
+			<p class="hub-insight-card__meta"><?= esc_html( sprintf( '%s · Article', get_the_date( 'd M Y', $post ) ) ); ?></p>
 			<h2 class="hub-insight-card__title h3-data-m"><?= esc_html( get_the_title( $post ) ); ?></h2>
 			<?php
 			if ( $excerpt ) {

@@ -57,6 +57,15 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 								<Button variant="secondary" onClick={ open }>
 									{ imageUrl ? __( 'Replace Image', 'hub-gsct2026' ) : __( 'Select Image', 'hub-gsct2026' ) }
 								</Button>
+								{ imageUrl && (
+									<Button
+										variant="tertiary"
+										isDestructive
+										onClick={ () => setAttributes( { imageId: 0, imageUrl: '', imageAlt: '' } ) }
+									>
+										{ __( 'Remove', 'hub-gsct2026' ) }
+									</Button>
+								) }
 							</div>
 						) }
 					/>

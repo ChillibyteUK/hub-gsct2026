@@ -42,6 +42,21 @@ function ImageField( { attributes, setAttributes, name, label, help } ) {
 							<Button variant="secondary" onClick={ open }>
 								{ url ? __( 'Replace image', 'hub-gsct2026' ) : __( 'Select image', 'hub-gsct2026' ) }
 							</Button>
+							{ url && (
+								<Button
+									variant="tertiary"
+									isDestructive
+									onClick={ () =>
+										setAttributes( {
+											[ `${ name }Id` ]: 0,
+											[ `${ name }Url` ]: '',
+											[ `${ name }Alt` ]: '',
+										} )
+									}
+								>
+									{ __( 'Remove', 'hub-gsct2026' ) }
+								</Button>
+							) }
 							{ help && <p className="hub-editor-field__help">{ help }</p> }
 						</div>
 					) }

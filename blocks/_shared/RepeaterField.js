@@ -95,6 +95,21 @@ function RepeaterImageField( { field, row, index, updateRow, isColumn } ) {
 								? __( 'Replace', 'hub-gsct2026' )
 								: __( 'Select', 'hub-gsct2026' ) }
 						</Button>
+						{ ( id || url ) && (
+							<Button
+								variant="tertiary"
+								size="small"
+								isDestructive
+								onClick={ () =>
+									updateRow( index, {
+										[ field.name ]: 0,
+										[ `${ field.name }Url` ]: '',
+									} )
+								}
+							>
+								{ __( 'Remove', 'hub-gsct2026' ) }
+							</Button>
+						) }
 					</div>
 				) }
 			/>
@@ -185,6 +200,21 @@ function renderRowField( field, row, index, updateRow, isColumn ) {
 									? __( 'Replace', 'hub-gsct2026' )
 									: __( 'Select', 'hub-gsct2026' ) }
 							</Button>
+							{ !! row[ field.name ] && (
+								<Button
+									variant="tertiary"
+									size="small"
+									isDestructive
+									onClick={ () =>
+										updateRow( index, {
+											[ field.name ]: 0,
+											[ `${ field.name }Name` ]: '',
+										} )
+									}
+								>
+									{ __( 'Remove', 'hub-gsct2026' ) }
+								</Button>
+							) }
 						</div>
 					) }
 				/>

@@ -59,7 +59,7 @@ get_header();
 				</div>
 				<span class="hub-post-meta__divider" aria-hidden="true"></span>
 				<div class="hub-post-meta__text">
-					<span class="hub-post-meta__sub text-body"><?= esc_html( sprintf( 'Published %s', get_the_date( 'M j, Y' ) ) ); ?></span>
+					<span class="hub-post-meta__sub text-body"><?= esc_html( sprintf( 'Published %s', get_the_date( 'd M Y' ) ) ); ?></span>
 					<?php
 					if ( $hub_minutes > 0 ) {
 						?>

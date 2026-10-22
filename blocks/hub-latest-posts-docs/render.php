@@ -83,7 +83,7 @@ $wrapper_attributes = get_block_wrapper_attributes( array( 'class' => 'hub-lates
 
 						$hub_meta = sprintf(
 							'%s · Article',
-							get_the_date( 'j M Y', $hub_post->ID )
+							get_the_date( 'd M Y', $hub_post->ID )
 						);
 						?>
 					<a class="hub-related-insights__card" data-hub-carousel-card href="<?= esc_url( get_permalink( $hub_post->ID ) ); ?>">
@@ -143,7 +143,7 @@ $wrapper_attributes = get_block_wrapper_attributes( array( 'class' => 'hub-lates
 					foreach ( $hub_docs as $card ) {
 						$card        = (array) $card;
 						$card_title  = $card['title'] ?? '';
-						$card_date   = trim( (string) ( $card['date'] ?? '' ) );
+						$card_date   = hub_gsct2026_format_date( $card['date'] ?? '' );
 						$file_id     = (int) ( $card['file'] ?? 0 );
 						$file_url    = $file_id ? wp_get_attachment_url( $file_id ) : '';
 						$file_detail = '';

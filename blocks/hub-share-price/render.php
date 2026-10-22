@@ -47,7 +47,7 @@ if ( ! empty( $hub_snap['lastTrade'] ) ) {
 			$hub_tz = wp_timezone();
 		}
 
-		$hub_updated = wp_date( 'j M Y H:i', $hub_time, $hub_tz );
+		$hub_updated = wp_date( 'd M Y H:i', $hub_time, $hub_tz );
 	}
 }
 

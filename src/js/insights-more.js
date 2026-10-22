@@ -45,8 +45,12 @@ export function initInsightsMore() {
 		};
 
 		const formatDate = (iso) => {
+			// Built by hand, not Intl: en-GB abbreviates September as "Sept",
+			// and the site standard is DD Mon YYYY (02 Nov 2026).
 			const date = new Date(iso);
-			return date.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
+			if (Number.isNaN(date.getTime())) return '';
+			const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+			return `${String(date.getDate()).padStart(2, '0')} ${months[date.getMonth()]} ${date.getFullYear()}`;
 		};
 
 		const cardHtml = (post) => {

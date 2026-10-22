@@ -193,6 +193,15 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 									<Button variant="secondary" onClick={ open }>
 										{ imageUrl ? __( 'Replace image', 'hub-gsct2026' ) : __( 'Select image', 'hub-gsct2026' ) }
 									</Button>
+									{ imageUrl && (
+										<Button
+											variant="tertiary"
+											isDestructive
+											onClick={ () => setAttributes( { imageId: 0, imageUrl: '', imageAlt: '' } ) }
+										>
+											{ __( 'Remove', 'hub-gsct2026' ) }
+										</Button>
+									) }
 								</div>
 							) }
 						/>
@@ -254,6 +263,15 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 										<Button variant="secondary" onClick={ open }>
 											{ videoThumbnailUrl ? __( 'Replace thumbnail', 'hub-gsct2026' ) : __( 'Select thumbnail', 'hub-gsct2026' ) }
 										</Button>
+										{ videoThumbnailUrl && (
+											<Button
+												variant="tertiary"
+												isDestructive
+												onClick={ () => setAttributes( { videoThumbnailId: 0, videoThumbnailUrl: '', videoThumbnailAlt: '' } ) }
+											>
+												{ __( 'Remove', 'hub-gsct2026' ) }
+											</Button>
+										) }
 									</div>
 								) }
 							/>

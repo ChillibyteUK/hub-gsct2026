@@ -62,7 +62,7 @@ $wrapper_attributes = get_block_wrapper_attributes( array( 'class' => 'hub-docum
 				foreach ( $cards as $card ) {
 					$card        = (array) $card;
 					$card_title  = $card['title'] ?? '';
-					$card_date   = trim( (string) ( $card['date'] ?? '' ) );
+					$card_date   = hub_gsct2026_format_date( $card['date'] ?? '' );
 					$file_id     = (int) ( $card['file'] ?? 0 );
 					$file_url    = $file_id ? wp_get_attachment_url( $file_id ) : '';
 					$file_detail = '';

@@ -69,6 +69,15 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 									<Button variant="secondary" onClick={ open }>
 										{ backgroundUrl ? __( 'Replace background image', 'hub-gsct2026' ) : __( 'Select background image', 'hub-gsct2026' ) }
 									</Button>
+									{ backgroundUrl && (
+										<Button
+											variant="tertiary"
+											isDestructive
+											onClick={ () => setAttributes( { backgroundId: 0, backgroundUrl: '', backgroundAlt: '' } ) }
+										>
+											{ __( 'Remove', 'hub-gsct2026' ) }
+										</Button>
+									) }
 								</div>
 							) }
 						/>

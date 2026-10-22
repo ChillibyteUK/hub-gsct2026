@@ -162,7 +162,7 @@ $wrapper_attributes = get_block_wrapper_attributes(
 								}
 							}
 
-							$hub_release = get_post_meta( $hub_doc->ID, 'release_date', true );
+							$hub_release = hub_gsct2026_format_date( get_post_meta( $hub_doc->ID, 'release_date', true ) );
 							$hub_file_id = (int) get_post_meta( $hub_doc->ID, 'document_file', true );
 							$hub_url     = get_post_meta( $hub_doc->ID, 'document_url', true );
 

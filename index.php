@@ -108,7 +108,7 @@ $hero_text  = get_the_content( null, false, $page_for_posts_id );
 				}
 				$hub_meta = sprintf(
 					'%s · Article',
-					get_the_date( 'j M Y' )
+					get_the_date( 'd M Y' )
 				);
 
 				$hub_thumb = get_the_post_thumbnail(
