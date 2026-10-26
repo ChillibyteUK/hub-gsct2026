@@ -38,7 +38,7 @@ $wrapper_attributes = get_block_wrapper_attributes( array( 'class' => 'hub-stats
 <section <?php echo $wrapper_attributes; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- get_block_wrapper_attributes() already escapes. ?>>
 	<div class="container">
 		<div class="text-eyebrow">
-			LSEG:GSCT
+			LSE: GSCT
 		</div>
 		<div class="hub-stats-banner__stat">
 			<div class="text-label text-uppercase">
@@ -69,7 +69,7 @@ $wrapper_attributes = get_block_wrapper_attributes( array( 'class' => 'hub-stats
 		</div>
 		<div class="hub-stats-banner__stat">
 			<div class="text-label text-uppercase">
-				Net Yield
+				Net Dividend Yield
 			</div>
 			<div class="h2-data-l">
 				<?= $hub_yield_display; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- number_format() output plus an entity, no user input. ?>

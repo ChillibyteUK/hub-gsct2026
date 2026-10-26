@@ -2388,6 +2388,7 @@ a.hub-document-library-hero__card:focus-visible {
         text-wrap: balance;
         margin-block-end: var(--space-4);
     }
+
     .hub-how-to-invest-full__intro,
     .hub-how-to-invest-full__listing-intro {
         max-width: 900px;
@@ -2407,9 +2408,11 @@ a.hub-document-library-hero__card:focus-visible {
         box-shadow: var(--shadow-sm);
         padding: var(--space-5) var(--space-4);
         margin-block-end: var(--space-4);
+
         h4 {
             color: var(--col-black);
         }
+
         .hub-how-to-invest-full__vehicle-content {
             color: var(--col-medium-grey);
         }
@@ -2452,7 +2455,6 @@ a.hub-document-library-hero__card:focus-visible {
     max-height: 70px;
     width: auto;
     height: auto;
-    filter: grayscale(100%);
 }
 
 a.hub-how-to-invest-full__platform:hover,
@@ -2499,12 +2501,12 @@ a.hub-how-to-invest-full__platform:focus-visible {
         align-items: center;
         justify-content: center;
         padding: 1rem;
+
         img {
             max-width: min(160px, 100%);
             max-height: 70px;
             width: auto;
             height: auto;
-            filter: grayscale(100%);
         }
     }
 }

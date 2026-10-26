@@ -50,6 +50,10 @@ $wrapper_attributes = get_block_wrapper_attributes( array( 'class' => 'hub-how-t
 		</div>
 			<?php
 		}
+		?>
+		<small class="text-muted">All intellectual property rights in the brands and logos above are reserved by respective owners.</small>
+		<?php
+
 		if ( $link_url ) {
 			?>
 			<a class="text-link hub-how-to-invest__link" href="<?= esc_url( $link_url ); ?>">

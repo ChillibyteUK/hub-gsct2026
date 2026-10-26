@@ -140,7 +140,6 @@ $wrapper_attributes = get_block_wrapper_attributes(
 						<tr>
 							<th scope="col">Document title</th>
 							<th scope="col">Category</th>
-							<th scope="col">Release date</th>
 							<th scope="col" class="hub-document-library__format-col">Format</th>
 						</tr>
 					</thead>
@@ -162,7 +161,6 @@ $wrapper_attributes = get_block_wrapper_attributes(
 								}
 							}
 
-							$hub_release = hub_gsct2026_format_date( get_post_meta( $hub_doc->ID, 'release_date', true ) );
 							$hub_file_id = (int) get_post_meta( $hub_doc->ID, 'document_file', true );
 							$hub_url     = get_post_meta( $hub_doc->ID, 'document_url', true );
 
@@ -210,7 +208,6 @@ $wrapper_attributes = get_block_wrapper_attributes(
 							>
 								<td><?= esc_html( get_the_title( $hub_doc ) ); ?></td>
 								<td><?= esc_html( $hub_cat_name ); ?></td>
-								<td><?= esc_html( $hub_release ); ?></td>
 								<td class="hub-document-library__format-col">
 									<?php
 									if ( $hub_href ) {

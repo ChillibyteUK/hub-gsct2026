@@ -40,12 +40,15 @@ h6 {
 h1 {
 	font-size: var(--fs-h1);
 }
+
 h4 {
 	font-size: var(--fs-h4);
 }
+
 h5 {
 	font-size: var(--fs-h5);
 }
+
 h6 {
 	font-size: var(--fs-h6);
 }
@@ -62,6 +65,7 @@ th {
 a {
 	color: var(--col-primary);
 	text-decoration: none;
+	font-weight: var(--fw-500);
 }
 
 /*

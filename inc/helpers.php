@@ -131,7 +131,7 @@ function hub_gsct2026_learning_card( $post, $span = 'col-12 col-md-6 col-lg-4' )
 				}
 				?>
 			</div>
-			<p class="hub-insight-card__meta"><?= esc_html( sprintf( '%s · Article', get_the_date( 'd M Y', $post ) ) ); ?></p>
+			<?php /* <!-- <p class="hub-insight-card__meta"><?= esc_html( sprintf( '%s · Article', get_the_date( 'd M Y', $post ) ) ); ?></p> --> */ ?>
 			<h2 class="hub-insight-card__title h3-data-m"><?= esc_html( get_the_title( $post ) ); ?></h2>
 			<?php
 			if ( $excerpt ) {

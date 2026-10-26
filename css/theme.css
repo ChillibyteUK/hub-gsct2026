@@ -193,12 +193,15 @@ h6 {
 h1 {
 	font-size: var(--fs-h1);
 }
+
 h4 {
 	font-size: var(--fs-h4);
 }
+
 h5 {
 	font-size: var(--fs-h5);
 }
+
 h6 {
 	font-size: var(--fs-h6);
 }
@@ -215,6 +218,7 @@ th {
 a {
 	color: var(--col-primary);
 	text-decoration: none;
+	font-weight: var(--fw-500);
 }
 
 /*
@@ -5552,7 +5556,6 @@ a.hub-document-library-hero__card:focus-visible {
     max-height: 70px;
     width: auto;
     height: auto;
-    filter: grayscale(100%);
 }
 
 a.hub-how-to-invest-full__platform:hover,
@@ -5602,7 +5605,6 @@ a.hub-how-to-invest-full__platform:focus-visible {
             max-height: 70px;
             width: auto;
             height: auto;
-            filter: grayscale(100%);
         }
 
 /* Section link mirrors the cards-section arrow link (flex row, right

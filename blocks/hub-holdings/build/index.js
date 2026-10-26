@@ -1,1 +1,419 @@
-(()=>{"use strict";const e=window.wp.blocks,t=window.wp.blockEditor,o=window.wp.components,n=window.wp.i18n,i=window.wp.compose,l=window.wp.data,s=window.wp.element,r=window.ReactJSXRuntime;function d({blockProps:e,clientId:o,classPrefix:c="hub",textDomain:a="hub-gsct2026",storageNamespace:u="block",title:w,children:h,defaultOpen:p=!0}){const[b,g]=(0,s.useState)(p),f=(0,i.useInstanceId)(d),k=(0,s.useRef)(),x=`${c}-editor-block-content-${f}`,m=(0,l.useSelect)(e=>{if(!o)return"";const{getBlockIndex:n,getBlockRootClientId:i}=e(t.store),l=[];let s=o;for(;s;){const e=i(s)||"";l.unshift(String(n(s,e))),s=e||null}return l.join(".")},[o]),v=(0,s.useMemo)(()=>o&&m&&"undefined"!=typeof window?[c,"editor-block-state",u,window.location.pathname,window.location.search,m].join(":"):"",[m,c,o,u]);return(0,s.useEffect)(()=>{if(!v||"undefined"==typeof window)return;const e=window.localStorage.getItem(v);"closed"===e?g(!1):"open"===e&&g(!0)},[v]),(0,s.useEffect)(()=>{v&&"undefined"!=typeof window&&window.localStorage.setItem(v,b?"open":"closed")},[b,v]),(0,s.useEffect)(()=>{const e=k.current;if(e)return e.addEventListener("keydown",t),()=>{e.removeEventListener("keydown",t)};function t(e){e.shiftKey&&["ArrowUp","ArrowDown","ArrowLeft","ArrowRight"].includes(e.key)&&e.stopPropagation()}},[]),(0,r.jsxs)("div",{...e,children:[(0,r.jsxs)("div",{className:`${c}-editor-block__title`,children:[(0,r.jsx)("span",{children:w}),(0,r.jsx)("button",{type:"button",className:`${c}-editor-block__toggle`,onClick:()=>g(e=>!e),"aria-expanded":b,"aria-controls":x,"aria-label":b?(0,n.__)("Hide block fields",a):(0,n.__)("Show block fields",a),children:(0,r.jsx)("span",{"aria-hidden":"true",children:b?"−":"+"})})]}),(0,r.jsx)("div",{id:x,ref:k,className:`${c}-editor-block__content`,hidden:!b,children:h})]})}const c=JSON.parse('{"UU":"hub-gsct2026/hub-holdings"}');(0,e.registerBlockType)(c.UU,{edit:function({attributes:e,setAttributes:n,clientId:i}){const{title:l,holdingsCsv:s,excludeLabel:c}=e,a=(0,t.useBlockProps)({className:"container hub-editor-block"});return(0,r.jsxs)(d,{blockProps:a,clientId:i,classPrefix:"hub",textDomain:"hub-gsct2026",title:"HUB Holdings",children:[(0,r.jsx)(o.TextControl,{label:"Title",value:l,onChange:e=>n({title:e})}),(0,r.jsx)(o.TextareaControl,{label:"Holdings CSV",value:s,onChange:e=>n({holdingsCsv:e}),help:"Paste the full CSV: Holding Name, Sector/Industry, Weight %. Header row optional. Quoted fields supported.",rows:10}),(0,r.jsx)(o.TextControl,{label:"Filter button label",value:c,onChange:e=>n({excludeLabel:e}),help:"Toggles hiding rows whose Sector/Industry is ‘Collective investments’."}),(0,r.jsx)("p",{className:"hub-editor-block__note",children:"Renders the top 10 by weight %. The filter button toggles hiding ‘Collective investments’ rows instantly, without reloading the page."})]})},save:()=>null})})();
+/******/ (() => { // webpackBootstrap
+/******/ 	"use strict";
+/******/ 	var __webpack_modules__ = ({
+
+/***/ "./blocks/_shared/EditorBlockShell.js"
+/*!********************************************!*\
+  !*** ./blocks/_shared/EditorBlockShell.js ***!
+  \********************************************/
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ EditorBlockShell)
+/* harmony export */ });
+/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @wordpress/i18n */ "@wordpress/i18n");
+/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _wordpress_block_editor__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @wordpress/block-editor */ "@wordpress/block-editor");
+/* harmony import */ var _wordpress_block_editor__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _wordpress_compose__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @wordpress/compose */ "@wordpress/compose");
+/* harmony import */ var _wordpress_compose__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_wordpress_compose__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var _wordpress_data__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @wordpress/data */ "@wordpress/data");
+/* harmony import */ var _wordpress_data__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_wordpress_data__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @wordpress/element */ "@wordpress/element");
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_4__);
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__);
+
+
+
+
+
+
+/**
+ * Wraps a block's edit.js output in a collapsible section with a title bar
+ * and open/closed toggle, persisting the toggle state per block-instance
+ * (keyed by the block's position path within the post plus the current
+ * URL) in localStorage — so a page with many blocks stays scannable in the
+ * editor instead of every block's full field set staying expanded at once.
+ *
+ * @param {Object}   props
+ * @param {Object}   props.blockProps       Result of useBlockProps().
+ * @param {string}   props.clientId         The block's clientId, for deriving its position path.
+ * @param {string}   [props.classPrefix]    Class/prefix root, matches editor.css.
+ * @param {string}   [props.textDomain]     i18n text domain for the toggle's aria-label.
+ * @param {string}   [props.storageNamespace] Extra localStorage key segment, in case two shells need independent state on the same path.
+ * @param {string}   props.title            Block name shown in the title bar.
+ * @param {boolean}  [props.defaultOpen]    Initial state before localStorage is read.
+ * @param {*}        props.children         The block's own field controls.
+ */
+
+function EditorBlockShell({
+  blockProps,
+  clientId,
+  classPrefix = 'hub',
+  textDomain = 'hub-gsct2026',
+  storageNamespace = 'block',
+  title,
+  children,
+  defaultOpen = true
+}) {
+  const [isOpen, setIsOpen] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_4__.useState)(defaultOpen);
+  const instanceId = (0,_wordpress_compose__WEBPACK_IMPORTED_MODULE_2__.useInstanceId)(EditorBlockShell);
+  const contentRef = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_4__.useRef)();
+  const contentId = `${classPrefix}-editor-block-content-${instanceId}`;
+  const blockPath = (0,_wordpress_data__WEBPACK_IMPORTED_MODULE_3__.useSelect)(select => {
+    if (!clientId) {
+      return '';
+    }
+    const {
+      getBlockIndex,
+      getBlockRootClientId
+    } = select(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_1__.store);
+    const path = [];
+    let currentId = clientId;
+    while (currentId) {
+      const parentId = getBlockRootClientId(currentId) || '';
+      path.unshift(String(getBlockIndex(currentId, parentId)));
+      currentId = parentId || null;
+    }
+    return path.join('.');
+  }, [clientId]);
+  const storageKey = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_4__.useMemo)(() => {
+    if (!clientId || !blockPath || typeof window === 'undefined') {
+      return '';
+    }
+    return [classPrefix, 'editor-block-state', storageNamespace, window.location.pathname, window.location.search, blockPath].join(':');
+  }, [blockPath, classPrefix, clientId, storageNamespace]);
+  (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_4__.useEffect)(() => {
+    if (!storageKey || typeof window === 'undefined') {
+      return;
+    }
+    const storedValue = window.localStorage.getItem(storageKey);
+    if (storedValue === 'closed') {
+      setIsOpen(false);
+    } else if (storedValue === 'open') {
+      setIsOpen(true);
+    }
+  }, [storageKey]);
+  (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_4__.useEffect)(() => {
+    if (!storageKey || typeof window === 'undefined') {
+      return;
+    }
+    window.localStorage.setItem(storageKey, isOpen ? 'open' : 'closed');
+  }, [isOpen, storageKey]);
+
+  // Confirmed live (2026-09-22, fixed upstream in cb-identityjs2026) as a
+  // real, reproducible bug, not a theory: every field in a block's own
+  // fields-form UI (TextControl, RichText, the repeater's own inputs)
+  // renders inside the block's own canvas output, which sits inside
+  // Gutenberg's WritingFlow component — the same wrapper that manages
+  // block-to-block multi-selection. Pressing Shift+Arrow with the cursor
+  // mid-text (not at a boundary — ruled out as WordPress's own intentional
+  // "extend past the edge" behaviour) handed focus to WritingFlow's own
+  // handler instead of the input doing its own text selection.
+  //
+  // A React onKeyDown prop + event.stopPropagation() here does NOT fix
+  // it: per Gutenberg's own source
+  // (packages/block-editor/src/components/writing-flow/use-arrow-nav.js),
+  // WritingFlow intercepts with a plain native `node.addEventListener(
+  // 'keydown', onKeyDown )` on its own wrapper element — not a React
+  // synthetic handler. That native listener fires during real DOM bubble
+  // propagation, which reaches it before React's own internal delegated
+  // dispatch (which is what actually invokes a React onKeyDown prop) ever
+  // gets to run — so stopping propagation inside React's synthetic system
+  // is always too late. Only a real addEventListener on a descendant node
+  // (this one) intercepts during native bubbling before it reaches
+  // WritingFlow's own ancestor listener.
+  (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_4__.useEffect)(() => {
+    const node = contentRef.current;
+    if (!node) {
+      return;
+    }
+    function stopShiftArrowFromReachingWritingFlow(event) {
+      if (event.shiftKey && ['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(event.key)) {
+        event.stopPropagation();
+      }
+    }
+    node.addEventListener('keydown', stopShiftArrowFromReachingWritingFlow);
+    return () => {
+      node.removeEventListener('keydown', stopShiftArrowFromReachingWritingFlow);
+    };
+  }, []);
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
+    ...blockProps,
+    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
+      className: `${classPrefix}-editor-block__title`,
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("span", {
+        children: title
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("button", {
+        type: "button",
+        className: `${classPrefix}-editor-block__toggle`,
+        onClick: () => setIsOpen(open => !open),
+        "aria-expanded": isOpen,
+        "aria-controls": contentId,
+        "aria-label": isOpen ? (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Hide block fields', textDomain) : (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Show block fields', textDomain),
+        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("span", {
+          "aria-hidden": "true",
+          children: isOpen ? '−' : '+'
+        })
+      })]
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("div", {
+      id: contentId,
+      ref: contentRef,
+      className: `${classPrefix}-editor-block__content`,
+      hidden: !isOpen,
+      children: children
+    })]
+  });
+}
+
+/***/ },
+
+/***/ "./blocks/hub-holdings/src/edit.js"
+/*!*****************************************!*\
+  !*** ./blocks/hub-holdings/src/edit.js ***!
+  \*****************************************/
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ Edit)
+/* harmony export */ });
+/* harmony import */ var _wordpress_block_editor__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @wordpress/block-editor */ "@wordpress/block-editor");
+/* harmony import */ var _wordpress_block_editor__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @wordpress/components */ "@wordpress/components");
+/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _shared_EditorBlockShell__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../_shared/EditorBlockShell */ "./blocks/_shared/EditorBlockShell.js");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__);
+
+
+
+
+function Edit({
+  attributes,
+  setAttributes,
+  clientId
+}) {
+  const {
+    title,
+    holdingsCsv,
+    excludeLabel
+  } = attributes;
+  const blockProps = (0,_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_0__.useBlockProps)({
+    className: 'container hub-editor-block'
+  });
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)(_shared_EditorBlockShell__WEBPACK_IMPORTED_MODULE_2__["default"], {
+    blockProps: blockProps,
+    clientId: clientId,
+    classPrefix: "hub",
+    textDomain: "hub-gsct2026",
+    title: "HUB Holdings",
+    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.TextControl, {
+      label: "Title",
+      value: title,
+      onChange: value => setAttributes({
+        title: value
+      })
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.TextareaControl, {
+      label: "Holdings CSV",
+      value: holdingsCsv,
+      onChange: value => setAttributes({
+        holdingsCsv: value
+      }),
+      help: "Paste the full CSV: Holding Name, Sector/Industry, Weight %. Header row optional. Quoted fields supported.",
+      rows: 10
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.TextControl, {
+      label: "Filter button label",
+      value: excludeLabel,
+      onChange: value => setAttributes({
+        excludeLabel: value
+      }),
+      help: "Toggles hiding rows whose Sector/Industry is \u2018Collective investments\u2019."
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("p", {
+      className: "hub-editor-block__note",
+      children: "Renders the top 10 by weight %. The filter button toggles hiding \u2018Collective investments\u2019 rows instantly, without reloading the page."
+    })]
+  });
+}
+
+/***/ },
+
+/***/ "react/jsx-runtime"
+/*!**********************************!*\
+  !*** external "ReactJSXRuntime" ***!
+  \**********************************/
+(module) {
+
+module.exports = window["ReactJSXRuntime"];
+
+/***/ },
+
+/***/ "@wordpress/block-editor"
+/*!*************************************!*\
+  !*** external ["wp","blockEditor"] ***!
+  \*************************************/
+(module) {
+
+module.exports = window["wp"]["blockEditor"];
+
+/***/ },
+
+/***/ "@wordpress/blocks"
+/*!********************************!*\
+  !*** external ["wp","blocks"] ***!
+  \********************************/
+(module) {
+
+module.exports = window["wp"]["blocks"];
+
+/***/ },
+
+/***/ "@wordpress/components"
+/*!************************************!*\
+  !*** external ["wp","components"] ***!
+  \************************************/
+(module) {
+
+module.exports = window["wp"]["components"];
+
+/***/ },
+
+/***/ "@wordpress/compose"
+/*!*********************************!*\
+  !*** external ["wp","compose"] ***!
+  \*********************************/
+(module) {
+
+module.exports = window["wp"]["compose"];
+
+/***/ },
+
+/***/ "@wordpress/data"
+/*!******************************!*\
+  !*** external ["wp","data"] ***!
+  \******************************/
+(module) {
+
+module.exports = window["wp"]["data"];
+
+/***/ },
+
+/***/ "@wordpress/element"
+/*!*********************************!*\
+  !*** external ["wp","element"] ***!
+  \*********************************/
+(module) {
+
+module.exports = window["wp"]["element"];
+
+/***/ },
+
+/***/ "@wordpress/i18n"
+/*!******************************!*\
+  !*** external ["wp","i18n"] ***!
+  \******************************/
+(module) {
+
+module.exports = window["wp"]["i18n"];
+
+/***/ },
+
+/***/ "./blocks/hub-holdings/block.json"
+/*!****************************************!*\
+  !*** ./blocks/hub-holdings/block.json ***!
+  \****************************************/
+(module) {
+
+module.exports = /*#__PURE__*/JSON.parse('{"$schema":"https://schemas.wp.org/trunk/block.json","apiVersion":3,"name":"hub-gsct2026/hub-holdings","title":"HUB Holdings","category":"hub-gsct2026","icon":"editor-table","description":"Top 10 holdings table from a pasted CSV (name, sector/industry, weight %). Filter button hides \'Collective investments\' rows.","attributes":{"title":{"type":"string","default":""},"holdingsCsv":{"type":"string","default":""},"excludeLabel":{"type":"string","default":"Exclude Collective investments"}},"supports":{"anchor":true,"className":true,"align":true},"editorScript":"file:./build/index.js","render":"file:./render.php"}');
+
+/***/ }
+
+/******/ 	});
+/************************************************************************/
+/******/ 	// The module cache
+/******/ 	const __webpack_module_cache__ = {};
+/******/ 	
+/******/ 	// The require function
+/******/ 	function __webpack_require__(moduleId) {
+/******/ 		// Check if module is in cache
+/******/ 		const cachedModule = __webpack_module_cache__[moduleId];
+/******/ 		if (cachedModule !== undefined) {
+/******/ 			return cachedModule.exports;
+/******/ 		}
+/******/ 		// Create a new module (and put it into the cache)
+/******/ 		const module = __webpack_module_cache__[moduleId] = {
+/******/ 			// no module.id needed
+/******/ 			// no module.loaded needed
+/******/ 			exports: {}
+/******/ 		};
+/******/ 	
+/******/ 		// Execute the module function
+/******/ 		if (!(moduleId in __webpack_modules__)) {
+/******/ 			delete __webpack_module_cache__[moduleId];
+/******/ 			const e = new Error("Cannot find module '" + moduleId + "'");
+/******/ 			e.code = 'MODULE_NOT_FOUND';
+/******/ 			throw e;
+/******/ 		}
+/******/ 		__webpack_modules__[moduleId](module, module.exports, __webpack_require__);
+/******/ 	
+/******/ 		// Return the exports of the module
+/******/ 		return module.exports;
+/******/ 	}
+/******/ 	
+/************************************************************************/
+/******/ 	/* webpack/runtime/compat get default export */
+/******/ 	// getDefaultExport function for compatibility with non-harmony modules
+/******/ 	__webpack_require__.n = (module) => {
+/******/ 		const getter = module && module.__esModule ?
+/******/ 			() => (module['default']) :
+/******/ 			() => (module);
+/******/ 		__webpack_require__.d(getter, { a: getter });
+/******/ 		return getter;
+/******/ 	};
+/******/ 	
+/******/ 	/* webpack/runtime/define property getters */
+/******/ 	// define getter/value functions for harmony exports
+/******/ 	__webpack_require__.d = (exports, definition) => {
+/******/ 		for(var key in definition) {
+/******/ 			if(__webpack_require__.o(definition, key) && !__webpack_require__.o(exports, key)) {
+/******/ 				Object.defineProperty(exports, key, { enumerable: true, get: definition[key] });
+/******/ 			}
+/******/ 		}
+/******/ 	};
+/******/ 	
+/******/ 	/* webpack/runtime/hasOwnProperty shorthand */
+/******/ 	__webpack_require__.o = (obj, prop) => (Object.hasOwn(obj, prop));
+/******/ 	
+/******/ 	/* webpack/runtime/make namespace object */
+/******/ 	// define __esModule on exports
+/******/ 	__webpack_require__.r = (exports) => {
+/******/ 		Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
+/******/ 		Object.defineProperty(exports, '__esModule', { value: true });
+/******/ 	};
+/******/ 	
+/************************************************************************/
+let __webpack_exports__ = {};
+// This entry needs to be wrapped in an IIFE because it needs to be isolated against other modules in the chunk.
+(() => {
+/*!******************************************!*\
+  !*** ./blocks/hub-holdings/src/index.js ***!
+  \******************************************/
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _wordpress_blocks__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @wordpress/blocks */ "@wordpress/blocks");
+/* harmony import */ var _wordpress_blocks__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_wordpress_blocks__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _edit__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./edit */ "./blocks/hub-holdings/src/edit.js");
+/* harmony import */ var _block_json__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../block.json */ "./blocks/hub-holdings/block.json");
+
+
+
+(0,_wordpress_blocks__WEBPACK_IMPORTED_MODULE_0__.registerBlockType)(_block_json__WEBPACK_IMPORTED_MODULE_2__.name, {
+  edit: _edit__WEBPACK_IMPORTED_MODULE_1__["default"],
+  save: () => null
+});
+})();
+
+/******/ })()
+;
+//# sourceMappingURL=index.js.map
