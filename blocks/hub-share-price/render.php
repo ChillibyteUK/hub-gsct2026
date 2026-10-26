@@ -68,7 +68,7 @@ $wrapper_attributes = get_block_wrapper_attributes( array( 'class' => 'hub-share
 <section <?php echo $wrapper_attributes; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- get_block_wrapper_attributes() already escapes. ?>>
 	<div class="container">
 		<div class="hub-share-price__card">
-		<div class="text-eyebrow">LSEG: GSCT</div>
+		<div class="text-eyebrow">LSEG:GSCT</div>
 		<div class="hub-share-price__current">
 			<div class="text-label text-uppercase">Current share price</div>
 			<div class="hub-share-price__price-row">
