@@ -99,6 +99,29 @@ minification. This is entirely separate from block JS — `blocks:build` is
 its own step, run by `@wordpress/scripts` against `webpack.config.js`, which
 compiles each `blocks/{slug}/src/index.js` to `blocks/{slug}/build/index.js`.
 
+## Investis market data
+
+The stats banner uses the `FCS.L` full snapshot for share price and yield,
+and `FCS.NAV/history?limit=1&order=desc` for the latest published NAV.
+NAV is in GBp. Its valuation date is retained and displayed in the banner;
+it is not necessarily the share-price date. Premium/discount is calculated
+as `(share price - NAV) / NAV * 100` (negative means a discount).
+The banner labels negative values "Discount", positive values "Premium",
+and exactly zero "At NAV". When unavailable, it shows "Premium" with a dash.
+
+Both feeds are cached separately for 15 minutes (via
+`hub_gsct2026_market_cache_ttl`) and retain their last successful response
+if a request fails. NAV failures are logged server-side and retried after
+the cache expires; without a previous NAV, the banner shows dashes.
+Fallback data retains its original valuation date, not the fetch date.
+No manual NAV or main-snapshot NAV is substituted for this series.
+
+The client must confirm whether this NAV is cum-income (including accrued
+income) or ex-income, and whether debt is valued at par or market value.
+The feed does not identify that basis. The displayed percentage compares
+the latest available share price with the latest published NAV, not
+necessarily two valuations from the same date.
+
 ## Adding a block
 
 ```

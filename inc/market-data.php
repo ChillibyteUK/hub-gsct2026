@@ -17,9 +17,8 @@
  *     wp eval "print_r( hub_gsct2026_get_market_snapshot() );"
  *
  * Fetches Group=full by default: price and change for Share Price,
- * dividend yields for Net Yield. NAV is *not* in the snapshot
- * (closeNav/previousCloseNav come back null) — see
- * hub_gsct2026_get_nav_per_share() for sourcing.
+ * dividend yields for Net Yield. NAV comes from the newest FCS.NAV
+ * history record, cached separately with its valuation date.
  *
  * @package hub-gsct2026
  */
@@ -122,25 +121,7 @@ function hub_gsct2026_fetch_market_snapshot() {
 		'https://api.investisdigital.com/marketdata/v1/instruments/' . rawurlencode( hub_gsct2026_market_instrument() ) . '/snapshot'
 	);
 
-	// The API sits behind a bot-management WAF that serves a browser
-	// challenge page to non-browser user agents (including WordPress's
-	// default UA) — verified: stock WP UA gets the challenge HTML, a
-	// browser UA gets clean JSON. So this request identifies as a browser.
-	// Long term, ask Investis to allowlist server-to-server access instead.
-	$response = wp_remote_get(
-		$url,
-		array(
-			'timeout'    => 10,
-			'user-agent' => apply_filters(
-				'hub_gsct2026_market_user_agent',
-				'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0 Safari/537.36'
-			),
-			'headers'    => array(
-				'accept'    => '*/*',
-				'x-api-key' => $key,
-			),
-		)
-	);
+	$response = hub_gsct2026_market_request( $url, $key );
 
 	if ( is_wp_error( $response ) ) {
 		return null;
@@ -192,20 +173,128 @@ function hub_gsct2026_fetch_market_snapshot() {
 }
 
 /**
- * NAV per share in pence, from the API's closeNav when populated, else
- * null. No manual fallback — one was briefly added and removed per
- * direction; a hand-entered NAV would go stale against the live price.
+ * Server-side Investis request. Browser UA avoids the provider's WAF
+ * challenge; ask Investis to allowlist server-to-server access long term.
+ *
+ * @param string $url API URL.
+ * @param string $key API key.
+ * @return array|WP_Error
+ */
+function hub_gsct2026_market_request( $url, $key ) {
+	return wp_remote_get(
+		$url,
+		array(
+			'timeout'    => 10,
+			'user-agent' => apply_filters(
+				'hub_gsct2026_market_user_agent',
+				'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0 Safari/537.36'
+			),
+			'headers'    => array(
+				'accept'    => '*/*',
+				'x-api-key' => $key,
+			),
+		)
+	);
+}
+
+/**
+ * Latest published NAV in GBp, retaining the valuation date (not fetch
+ * date). Same cache lifetime and last-good fallback policy as share price.
+ * Failed attempts are cached too, avoiding repeated requests in a render.
+ *
+ * @return array|null Keys: value, date, fetched.
+ */
+function hub_gsct2026_get_latest_nav() {
+	$fresh = get_transient( 'hub_latest_nav' );
+
+	if ( ! is_array( $fresh ) ) {
+		$data = hub_gsct2026_fetch_latest_nav();
+
+		if ( is_wp_error( $data ) ) {
+			error_log( 'Investis NAV: ' . $data->get_error_message() ); // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
+			$fresh = array();
+		} else {
+			$fresh = $data;
+			update_option( 'hub_latest_nav_fallback', $data, false );
+		}
+
+		set_transient(
+			'hub_latest_nav',
+			$fresh,
+			apply_filters( 'hub_gsct2026_market_cache_ttl', 15 * MINUTE_IN_SECONDS )
+		);
+	}
+
+	if ( $fresh ) {
+		return $fresh;
+	}
+
+	$fallback = get_option( 'hub_latest_nav_fallback', array() );
+
+	return is_array( $fallback ) && $fallback ? $fallback : null;
+}
+
+/**
+ * Newest record only: do not silently substitute an older record or a NAV
+ * from a different series. Units are GBp; income/debt basis is unconfirmed.
+ *
+ * @return array|WP_Error
+ */
+function hub_gsct2026_fetch_latest_nav() {
+	$key = hub_gsct2026_market_api_key();
+
+	if ( '' === $key ) {
+		return new WP_Error( 'hub_nav_no_key', 'No Investis API key is configured.' );
+	}
+
+	$response = hub_gsct2026_market_request(
+		'https://api.investisdigital.com/marketdata/v1/instruments/FCS.NAV/history?limit=1&order=desc',
+		$key
+	);
+
+	if ( is_wp_error( $response ) ) {
+		return new WP_Error( 'hub_nav_transport', 'NAV request failed (transport error).' );
+	}
+
+	$status = wp_remote_retrieve_response_code( $response );
+
+	if ( 200 !== $status ) {
+		return new WP_Error( 'hub_nav_http', 'NAV request returned HTTP ' . (int) $status . '.' );
+	}
+
+	$body = json_decode( wp_remote_retrieve_body( $response ), true );
+	$item = is_array( $body ) ? ( $body['data']['history'][0] ?? null ) : null;
+
+	if (
+		! is_array( $body ) ||
+		200 !== (int) ( $body['meta']['status'] ?? 0 ) ||
+		! is_array( $item ) ||
+		! hub_gsct2026_validate_ymd( $item['date'] ?? null ) ||
+		$item['date'] > gmdate( 'Y-m-d' ) ||
+		! isset( $item['close'] ) ||
+		! is_numeric( $item['close'] ) ||
+		! is_finite( (float) $item['close'] ) ||
+		(float) $item['close'] <= 0
+	) {
+		return new WP_Error( 'hub_nav_invalid', 'NAV response has no valid latest valuation date and positive value.' );
+	}
+
+	return array(
+		'value'   => (float) $item['close'],
+		'date'    => $item['date'],
+		'fetched' => time(),
+	);
+}
+
+/**
+ * NAV per share in GBp from the latest published FCS.NAV valuation.
  *
  * @return float|null
  */
 function hub_gsct2026_get_nav_per_share() {
-	$snapshot = hub_gsct2026_get_market_snapshot();
+	$nav = hub_gsct2026_get_latest_nav();
 
-	if ( $snapshot && ! empty( $snapshot['closeNav'] ) ) {
-		return (float) $snapshot['closeNav'];
-	}
-
-	return null;
+	return $nav ? $nav['value'] : null;
 }
 
 /**
