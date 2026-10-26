@@ -6701,14 +6701,19 @@ a.hub-nav-cards__card:focus-visible {
     padding-block: var(--space-5);
 }
 .hub-stats-banner .container {
-        display: flex;
+        display: grid;
+        grid-template-columns: repeat(5, auto);
         justify-content: space-between;
-        align-items: center;
+        align-items: start;
+        gap: var(--space-3);
+    }
+.hub-stats-banner .text-eyebrow {
+        align-self: center;
     }
 
 /* Mobile: eyebrow spans the full row, stats fall into two columns beneath
    it — grid-column: 1 / -1 on the eyebrow, everything else auto-places
-   one per cell. Desktop keeps the flex row above. */
+   one per cell. Desktop keeps the five-column grid above. */
 @media (max-width: 767px) {
     .hub-stats-banner .container {
         display: grid;
