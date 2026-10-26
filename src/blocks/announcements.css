@@ -175,3 +175,374 @@ body.has-investis-tool a.active {
 	color: var(--col-grey-600);
 	font-size: var(--fs-small);
 }
+
+/* ---------------------------------------------------------------------
+   Filter form — re-skinned to the "Search announcements" design: heading,
+   WHAT / WHEN grey cards, bordered category control, black pill button.
+   The tool renders an accordion (Filters > Category) with Duet date
+   pickers; none of its markup can change, so the accordion is neutralised
+   rather than replaced. Selectors are prefixed with .invd-container to
+   out-specify the tool's own `.invd-container ...` rules; !important only
+   where the tool writes inline styles (accordion panel height/display).
+   --------------------------------------------------------------------- */
+
+/* Outer "Filters" bar → plain heading; panel is forced open, trigger inert. */
+.hub-announcements .invd-container .tnf-accordion-trigger:not(.tnf-inner-accordion) {
+	padding: 0;
+	margin-bottom: var(--space-3);
+	border: 0;
+	background: none;
+	color: var(--col-body);
+	font-size: var(--fs-600);
+	font-weight: var(--fw-bold);
+	pointer-events: none;
+	cursor: default;
+
+	svg {
+		display: none;
+	}
+
+	.accordion-title {
+		font-size: 0;
+
+		&::before {
+			content: "Search announcements";
+			font-size: var(--fs-600);
+		}
+	}
+}
+
+.hub-announcements .invd-container .tnf-accordion-panel:not(.tnf-accordion-item .tnf-accordion-item .tnf-accordion-panel) {
+	display: block !important;
+	height: auto !important;
+	overflow: visible !important;
+	padding: 0;
+	border: 0;
+}
+
+/* WHAT / WHEN cards */
+.hub-announcements .invd-container .filter-options-wrapper {
+	display: grid;
+	grid-template-columns: 1fr;
+	gap: var(--space-3);
+	align-items: start;
+	width: 100%;
+
+	@media (min-width: 768px) {
+		grid-template-columns: 1fr 1fr;
+	}
+}
+
+.hub-announcements .invd-container .filter-search-wrapper,
+.hub-announcements .invd-container .filter-date-wrapper {
+	display: flex;
+	flex-direction: column;
+	gap: var(--space-2);
+	padding: var(--space-4);
+	border-radius: var(--radius-sm);
+	background-color: var(--col-grey-100);
+
+	&::before {
+		font-size: var(--fs-small);
+		font-weight: var(--fw-bold);
+		letter-spacing: 0.02em;
+		text-transform: uppercase;
+		margin-bottom: var(--space-2);
+	}
+}
+
+.hub-announcements .invd-container .filter-search-wrapper::before {
+	content: "What";
+}
+
+.hub-announcements .invd-container .filter-date-wrapper::before {
+	content: "When";
+}
+
+/* Fields: white, thin grey border, rounded */
+.hub-announcements .invd-container .tnf-input,
+.hub-announcements .invd-container .duet-date__input {
+	box-sizing: border-box;
+	width: 100%;
+	height: 2.5rem;
+	padding: 0 var(--space-3);
+	border: 1px solid var(--col-grey-500);
+	border-radius: var(--radius-sm);
+	background-color: var(--col-white);
+	color: var(--col-body);
+	font-family: var(--font-family-base);
+	font-size: var(--fs-small);
+}
+
+/* Date pickers: "From" / "To" label on the left, field on the right */
+.hub-announcements .invd-container .tnf-datepicker-wrapper {
+	width: 100%;
+	margin: 0;
+}
+
+.hub-announcements .invd-container .tnf-datepicker-item {
+	display: grid;
+	grid-template-columns: 5rem 1fr;
+	align-items: center;
+	margin: 0;
+}
+
+.hub-announcements .invd-container .tnf-datepicker-label {
+	margin: 0;
+	font-size: var(--fs-small);
+}
+
+.hub-announcements .invd-container .duet-date__toggle {
+	color: var(--col-brand-red);
+}
+
+/* Category: nested accordion trigger becomes a select-style bar */
+.hub-announcements .invd-container .tnf-inner-accordion {
+	box-sizing: border-box;
+	min-height: 2.5rem;
+	margin-top: var(--space-3);
+	padding: 0 var(--space-3);
+	border: 1px solid var(--col-grey-500);
+	border-radius: var(--radius-sm);
+	background-color: var(--col-white);
+	color: var(--col-grey-600);
+	font-size: var(--fs-small);
+	font-weight: var(--fw-normal);
+
+	svg {
+		color: var(--col-brand-red);
+		fill: currentColor;
+	}
+}
+
+/* Apply → black pill */
+.hub-announcements .invd-container .filter-btn--action {
+	margin-top: var(--space-3);
+	text-align: left;
+
+	button,
+	a {
+		padding: var(--space-2) var(--space-4);
+		border: 0;
+		border-radius: 100vw;
+		background-color: var(--col-black);
+		color: var(--col-white);
+		font-family: var(--font-family-base);
+		font-size: var(--fs-button);
+		font-weight: var(--fw-bold);
+		letter-spacing: 0.02em;
+		text-transform: uppercase;
+		cursor: pointer;
+	}
+}
+
+/* Cards fill their grid cell; the tool sets its own widths on the
+   wrappers and the custom elements inside them. */
+.hub-announcements .invd-container .filter-search-wrapper,
+.hub-announcements .invd-container .filter-date-wrapper {
+	box-sizing: border-box;
+	width: 100%;
+	max-width: none;
+	margin: 0;
+}
+
+.hub-announcements .invd-container .filter-search-wrapper cid-news-filter-search,
+.hub-announcements .invd-container .filter-search-wrapper cid-input,
+.hub-announcements .invd-container .filter-date-wrapper duet-date-picker,
+.hub-announcements .invd-container .filter-date-wrapper cid-date-picker,
+.hub-announcements .invd-container .filter-date-wrapper cid-news-filter-timeperiod {
+	display: block;
+	width: 100%;
+}
+
+.hub-announcements .invd-container .filter-date-wrapper cid-news-filter-timeperiod > span {
+	display: flex;
+	flex-direction: column;
+	gap: var(--space-2);
+}
+
+.hub-announcements .invd-container .filter-search-wrapper .tnf-input-wrapper,
+.hub-announcements .invd-container .filter-search-wrapper .h-option-wrapper,
+.hub-announcements .invd-container .filter-search-wrapper .search-box {
+	display: block;
+	width: 100%;
+	margin: 0;
+	padding: 0;
+}
+
+/* Specificity bump: the tool sets `width: 50%/75%/25%; float: left` and a
+   4rem input on its own wrappers with selectors that tie with the ones
+   above and load later. Everything layout-critical is restated under
+   this longer parent so it wins on specificity, not order. */
+.hub-announcements .invd-container .cid-rns .filter-options-wrapper {
+	.filter-search-wrapper,
+	.filter-date-wrapper {
+		float: none;
+		width: 100%;
+		padding: var(--space-4);
+	}
+
+	.filter-search-wrapper .filter-option-wrapper,
+	.filter-search-wrapper .search-box,
+	.filter-search-wrapper .search-box > div {
+		width: 100%;
+		padding: 0;
+	}
+
+	.filter-search-wrapper .search-box input.tnf-input {
+		width: 100%;
+		min-height: 0;
+		height: 2.5rem;
+	}
+
+	.filter-date-wrapper .form-fields {
+		float: none;
+		width: 100%;
+		padding: 0;
+	}
+
+	.filter-date-wrapper .duet-date__input-wrapper .duet-date__input {
+		height: 2.5rem;
+		padding: 0 var(--space-3);
+	}
+}
+
+/* ---------------------------------------------------------------------
+   Category list — stays as checkboxes (multi-select suits it better than
+   a <select>), styled as the open state of the select-style bar above:
+   a bordered card of custom checkboxes in a responsive column grid.
+   Parent chain is deliberately long to out-specify the tool's own rules.
+   --------------------------------------------------------------------- */
+
+/* The panels carry the tool's `.link` class, so the active-link colour
+   leaks into every label inside (WHAT/WHEN, From/To date, Category). */
+.hub-announcements .invd-container .cid-rns .tnf-accordion-panel,
+.hub-announcements .invd-container .cid-rns .tnf-inner-accordion {
+	color: var(--col-body);
+}
+
+.hub-announcements .invd-container .cid-rns .tnf-accordion-item .tnf-accordion-item {
+	.tnf-accordion-panel {
+		margin-top: var(--space-2);
+		padding: var(--space-3);
+		border: 1px solid var(--col-grey-500);
+		border-radius: var(--radius-sm);
+		background-color: var(--col-white);
+	}
+
+	.description {
+		padding: 0;
+	}
+
+	.filter-option-wrapper {
+		max-height: 18rem;
+		padding: 0;
+	}
+
+	/* "All news" row, then the category grid beneath it */
+	.filter-option-wrapper > div {
+		margin: 0;
+	}
+
+	.filter-option-wrapper > div:first-child {
+		padding-bottom: var(--space-3);
+		margin-bottom: var(--space-3);
+		border-bottom: 1px solid var(--col-light-grey);
+	}
+
+	.filter-option-wrapper > div:last-child {
+		display: grid;
+		grid-template-columns: repeat(auto-fill, minmax(14rem, 1fr));
+		gap: var(--space-2) var(--space-4);
+	}
+
+	cid-checkbox {
+		display: block;
+		margin: 0;
+	}
+
+	.tnf-checkbox-label {
+		display: flex;
+		align-items: center;
+		gap: var(--space-2);
+		margin: 0;
+		font-size: var(--fs-small);
+		cursor: pointer;
+	}
+
+	.tnf-checkbox-icon {
+		flex: none;
+		width: 1.25rem;
+		height: 1.25rem;
+		border: 1px solid var(--col-grey-500);
+		border-radius: 0.25rem;
+		background-color: var(--col-white);
+		color: var(--col-white);
+		align-items: center;
+		justify-content: center;
+
+		svg {
+			width: 0.75rem;
+			height: 0.75rem;
+			fill: currentColor;
+		}
+	}
+
+	input:checked + .tnf-checkbox-label .tnf-checkbox-icon {
+		border-color: var(--col-black);
+		background-color: var(--col-black);
+	}
+
+	input:focus-visible + .tnf-checkbox-label .tnf-checkbox-icon {
+		outline: 2px solid var(--col-brand-blue-500);
+		outline-offset: 2px;
+	}
+
+	.tnf-checkbox-label:hover .tnf-checkbox-icon {
+		border-color: var(--col-black);
+	}
+}
+
+/* The tool constrains each checkbox's width, which wraps labels at ~90px;
+   let them take the full grid cell. And the tick's own <path> carries a
+   fill, so colour it explicitly (white on the black checked box). */
+.hub-announcements .invd-container .cid-rns .tnf-accordion-item .tnf-accordion-item {
+	.form-item__control,
+	.tnf-checkbox {
+		width: 100%;
+		max-width: none;
+	}
+
+	.tnf-checkbox-text {
+		flex: 1;
+		width: auto;
+		white-space: normal;
+	}
+
+	.tnf-checkbox-icon svg,
+	.tnf-checkbox-icon svg * {
+		fill: var(--col-white);
+	}
+}
+
+.hub-announcements .invd-container .cid-rns .tnf-accordion-item .tnf-accordion-item {
+	cid-checkbox.from-item,
+	cid-checkbox .form-item__control,
+	cid-checkbox .tnf-checkbox-label {
+		width: 100%;
+	}
+
+	.tnf-checkbox .tnf-checkbox-icon svg.svg {
+		width: 0.75rem;
+		height: 0.75rem;
+	}
+}
+
+/* The tool sizes the tick through its own `.icon-size-20` helper and pads
+   the svg by 4px; !important is the only thing that reliably beats it. */
+.hub-announcements .invd-container .cid-rns .tnf-checkbox .tnf-checkbox-icon svg.svg {
+	box-sizing: border-box;
+	width: 100% !important;
+	height: 100% !important;
+	padding: 0.25rem !important;
+}

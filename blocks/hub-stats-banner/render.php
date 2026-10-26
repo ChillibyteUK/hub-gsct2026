@@ -32,7 +32,7 @@ $wrapper_attributes = get_block_wrapper_attributes( array( 'class' => 'hub-stats
 <section <?php echo $wrapper_attributes; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- get_block_wrapper_attributes() already escapes. ?>>
 	<div class="container">
 		<div class="text-eyebrow">
-			LSEG:GSCT
+			LSEG: GSCT
 		</div>
 		<div class="hub-stats-banner__stat">
 			<div class="text-label text-uppercase">
