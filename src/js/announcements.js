@@ -4,10 +4,10 @@
  * this runs once at init plus on every DOM change inside the container —
  * every step is guarded to be a no-op on repeat runs:
  *
- * - moves each row's .form-type category content into a real Category
- *   column (with matching header), leaving rows without one an empty
- *   cell so columns stay aligned. The "Form type" sr-only span moves
- *   with it untouched.
+ * - moves each row's <cid-news-categories> into a real Category column
+ *   (with matching header), leaving rows without one an empty cell so
+ *   columns stay aligned. The "Form type" sr-only span moves with it
+ *   untouched.
  * - appends a visible "Download" label to the icon-only PDF links.
  * - builds the "Search results / N documents found" heading and the
  *   "Page X of Y (Z results)" footer from the tool's own count text,
@@ -47,6 +47,11 @@ function enhanceAnnouncements( section ) {
 		const downloadTh = headRow.querySelector( '.invd-download-th' );
 		headRow.insertBefore( th, downloadTh );
 
+		const downloadHead = headRow.querySelector( '.invd-download-th' );
+		if ( downloadHead && 'Download' === ( downloadHead.textContent || '' ).trim() ) {
+			downloadHead.textContent = 'PDF';
+		}
+
 		const dateTh = headRow.querySelector( '.invd-date-time-th' );
 		if ( dateTh && 'Date and time' === ( dateTh.textContent || '' ).trim() ) {
 			dateTh.textContent = 'Date';
@@ -63,12 +68,17 @@ function enhanceAnnouncements( section ) {
 			catTd.className = 'hub-ann-cat-td';
 			row.insertBefore( catTd, row.querySelector( '.invd-download-td' ) );
 		}
-		const formType = row.querySelector( '.form-type' );
-		if ( formType && formType.parentElement !== catTd ) {
-			catTd.appendChild( formType );
+		// The tool nests the category inside <cid-news-categories> in the
+		// title cell (stacked under the title). Move the whole component
+		// rather than its children — it owns that subtree and re-renders it.
+		const categories = row.querySelector( 'cid-news-categories' );
+		if ( categories && categories.parentElement !== catTd ) {
+			catTd.appendChild( categories );
 		}
 
-		const link = row.querySelector( '.invd-download-td a.pdf' );
+		// The tool has shipped this control as both <a class="pdf"> and
+		// <button class="pdf"> — match either.
+		const link = row.querySelector( '.invd-download-td .pdf' );
 		if ( link ) {
 			// Swap the tool's large document glyph for the theme's small
 			// download arrow — one less specificity fight to win.
@@ -93,6 +103,13 @@ function enhanceAnnouncements( section ) {
 		pager.querySelectorAll( 'a, button' ).forEach( ( el ) => {
 			el.classList.add( 'hub-ann-page' );
 		} );
+
+		// The tool's "next" control is a bare » glyph — spell it out. Its
+		// aria-label already says what it does; this is purely visual.
+		const next = pager.querySelector( '.pagination__item--next span' );
+		if ( next && '»' === ( next.textContent || '' ).trim() ) {
+			next.textContent = 'Next';
+		}
 	}
 
 	const countSource = section.querySelector( '.news-result-count .msg-alignment' );

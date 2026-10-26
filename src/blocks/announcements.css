@@ -98,13 +98,29 @@ body.has-investis-tool a.active {
 	text-align: left;
 }
 
-.hub-announcements .hub-ann-cat-td .form-type {
+.hub-announcements .hub-ann-cat-td .news-card--form-type {
 	display: inline-block;
-	padding: var(--space-1) var(--space-3);
+	padding: var(--space-2) var(--space-3);
 	border-radius: 100vw;
 	background-color: #dbeafe;
-	font-size: var(--fs-small);
+	font-size: var(--fs-400);
+	line-height: 1.5;
 	white-space: nowrap;
+
+	.tnf-sub-category {
+		font-size: inherit;
+	}
+
+	/* Empty BEM-modifier span the tool renders ahead of the label. */
+	.form-type--number:empty {
+		display: none;
+	}
+}
+
+/* Rows with no category render an empty pill shell — don't paint it. */
+.hub-announcements .hub-ann-cat-td .news-card--form-type:not(:has(.tnf-sub-category)),
+.hub-announcements .hub-ann-cat-td .news-card--form-type:empty {
+	display: none;
 }
 
 /* Backup for the tool's own sr-only: keeps the "Form type" context for
@@ -127,16 +143,31 @@ body.has-investis-tool a.active {
 	white-space: nowrap;
 }
 
-.hub-announcements .invd-download-td a.pdf {
+.hub-announcements .invd-download-td .pdf {
 	display: inline-flex;
 	align-items: center;
 	gap: 0.375rem;
+	width: auto;
+	margin: 0;
+	padding: 0;
+	border: 0;
+	background: none;
 	color: inherit;
+	font-family: var(--font-family-base);
+	font-size: var(--fs-400);
 	text-decoration: none;
 	font-weight: var(--fw-normal);
+	cursor: pointer;
 }
 
-.hub-announcements .invd-download-td a.pdf svg.hub-ann-dl-icon {
+/* The control's own wrapper spans/icon box are sized for the big glyph. */
+.hub-announcements .invd-download-td .pdf .icon {
+	display: flex;
+	width: auto;
+	height: auto;
+}
+
+.hub-announcements .invd-download-td .pdf svg.hub-ann-dl-icon {
 	display: block;
 	width: 0.875rem;
 	height: auto;
@@ -545,4 +576,205 @@ body.has-investis-tool a.active {
 	width: 100% !important;
 	height: 100% !important;
 	padding: 0.25rem !important;
+}
+
+/* ---------------------------------------------------------------------
+   Pager row + IDX footer. Page count text (left) and the pager (right)
+   are separate siblings inside .news-result-container, so they share a
+   row with floats and the disclaimer clears them. Pager links are
+   restyled as pills under a longer selector — the tool's own
+   `.tnf-pagination` link rules (large navy numerals) otherwise win.
+   --------------------------------------------------------------------- */
+.hub-announcements .invd-container .hub-ann-foot {
+	float: left;
+	margin-top: var(--space-4);
+	font-size: var(--fs-400);
+}
+
+.hub-announcements .invd-container .dividend-history-pagination {
+	float: right;
+	margin-top: var(--space-3);
+}
+
+.hub-announcements .invd-container .tnf-pagination {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: flex-end;
+	gap: var(--space-2);
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+.hub-announcements .invd-container .tnf-pagination .pagination__item a.hub-ann-page {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	box-sizing: border-box;
+	min-width: 2.5rem;
+	height: 2.5rem;
+	margin: 0;
+	padding: 0 var(--space-3);
+	border: 1px solid var(--col-grey-500);
+	border-radius: 100vw;
+	background: none;
+	color: var(--col-body);
+	font-family: var(--font-family-base);
+	font-size: var(--fs-small);
+	font-weight: var(--fw-normal);
+	text-decoration: none;
+
+	span {
+		font-size: inherit;
+	}
+
+	&:hover {
+		border-color: var(--col-black);
+	}
+
+	&.is-current {
+		border-color: var(--col-black);
+		font-weight: var(--fw-bold);
+	}
+}
+
+.hub-announcements .cid-disclaimer.tnf-disclaimer {
+	clear: both;
+	display: flex;
+	align-items: center;
+	gap: var(--space-2);
+	padding-top: var(--space-4);
+	color: var(--col-grey-600);
+	font-size: var(--fs-small);
+
+	/* The logo link is nested inside the <p>, so that's the flex row. */
+	p {
+		display: flex;
+		align-items: center;
+		gap: var(--space-2);
+		margin: 0;
+		font-size: var(--fs-small);
+		line-height: 1;
+		white-space: nowrap;
+	}
+
+	p cid-translation {
+		font-size: inherit;
+	}
+
+	a,
+	a.tnf-disclaimer-img {
+		display: block;
+		margin: 0;
+		padding: 0;
+	}
+
+	img {
+		display: block;
+		height: 0.875rem;
+		width: auto;
+	}
+}
+
+/* PDF column: header and cells right-aligned like the design. */
+.hub-announcements table.invd-table .invd-download-th,
+.hub-announcements table.invd-table td.invd-download-td {
+	text-align: right;
+}
+
+/* ---------------------------------------------------------------------
+   Column widths — fixed layout so columns don't resize as each page's
+   content changes. Date / Category / PDF are sized to their widest
+   possible content ("dd/mm/yyyy hh:mm", the longest category pill
+   "Interim report and accounts", icon + "Download"); Title takes the
+   rest. Below 768px a fixed layout would crush the title, so it falls
+   back to auto and the table scrolls inside its wrapper instead.
+   --------------------------------------------------------------------- */
+@media (min-width: 768px) {
+	.hub-announcements table.invd-table {
+		table-layout: fixed;
+	}
+
+	.hub-announcements table.invd-table .invd-date-time-th,
+	.hub-announcements table.invd-table .invd-date-time-td {
+		width: 11rem;
+	}
+
+	.hub-announcements table.invd-table .hub-ann-cat-th,
+	.hub-announcements table.invd-table .hub-ann-cat-td {
+		width: 17rem;
+	}
+
+	.hub-announcements table.invd-table .invd-download-th,
+	.hub-announcements table.invd-table .invd-download-td {
+		width: 9rem;
+	}
+
+	.hub-announcements table.invd-table .invd-title-td {
+		overflow-wrap: anywhere;
+	}
+}
+
+@media (max-width: 767px) {
+	.hub-announcements .table-layout {
+		overflow-x: auto;
+	}
+
+	.hub-announcements table.invd-table {
+		min-width: 40rem;
+	}
+}
+
+/* The tool pins the title column to `width: 40%` via nth-child — which,
+   under a fixed layout, fights the explicit widths above. Let Title take
+   whatever's left. */
+@media (min-width: 768px) {
+	.hub-announcements .invd-container .cid-rns table.table--borderless {
+		th:nth-child(2),
+		td:nth-child(2) {
+			width: auto;
+		}
+	}
+}
+
+/* Type consistency: every cell's text sits on the same 16px / 24px
+   baseline. The title's <h5> wrapper (22px, 27px line box) and the
+   download button (line-height: normal) otherwise make rows uneven. */
+.hub-announcements .invd-container table.invd-table {
+	.news-title {
+		margin: 0;
+		font-size: var(--fs-400);
+		line-height: 24px;
+	}
+
+	.invd-download-td .pdf {
+		line-height: 24px;
+	}
+}
+
+/* Explicit column widths, restated with the tool's own nth-child selector
+   shape so they win (class-based widths above lose to it on specificity). */
+@media (min-width: 768px) {
+	.hub-announcements .invd-container .cid-rns table.table--borderless {
+		th:nth-child(1),
+		td:nth-child(1) {
+			width: 11rem;
+		}
+
+		th:nth-child(3),
+		td:nth-child(3) {
+			width: 17rem;
+		}
+
+		th:nth-child(4),
+		td:nth-child(4) {
+			width: 9rem;
+		}
+	}
+}
+
+/* Rows with a category pill are taller than ones without; give every row
+   the pill row's height so the table doesn't change rhythm row to row. */
+.hub-announcements table.invd-table tbody td {
+	height: 3.6rem;
 }
