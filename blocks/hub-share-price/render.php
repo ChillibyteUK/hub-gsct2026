@@ -54,7 +54,7 @@ if ( ! empty( $hub_snap['lastTrade'] ) ) {
 $hub_volume = isset( $hub_snap['volume'] ) ? number_format( (int) $hub_snap['volume'] ) : '&ndash;';
 
 // Market cap arrives in pence (LSE GBX instrument), so £m is cap / 1e8.
-$hub_mcap = isset( $hub_snap['marketCap'] ) ? number_format( (float) $hub_snap['marketCap'] / 100000000, 2 ) . ' Mn GBP' : '&ndash;';
+$hub_mcap = isset( $hub_snap['marketCap'] ) ? number_format( (float) $hub_snap['marketCap'] / 100000000, 2 ) . ' Mn GBp' : '&ndash;';
 
 $hub_open      = $hub_pence( $hub_snap['open'] ?? null );
 $hub_prev      = $hub_pence( $hub_snap['prevClose'] ?? null );
