@@ -134,6 +134,10 @@ $wrapper_attributes = get_block_wrapper_attributes(
 				<?php
 			}
 			?>
+			<button type="button" class="hub-document-library__clear" data-document-library-clear hidden>
+				<svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="m2 2 8 8M10 2l-8 8"/></svg>
+				<span>Clear filters</span>
+			</button>
 			<div class="hub-document-library__table-wrap">
 				<table class="hub-document-library__table">
 					<thead>

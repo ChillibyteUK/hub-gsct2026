@@ -69,6 +69,32 @@
 	transition: background-color 200ms ease, color 200ms ease, box-shadow 200ms ease;
 }
 
+.hub-document-library__clear {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.5rem;
+	margin: calc(var(--space-2) * -1) 0 var(--space-4);
+	padding: 0;
+	border: 0;
+	background: none;
+	color: var(--col-brand-purple);
+	cursor: pointer;
+	font-family: var(--font-family-base);
+	font-size: var(--fs-400);
+	font-weight: var(--fw-bold);
+	text-decoration: underline;
+	text-underline-offset: 0.2em;
+}
+
+.hub-document-library__clear[hidden] {
+	display: none;
+}
+
+.hub-document-library__clear:focus-visible {
+	outline: 2px solid var(--col-brand-yellow);
+	outline-offset: 2px;
+}
+
 .hub-document-library__more {
 	position: relative;
 }

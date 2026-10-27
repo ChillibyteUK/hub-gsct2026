@@ -1176,6 +1176,7 @@
 	    const rows = Array.from(section.querySelectorAll('[data-doc-row]'));
 	    const empty = section.querySelector('[data-doc-empty]');
 	    const search = section.querySelector('[data-document-library-search]');
+	    const clear = section.querySelector('[data-document-library-clear]');
 	    const pills = Array.from(section.querySelectorAll('.hub-document-library__pill[data-cat]'));
 	    const more = section.querySelector('.hub-document-library__more');
 	    const toggle = section.querySelector('.hub-document-library__more-toggle');
@@ -1277,6 +1278,9 @@
 	      if (empty) {
 	        empty.hidden = shown > 0;
 	      }
+	      if (clear) {
+	        clear.hidden = !activeCat && !query;
+	      }
 	    };
 	    const selectCat = slug => {
 	      activeCat = activeCat === slug ? '' : slug;
@@ -1292,6 +1296,19 @@
 	      }
 	      apply();
 	    };
+	    clear?.addEventListener('click', () => {
+	      if (search) {
+	        search.value = '';
+	        clearTimeout(timer);
+	        fetchContent('');
+	      }
+	      if (activeCat) {
+	        selectCat(activeCat);
+	      } else {
+	        apply();
+	      }
+	      (search || clear).focus();
+	    });
 	    pills.forEach(pill => {
 	      pill.addEventListener('click', () => {
 	        selectCat(pill.getAttribute('data-cat') || '');
