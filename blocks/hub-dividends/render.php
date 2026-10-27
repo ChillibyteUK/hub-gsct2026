@@ -2,26 +2,41 @@
 /**
  * Block template for HUB Dividends.
  *
- * Three sections from one corporateactions fetch: latest dividend card,
- * annual Final/Interim stacked chart (5/10 years/All pills), and the full
- * searchable history table with progressive disclosure plus CSV export.
- * Year stacks group by ex-div calendar year; chart colours mirror the
- * --col-chart-* tokens (canvas needs hex — see the map below).
+ * Bundles the Investis Dividend Centre overview tool (latest dividend,
+ * annual chart and history): the container div plus its script and
+ * stylesheet — same URLs as the standalone snippet, loaded via the enqueue
+ * API so WordPress manages order (the script handle is shared with the other
+ * Investis blocks, so it loads once per page). The tool renders everything
+ * client-side; src/blocks/dividends.css re-skins it on top of the tool's own
+ * stylesheet. Below it sits the full dividend history table (see below).
+ *
+ * The second stylesheet in the snippet (the Columbia Threadneedle client
+ * skin) is deliberately NOT enqueued: it only carries CT branding that this
+ * block replaces, so loading it would just add competing rules to override.
  *
  * @package hub-gsct2026
  */
 
 defined( 'ABSPATH' ) || exit;
 
-$hub_events = hub_gsct2026_get_dividend_events();
+wp_enqueue_script(
+	'investis-ir',
+	'https://assets.investisdigital.com/nextgentools/v3/scripts/ir.js',
+	array(),
+	null,
+	true
+);
+wp_enqueue_style(
+	'investis-ngt-market',
+	'https://assets.investisdigital.com/nextgentools/v3/assets/ngt-market-main.css',
+	array(),
+	null
+);
 
-if ( ! $hub_events ) {
-	return;
-}
-
-$hub_latest = $hub_events[0];
-$hub_annual = hub_gsct2026_get_annual_dividends( $hub_events );
-
+// The Investis overview tool has no history table, so the full ex-dividend
+// history stays here, from the corporate actions API: searchable, ten rows
+// at a time, with a CSV download (src/js/dividend-history.js).
+$hub_events   = hub_gsct2026_get_dividend_events();
 $hub_fmt_date = static function ( $ymd ) {
 	$time = strtotime( $ymd );
 	return false !== $time ? wp_date( 'd M Y', $time ) : $ymd;
@@ -31,68 +46,11 @@ $wrapper_attributes = get_block_wrapper_attributes( array( 'class' => 'hub-divid
 ?>
 <section <?php echo $wrapper_attributes; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- get_block_wrapper_attributes() already escapes. ?>>
 	<div class="container">
-		<h2 class="h3-data-m">Latest dividend</h2>
-		<div class="hub-dividends__latest">
-			<div class="row">
-				<div class="col-12 col-md-3">
-					<div class="text-label text-uppercase">Ex-dividend date</div>
-					<div class="h2-data-l"><?= esc_html( $hub_fmt_date( $hub_latest['exDate'] ) ); ?></div>
-				</div>
-				<div class="col-12 col-md-3">
-					<div class="text-label text-uppercase">Payment date</div>
-					<div class="h2-data-l"><?= esc_html( $hub_fmt_date( $hub_latest['payDate'] ) ); ?></div>
-				</div>
-				<div class="col-12 col-md-3">
-					<div class="text-label text-uppercase">Dividend value</div>
-					<div class="h2-data-l"><?= esc_html( number_format( $hub_latest['value'], 2 ) ); ?> <span class="h3-data-m">GBp</span></div>
-				</div>
-				<div class="col-12 col-md-3">
-					<div class="text-label text-uppercase">Dividend type</div>
-					<div class="h2-data-l"><?= esc_html( $hub_latest['label'] ); ?></div>
-				</div>
-			</div>
-		</div>
-		<h2 class="h3-data-m pt-5">Annual dividends and dividend yield</h2>
-		<div class="hub-dividends__pills" data-div-pills>
-			<button type="button" class="is-active" data-years="5">5 years</button>
-			<button type="button" data-years="10">10 years</button>
-			<button type="button" data-years="0">All</button>
-		</div>
-		<div class="hub-dividends__chart-wrap">
-			<div class="hub-dividends__canvas">
-				<canvas
-					data-div-chart
-					data-chart="
-					<?=
-					esc_attr(
-						wp_json_encode(
-							array_reverse(
-								array_map(
-									static function ( $year, $totals ) {
-										return array(
-											'year'    => (string) $year,
-											'final'   => $totals['final'],
-											'interim' => $totals['interim'],
-										);
-									},
-									array_keys( $hub_annual ),
-									$hub_annual
-								)
-							)
-						)
-					);
-					?>
-					"
-					role="img"
-					aria-label="Annual dividends chart"
-				></canvas>
-			</div>
-			<ul class="hub-dividends__legend" aria-hidden="true">
-				<li><span class="hub-dividends__chip" style="background: var(--col-chart-3);"></span>Final</li>
-				<li><span class="hub-dividends__chip" style="background: var(--col-chart-2);"></span>Interim</li>
-			</ul>
-		</div>
-		<h2 class="h3-data-m pt-5">Dividend history</h2>
+		<div data-lang="en-GB" id="invd-container-dvc-1451-358-dvc-gobal-smaller" data-path="marketdatatools/dividendcenter/clients" data-client="1451" data-config="dvc-1451-358-dvc-gobal-smaller" data-active="true" class="invd-container dvc-gobal-smaller gsct-dvc-overview"></div>
+		<?php
+		if ( $hub_events ) {
+			?>
+		<h2 class="h3-data-m hub-dividends__history-title">Dividend history</h2>
 		<div class="hub-dividends__search">
 			<svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="8" cy="8" r="6.5"/><path d="m13 13 4 4"/></svg>
 			<label class="screen-reader-text" for="<?= esc_attr( $hub_search_id = wp_unique_id( 'hub-dividends-search-' ) ); ?>">Search dividends</label>
@@ -145,5 +103,8 @@ $wrapper_attributes = get_block_wrapper_attributes( array( 'class' => 'hub-divid
 				<svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 1v9m0 0 3.5-3.5M8 10 4.5 6.5M2.5 11v2.5a.5.5 0 0 0 .5.5h10a.5.5 0 0 0 .5-.5V11"/></svg>
 			</button>
 		</div>
+		<?php
+		}
+		?>
 	</div>
 </section>

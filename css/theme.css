@@ -4551,224 +4551,407 @@ body.has-investis-tool a.active {
 }
 
 /* --- src/blocks/dividend-calculator.css --- */
-/* HUB Dividend Calculator — stacked inputs left, yellow results card
-   right, payments table plus disclaimer below. Native inputs carry the
-   theme's forms.css treatment; this file only owns layout and the card. */
+/* HUB Dividend Calculator — the Investis Dividend Centre calculator tool
+   re-skinned to the site. Same approach as HUB Dividends: the tool's own
+   stylesheet still loads, so rules are prefixed with
+   .hub-dividend-calculator .invd-container to out-specify it. */
 
 .hub-dividend-calculator {
 	padding-block: var(--space-5);
+	/* The tool's visually-hidden helper text is absolutely positioned and
+	   can poke out past the right edge on narrow screens, widening the page. */
+	overflow-x: clip;
 }
 
-.hub-dividend-calculator .h2-data-l {
-	margin-block: 0 var(--space-4);
+.hub-dividend-calculator .invd-container {
+	font-family: var(--font-family-base);
+	color: var(--col-body);
 }
 
-.hub-dividend-calculator__form {
-	display: grid;
-	gap: var(--space-3);
-	margin-bottom: var(--space-4);
-}
-
-.hub-dividend-calculator__field label {
-	display: block;
-	margin-bottom: var(--space-1);
-	font-weight: var(--fw-bold);
-}
-
-.hub-dividend-calculator__field input {
-	width: 100%;
-}
-
-.hub-dividend-calculator__error {
-	margin: 0;
-	color: var(--col-negative);
-	font-weight: var(--fw-bold);
-}
-
-.hub-dividend-calculator__card {
-	display: flex;
-	flex-direction: column;
-	justify-content: center;
-	height: 100%;
-	background-color: var(--col-brand-yellow);
-	border-radius: var(--radius-lg);
-	padding: var(--space-4);
-	color: var(--col-black);
-	text-align: center;
-}
-
-.hub-dividend-calculator__card[hidden] {
+/* Single "Calculator" tab: its navy bar goes. */
+.hub-dividend-calculator .invd-container .cid-dvc > .cid-tabs > cid-tool-tabs {
 	display: none;
 }
 
-.hub-dividend-calculator__result .h2-data-l {
+.hub-dividend-calculator .invd-container .tab-content,
+.hub-dividend-calculator .invd-container .tab-content > .tab-panel,
+.hub-dividend-calculator .invd-container .description,
+.hub-dividend-calculator .invd-container .dividend-calculator {
+	padding: 0;
+	border: 0;
+	background: none;
+}
+
+.hub-dividend-calculator .invd-container .dividend-calculator > .row {
+	display: grid;
+	grid-template-columns: 1fr;
+	gap: var(--space-4);
 	margin: 0;
 }
 
-.hub-dividend-calculator__divider {
-	border-top: 1px solid rgb(0 0 0 / 0.15);
-	margin-block: var(--space-3);
+@media (min-width: 992px) {
+	.hub-dividend-calculator .invd-container .dividend-calculator > .row {
+		grid-template-columns: 1fr 1fr;
+		gap: var(--space-5);
+	}
 }
 
-.hub-dividend-calculator__yield-note {
-	margin: var(--space-2) 0 0;
+.hub-dividend-calculator .invd-container .dividend-calculator > .row > * {
+	grid-column: auto;
+	width: auto;
+	max-width: none;
+	margin: 0;
+	padding: 0;
+	border: 0;
 }
 
-.hub-dividend-calculator__payments {
-	margin-top: var(--space-5);
-	overflow-x: auto;
+/* The payments table row spans both columns. */
+.hub-dividend-calculator .invd-container .dividend-calculator > .row > .dividend-calculator-table-container {
+	grid-column: 1 / -1;
 }
 
-/* Per-row share counts: fixed narrow width so the input doesn't stretch
-   the column (theme inputs default to width: 100%). */
-.hub-dividend-calculator__payments input[type="number"] {
-	width: 5.5rem;
+/* Fields */
+.hub-dividend-calculator .invd-container .form-item__label,
+.hub-dividend-calculator .invd-container .tnf-datepicker-label {
+	display: block;
+	margin: 0 0 var(--space-1);
+	color: var(--col-black);
+	font-size: var(--fs-400);
+	font-weight: var(--fw-medium);
 }
 
-/* Static row order (rows are only ever rebuilt wholesale), so plain
-   nth-child striping is safe — same lightest-grey as the other tables. */
-.hub-dividend-calculator__payments tbody tr:nth-child(even) td {
-	background-color: var(--col-lightest-grey);
+.hub-dividend-calculator .invd-container input.form-control,
+.hub-dividend-calculator .invd-container input.duet-date__input {
+	width: 100%;
+	padding: var(--space-2);
+	border: 1px solid var(--col-medium-grey);
+	border-radius: var(--radius-sm);
+	background-color: var(--col-white);
+	color: var(--col-body);
+	font-family: var(--font-family-base);
+	font-size: var(--fs-400);
 }
 
-.hub-dividend-calculator__note {
+.hub-dividend-calculator .invd-container .form-item {
+	margin-bottom: var(--space-3);
+}
+
+/* Results card: the site's yellow card */
+.hub-dividend-calculator .invd-container .dividend-summary {
+	padding: var(--space-4);
+	border-radius: var(--radius-lg);
+	background-color: var(--col-brand-yellow);
+	color: var(--col-black);
+}
+
+.hub-dividend-calculator .invd-container .dividend-summary dl {
+	margin: 0;
+	text-align: left;
+}
+
+.hub-dividend-calculator .invd-container .dividend-summary dt {
+	margin: 0;
+	font-weight: var(--fw-medium);
+	font-size: clamp(14px, calc(12.59px + 0.38vw), 16px);
+	line-height: clamp(20px, calc(18.59px + 0.38vw), 24px);
+	text-transform: uppercase;
+}
+
+.hub-dividend-calculator .invd-container .dividend-summary dd {
+	margin: 0;
+	font-weight: var(--fw-bold);
+	font-size: clamp(28px, calc(25.18px + 0.75vw), 36px);
+	line-height: clamp(32px, calc(28.47px + 0.94vw), 42px);
+}
+
+.hub-dividend-calculator .invd-container .dividend-calculator-table {
+	border-top: 0;
+}
+
+/* Payments table: the same look as the dividend history table (HUB
+   Dividends) — plain medium-weight header over a 2px rule, 1px row rules,
+   grey stripe on even rows, numbers right-aligned, 8px cell padding, 16/24
+   type. The tool's navy header and its own alignment classes are overridden
+   (it text-aligns with !important-weight rules, so the alignment needs
+   !important too). */
+.hub-dividend-calculator .invd-container .dividend-calculator-table-container table {
+	width: 100%;
+	border-collapse: collapse;
+	font-size: var(--fs-400);
+	line-height: 24px;
+}
+
+.hub-dividend-calculator .invd-container .dividend-calculator-table-container table thead,
+.hub-dividend-calculator .invd-container .dividend-calculator-table-container table thead tr,
+.hub-dividend-calculator .invd-container .dividend-calculator-table-container table thead th {
+	background: none !important;
+}
+
+.hub-dividend-calculator .invd-container .dividend-calculator-table-container table thead th {
+	padding: var(--space-2);
+	border: 0;
+	border-bottom: 2px solid var(--col-light-grey);
+	color: var(--col-black);
+	font-size: var(--fs-400);
+	font-weight: var(--fw-medium);
+	line-height: 24px;
+	text-align: left;
+	vertical-align: bottom;
+}
+
+.hub-dividend-calculator .invd-container .dividend-calculator-table-container table tbody td {
+	padding: var(--space-2);
+	border: 0;
+	border-bottom: 1px solid var(--col-light-grey);
+	background: none;
+	color: var(--col-black);
+	font-size: var(--fs-400);
+	font-weight: var(--fw-regular);
+	line-height: 24px;
+	text-align: left;
+	vertical-align: middle;
+}
+
+.hub-dividend-calculator .invd-container .dividend-calculator-table-container table tbody tr:nth-child(even) td {
+	background-color: var(--col-grey-100);
+}
+
+/* Numeric columns: dividend, adjusted dividend and amount. */
+.hub-dividend-calculator .invd-container .dividend-calculator-table-container table .invd-dc-value-th,
+.hub-dividend-calculator .invd-container .dividend-calculator-table-container table .invd-dc-adjusted-value-th,
+.hub-dividend-calculator .invd-container .dividend-calculator-table-container table thead th:last-child,
+.hub-dividend-calculator .invd-container .dividend-calculator-table-container table .invd-dc-value-td,
+.hub-dividend-calculator .invd-container .dividend-calculator-table-container table .invd-dc-adjustedDividend-td,
+.hub-dividend-calculator .invd-container .dividend-calculator-table-container table tbody td:last-child {
+	text-align: right !important;
+}
+
+/* Number-of-shares field in each row */
+.hub-dividend-calculator .invd-container .dividend-calculator-table-container table .no-of-shares-column input {
+	width: 100%;
+	min-width: 6rem;
+	padding: var(--space-2);
+	border: 1px solid var(--col-medium-grey);
+	border-radius: var(--radius-sm);
+	background-color: var(--col-white);
+	color: var(--col-body);
+	font-family: var(--font-family-base);
+	font-size: var(--fs-400);
+}
+
+/* Note and "Service provided by" credit */
+.hub-dividend-calculator .invd-container .customText-DVC {
 	margin: var(--space-3) 0 0;
 	color: var(--col-grey-600);
 	font-size: var(--fs-small);
+	line-height: 1.5;
 }
 
-.hub-dividend-calculator__provider {
-	display: flex;
-	align-items: center;
-	gap: var(--space-1);
+.hub-dividend-calculator .invd-container .disclaimer-container {
+	padding: 0;
+}
+
+.hub-dividend-calculator .invd-container .disclaimer-container p {
 	margin: var(--space-2) 0 0;
 	color: var(--col-grey-600);
 	font-size: var(--fs-small);
 }
 
-.hub-dividend-calculator__provider img {
-	display: block;
-	flex: none;
-}
-
 /* --- src/blocks/dividends.css --- */
-/* HUB Dividends — latest card, annual stacked chart, searchable history
-   table. Table striping is class-based (.is-alt, re-applied to visible
-   rows by the filter JS) rather than :nth-child, so search/disclosure
-   hiding can't break the alternation — same approach as HUB Holdings. */
+/* HUB Dividends — the Investis Dividend Centre overview tool (latest
+   dividend, annual chart) re-skinned to the site. The tool's own stylesheet
+   (ngt-market-main.css) still loads, so every rule here is prefixed with
+   .hub-dividends .invd-container to out-specify its `.invd-container ...`
+   selectors; !important only where the tool uses it or inlines a value.
+   The Columbia Threadneedle client skin is deliberately not loaded (see
+   render.php). Same approach as HUB Announcements. */
 
 .hub-dividends {
 	padding-block: var(--space-5);
+	/* The tool's visually-hidden helper text is absolutely positioned and
+	   can poke out past the right edge on narrow screens, widening the page. */
+	overflow-x: clip;
 }
 
-.hub-dividends .h2-data-l {
-	margin-block: var(--space-5) var(--space-3);
+.hub-dividends .invd-container {
+	font-family: var(--font-family-base);
+	color: var(--col-body);
 }
 
-.hub-dividends .h2-data-l:first-child {
-	margin-top: 0;
+/* A single "Overview" tab: its bar adds nothing, so it goes. (The year-range
+   buttons use the same tabs component, nested deeper — untouched here.) */
+.hub-dividends .invd-container .cid-dvc > .cid-tabs > cid-tool-tabs {
+	display: none;
 }
 
-.hub-dividends__latest {
-	background-color: var(--col-brand-yellow);
-	border-radius: var(--radius-lg);
-	padding: var(--space-4);
+.hub-dividends .invd-container .tab-content,
+.hub-dividends .invd-container .tab-content > .tab-panel,
+.hub-dividends .invd-container .description {
+	padding: 0;
+	border: 0;
+	background: none;
+}
+
+/* Section headings: Data M, like the other blocks' h3s. */
+.hub-dividends .invd-container h4 {
+	margin: 0 0 var(--space-3);
+	font-family: var(--font-family-base);
+	font-weight: var(--fw-bold);
+	/* The tool sets h4 size with !important. */
+	font-size: clamp(20px, calc(18.59px + 0.38vw), 24px) !important;
+	line-height: clamp(24px, calc(21.18px + 0.75vw), 32px) !important;
+	letter-spacing: 0;
 	color: var(--col-black);
-	margin-bottom: var(--space-2);
 }
 
-.hub-dividends__latest .h2-data-l {
+/* Latest dividend card */
+.hub-dividends .invd-container .overview-tab--latest-dividend.mb-20 {
+	/* Always shown: the Columbia Threadneedle skin hides this section, and
+	   that stylesheet can still be on a page via other embedded snippets. */
+	display: block !important;
+	margin-bottom: var(--space-5);
+}
+
+.hub-dividends .invd-container .latest-dividend {
+	padding: var(--space-4);
+	border-radius: var(--radius-lg);
+	background-color: var(--col-brand-yellow);
+	color: var(--col-black);
+}
+
+.hub-dividends .invd-container .latest-dividend .flex-container {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: flex-start;
+	gap: var(--space-4) var(--space-5);
+}
+
+.hub-dividends .invd-container .latest-dividend dl {
 	margin: 0;
+	padding: 0;
+	text-align: left;
 }
 
-.hub-dividends__pills {
+.hub-dividends .invd-container .latest-dividend dt {
+	margin: 0;
+	font-weight: var(--fw-medium);
+	font-size: clamp(14px, calc(12.59px + 0.38vw), 16px);
+	line-height: clamp(20px, calc(18.59px + 0.38vw), 24px);
+	text-transform: uppercase;
+}
+
+.hub-dividends .invd-container .latest-dividend dd {
+	margin: 0;
+	font-weight: var(--fw-bold);
+	font-size: clamp(28px, calc(25.18px + 0.75vw), 36px);
+	line-height: clamp(32px, calc(28.47px + 0.94vw), 42px);
+}
+
+/* Year-range buttons (5 / 10 / All): the site's outlined pills. Hover rings
+   are inset box-shadows inside the 1.5px border (no layout shift): off +
+   hover = white fill with a 1.5px purple inner ring; on + hover = stays
+   purple with a 3px white inner ring. */
+.hub-dividends .invd-container .dividend-chart-container .tab-list {
 	display: flex;
 	flex-wrap: wrap;
 	gap: var(--space-2);
-	margin-bottom: var(--space-4);
+	margin: 0 0 var(--space-4);
+	padding: 0;
+	border: 0;
+	background: none;
 }
 
-.hub-dividends__pills button {
+.hub-dividends .invd-container .dividend-chart-container .tab-list a.tab {
+	display: inline-block;
+	flex: none;
 	min-width: 65px;
+	margin: 0;
 	padding: 1rem;
 	border: 1.5px solid var(--col-brand-purple);
 	border-radius: 100vw;
 	background-color: transparent;
 	color: var(--col-brand-purple);
-	cursor: pointer;
 	font-family: var(--font-family-base);
 	font-size: var(--fs-400);
 	font-weight: var(--fw-bold);
 	line-height: normal;
-	/* Trim the font's built-in leading so the 1rem padding measures from
-	   cap height to baseline, not from the line box. */
+	text-align: center;
+	text-decoration: none;
 	text-box: trim-both cap alphabetic;
+	cursor: pointer;
 	transition: background-color 200ms ease, color 200ms ease, box-shadow 200ms ease;
 }
 
-/* Hover rings are inset box-shadows (inside the 1.5px border, no layout
-   shift): off + hover = white fill with a 1.5px purple inner ring;
-   on + hover = stays purple with a 3px white inner ring. */
-@media (hover: hover) {
-	.hub-dividends__pills button:hover {
-		background-color: var(--col-white);
-		box-shadow: inset 0 0 0 1.5px var(--col-brand-purple);
-	}
-}
-
-.hub-dividends__pills button:focus-visible {
-	outline: 2px solid var(--col-brand-yellow);
-	outline-offset: 2px;
-}
-
-.hub-dividends__pills button.is-active {
+.hub-dividends .invd-container .dividend-chart-container .tab-list a.tab.active {
 	background-color: var(--col-brand-purple);
 	color: var(--col-white);
 }
 
 @media (hover: hover) {
-	.hub-dividends__pills button.is-active:hover {
+	.hub-dividends .invd-container .dividend-chart-container .tab-list a.tab:hover {
+		background-color: var(--col-white);
+		color: var(--col-brand-purple);
+		box-shadow: inset 0 0 0 1.5px var(--col-brand-purple);
+	}
+
+	.hub-dividends .invd-container .dividend-chart-container .tab-list a.tab.active:hover {
 		background-color: var(--col-brand-purple);
+		color: var(--col-white);
 		box-shadow: inset 0 0 0 3px var(--col-white);
 	}
 }
 
-.hub-dividends__chart-wrap {
-	margin-bottom: var(--space-3);
+.hub-dividends .invd-container .dividend-chart-container .tab-list a.tab:focus-visible {
+	outline: 2px solid var(--col-brand-yellow);
+	outline-offset: 2px;
 }
 
-.hub-dividends__canvas {
-	position: relative;
-	height: 260px;
+/* Chart: Final / Interim in the site's chart colours. Highcharts runs in
+   styled mode, so series colours are plain CSS. */
+.hub-dividends .invd-container .highcharts-series-0 .highcharts-point,
+.hub-dividends .invd-container .highcharts-legend-item.highcharts-series-0 .highcharts-point {
+	fill: var(--col-chart-3);
+	stroke: var(--col-chart-3);
 }
 
-.hub-dividends__canvas canvas {
-	display: block;
-	width: 100%;
-	height: 100%;
+.hub-dividends .invd-container .highcharts-series-1 .highcharts-point,
+.hub-dividends .invd-container .highcharts-legend-item.highcharts-series-1 .highcharts-point {
+	fill: var(--col-chart-2);
+	stroke: var(--col-chart-2);
 }
 
-.hub-dividends__legend {
-	display: flex;
-	flex-wrap: wrap;
-	gap: var(--space-2) var(--space-4);
+.hub-dividends .invd-container .highcharts-grid-line {
+	stroke: var(--col-light-grey);
+}
+
+.hub-dividends .invd-container .highcharts-root {
+	font-family: var(--font-family-base);
+}
+
+/* Note and "Service provided by" credit under the chart */
+.hub-dividends .invd-container .customText-DVC {
 	margin: var(--space-3) 0 0;
+	color: var(--col-grey-600);
+	font-size: var(--fs-small);
+	line-height: 1.5;
+}
+
+.hub-dividends .invd-container .disclaimer-container {
 	padding: 0;
-	list-style: none;
 }
 
-.hub-dividends__legend li {
-	display: flex;
-	align-items: center;
-	gap: var(--space-1);
-	font-size: var(--fs-400);
+.hub-dividends .invd-container .disclaimer-container p {
+	margin: var(--space-2) 0 0;
+	color: var(--col-grey-600);
+	font-size: var(--fs-small);
 }
 
-.hub-dividends__chip {
-	display: inline-block;
-	width: 0.625rem;
-	height: 0.625rem;
-	border-radius: 50%;
+/* Dividend history (from the corporate actions API): search, table, "show
+   more" and CSV download. Table striping is class-based (.is-alt, re-applied
+   to visible rows by the filter JS) rather than :nth-child, so search/
+   disclosure hiding can't break the alternation. */
+.hub-dividends__history-title {
+	margin: var(--space-5) 0 var(--space-3);
 }
 
 .hub-dividends__search {

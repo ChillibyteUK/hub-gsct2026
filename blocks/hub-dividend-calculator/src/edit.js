@@ -1,9 +1,9 @@
 import { useBlockProps } from '@wordpress/block-editor';
-import { TextControl, TextareaControl } from '@wordpress/components';
+import { TextControl } from '@wordpress/components';
 import EditorBlockShell from '../../_shared/EditorBlockShell';
 
 export default function Edit( { attributes, setAttributes, clientId } ) {
-	const { title, disclaimer } = attributes;
+	const { title } = attributes;
 	const blockProps = useBlockProps( { className: 'container hub-editor-block' } );
 
 	return (
@@ -13,14 +13,8 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 				value={ title }
 				onChange={ ( value ) => setAttributes( { title: value } ) }
 			/>
-			<TextareaControl
-				label="Disclaimer"
-				value={ disclaimer }
-				onChange={ ( value ) => setAttributes( { disclaimer: value } ) }
-				help="Shown below the payments table."
-			/>
 			<p className="hub-editor-block__note">
-				Start/end dates plus share count in, total GBp and yield-on-cost out — computed live against dividend history and the start-date close.
+				Investis dividend calculator — the tool loads and calculates on the frontend, styled by the theme. It carries its own note and provider credit.
 			</p>
 		</EditorBlockShell>
 	);

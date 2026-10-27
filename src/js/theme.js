@@ -16,10 +16,10 @@ import { initRelatedInsights } from './related-insights';
 import { initHoldings } from './holdings';
 import { initGeoCharts } from './geo-chart';
 import { initReturnPerformance } from './return-performance';
-import { initDividends } from './dividends';
-import { initDividendCalculator } from './dividend-calculator';
 import { initDocumentLibraries } from './document-library';
 import { initAnnouncements } from './announcements';
+import { initInvestisDates } from './investis-dates';
+import { initDividendHistory } from './dividend-history';
 
 document.addEventListener('DOMContentLoaded', () => {
 	initLenis();
@@ -42,6 +42,6 @@ document.addEventListener('DOMContentLoaded', () => {
 	initReturnPerformance();
 	initDocumentLibraries();
 	initAnnouncements();
-	initDividends();
-	initDividendCalculator();
+	initInvestisDates();
+	initDividendHistory();
 });

@@ -2,19 +2,37 @@
 /**
  * Block template for HUB Dividend Calculator.
  *
- * Inputs stack in the left column; the yellow results card sits in the
- * middle column; the counted-payments table plus disclaimer follow below.
- * Calculation itself runs server-side via GET hub/v1/dividend-calc — the
- * browser never sees the API key — with results announced through an
- * aria-live region.
+ * Bundles the Investis Dividend Centre calculator tool: the container div
+ * plus its script and stylesheet — same URLs as the standalone snippet,
+ * loaded via the enqueue API (the script handle is shared with the other
+ * Investis blocks, so it loads once per page). The tool renders and
+ * calculates client-side; src/blocks/dividend-calculator.css re-skins it on
+ * top of the tool's own stylesheet. The Columbia Threadneedle client skin
+ * from the snippet is deliberately not enqueued (see HUB Dividends).
+ *
+ * The title stays a block field above the tool. The tool brings its own NOTE
+ * and "Service provided by IDX" footer, so there's no separate disclaimer.
  *
  * @package hub-gsct2026
  */
 
 defined( 'ABSPATH' ) || exit;
 
-$title      = $attributes['title'] ?? '';
-$disclaimer = $attributes['disclaimer'] ?? '';
+$title = $attributes['title'] ?? '';
+
+wp_enqueue_script(
+	'investis-ir',
+	'https://assets.investisdigital.com/nextgentools/v3/scripts/ir.js',
+	array(),
+	null,
+	true
+);
+wp_enqueue_style(
+	'investis-ngt-market',
+	'https://assets.investisdigital.com/nextgentools/v3/assets/ngt-market-main.css',
+	array(),
+	null
+);
 
 $wrapper_attributes = get_block_wrapper_attributes( array( 'class' => 'hub-dividend-calculator' ) );
 ?>
@@ -27,70 +45,6 @@ $wrapper_attributes = get_block_wrapper_attributes( array( 'class' => 'hub-divid
 			<?php
 		}
 		?>
-		<div class="row">
-			<div class="col-12 col-md-6 col-lg-4">
-				<form class="hub-dividend-calculator__form" data-div-calc data-endpoint="<?= esc_attr( esc_url_raw( rest_url( 'hub/v1/dividend-calc' ) ) ); ?>" novalidate>
-					<div class="hub-dividend-calculator__field">
-						<?php $hub_start_id = wp_unique_id( 'hub-div-calc-start-' ); ?>
-						<label for="<?= esc_attr( $hub_start_id ); ?>">Start date of investment</label>
-						<input type="date" id="<?= esc_attr( $hub_start_id ); ?>" name="start" required max="<?= esc_attr( gmdate( 'Y-m-d' ) ); ?>">
-					</div>
-					<div class="hub-dividend-calculator__field">
-						<?php $hub_end_id = wp_unique_id( 'hub-div-calc-end-' ); ?>
-						<label for="<?= esc_attr( $hub_end_id ); ?>">End date of investment</label>
-						<input type="date" id="<?= esc_attr( $hub_end_id ); ?>" name="end" required max="<?= esc_attr( gmdate( 'Y-m-d' ) ); ?>">
-					</div>
-					<div class="hub-dividend-calculator__field">
-						<?php $hub_shares_id = wp_unique_id( 'hub-div-calc-shares-' ); ?>
-						<label for="<?= esc_attr( $hub_shares_id ); ?>">Number of shares</label>
-						<input type="number" id="<?= esc_attr( $hub_shares_id ); ?>" name="shares" required min="1" step="1" inputmode="numeric">
-					</div>
-					<div class="hub-dividend-calculator__actions">
-						<button type="submit" class="btn" data-div-calc-submit>Calculate</button>
-					</div>
-					<p class="hub-dividend-calculator__error" data-div-calc-error hidden></p>
-				</form>
-			</div>
-			<div class="col-12 col-md-6 col-lg-4">
-				<div class="hub-dividend-calculator__card" data-div-calc-results hidden>
-					<div class="hub-dividend-calculator__result">
-						<div class="text-label text-uppercase">Total dividend amount</div>
-						<div class="h2-data-l"><span data-div-calc-total>–</span> <span class="h3-data-m">GBp</span></div>
-					</div>
-					<div class="hub-dividend-calculator__divider" aria-hidden="true"></div>
-					<div class="hub-dividend-calculator__result">
-						<div class="text-label text-uppercase">Dividend yield (per share)</div>
-						<div class="h2-data-l" data-div-calc-yield>–</div>
-						<p class="hub-dividend-calculator__yield-note text-body" data-div-calc-yield-note hidden></p>
-					</div>
-				</div>
-			</div>
-		</div>
-		<div class="hub-dividend-calculator__payments" data-div-calc-payments hidden>
-			<table class="hub-dividends__table">
-				<thead>
-					<tr>
-						<th scope="col">Ex-dividend date</th>
-						<th scope="col">Payment date</th>
-						<th scope="col">Dividend type</th>
-						<th scope="col" class="hub-dividends__value-col">Dividend (GBp)</th>
-						<th scope="col">Number of shares</th>
-						<th scope="col" class="hub-dividends__value-col">Amount (GBP)</th>
-					</tr>
-				</thead>
-				<tbody data-div-calc-payment-rows></tbody>
-			</table>
-		</div>
-		<?php
-		if ( '' !== trim( $disclaimer ) ) {
-			?>
-			<p class="hub-dividend-calculator__note text-body"><?= esc_html( $disclaimer ); ?></p>
-			<?php
-		}
-		?>
-		<p class="hub-dividend-calculator__provider text-body">
-			Service provided by <img src="<?= esc_url( get_template_directory_uri() . '/img/idx-logo.svg' ); ?>" alt="IDX" width="43" height="10">
-		</p>
-		<div class="screen-reader-text" aria-live="polite" data-div-calc-live></div>
+		<div id="invd-container-dvc-1451-645-dvc-gobal-smaller-calc-tab" data-path="marketdatatools/dividendcenter/clients" data-client="1451" data-config="dvc-1451-645-dvc-gobal-smaller-calc-tab" data-active="true" class="invd-container gsct-dvc-calc"></div>
 	</div>
 </section>

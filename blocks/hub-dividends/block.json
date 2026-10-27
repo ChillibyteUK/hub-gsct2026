@@ -5,7 +5,7 @@
 	"title": "HUB Dividends",
 	"category": "hub-gsct2026",
 	"icon": "chart-bar",
-	"description": "Latest dividend card, annual stacked chart and searchable dividend history — all from the corporate actions API.",
+	"description": "Investis Dividend Centre overview: latest dividend, annual chart and dividend history, rendered by the Investis tool and re-skinned with the site styling.",
 	"attributes": {},
 	"supports": {
 		"anchor": true,

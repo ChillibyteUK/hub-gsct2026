@@ -1161,432 +1161,6 @@
 	}
 
 	/**
-	 * Dividends block: annual stacked chart with year-range pills, searchable
-	 * history with progressive disclosure, and CSV export. Scoped per section
-	 * so multiple blocks never interfere. Table striping (.is-alt) is
-	 * re-applied to visible rows on every pass, so hiding rows can't break
-	 * the alternation.
-	 */
-	function initDividends() {
-	  document.querySelectorAll('.hub-dividends').forEach(section => {
-	    initDividendChart(section);
-	    initDividendHistory(section);
-	  });
-	}
-	function initDividendChart(section) {
-	  const canvas = section.querySelector('[data-div-chart]');
-	  if (!canvas || typeof window.Chart === 'undefined') {
-	    return;
-	  }
-	  let years = [];
-	  try {
-	    years = JSON.parse(canvas.getAttribute('data-chart') || '[]');
-	  } catch (err) {
-	    return;
-	  }
-	  if (!years.length) {
-	    return;
-	  }
-
-	  // Bar geometry: bars max out at 40px (26px on mobile) with 32px between
-	  // them, so a category "pitch" tops out at 72px (58px). With plenty of
-	  // width the plot area is narrowed to years x pitch and left-aligned to
-	  // the axis (the spare width goes into the chart's right padding), so the
-	  // spacing never exceeds 32px. When there are more years than fit (the
-	  // All view) the plot fills the width and bars shrink in the same
-	  // bar:gap proportion.
-	  const mobileQuery = window.matchMedia('(max-width: 767px)');
-	  const geometry = () => mobileQuery.matches ? {
-	    bar: 26,
-	    gap: 32
-	  } : {
-	    bar: 40,
-	    gap: 32
-	  };
-	  let axisWidth = 60; // y-axis width from the previous layout pass.
-
-	  const fitPlotArea = {
-	    id: 'hubDividendsFit',
-	    beforeLayout(instance) {
-	      const count = instance.data.labels.length;
-	      if (!count) {
-	        return;
-	      }
-	      const {
-	        bar,
-	        gap
-	      } = geometry();
-	      const free = instance.width - axisWidth - count * (bar + gap);
-	      instance.options.layout.padding.right = Math.max(0, free);
-	    },
-	    // The plot area stops short of the canvas edge, so carry the y gridlines
-	    // (including the zero baseline) on across the spare width — the chart
-	    // reads as full width while the bars stay left-aligned.
-	    beforeDatasetsDraw(instance) {
-	      const {
-	        ctx,
-	        chartArea,
-	        scales,
-	        width
-	      } = instance;
-	      const y = scales.y;
-	      if (!y || chartArea.right >= width - 0.5) {
-	        return;
-	      }
-	      ctx.save();
-	      ctx.strokeStyle = y.options.grid.color;
-	      ctx.lineWidth = 1;
-	      ctx.beginPath();
-	      y.ticks.forEach(tick => {
-	        const py = Math.round(y.getPixelForValue(tick.value)) + 0.5;
-	        ctx.moveTo(chartArea.right, py);
-	        ctx.lineTo(width, py);
-	      });
-	      ctx.stroke();
-	      ctx.restore();
-	    },
-	    afterLayout(instance) {
-	      const actual = instance.scales.y ? instance.scales.y.width : axisWidth;
-	      if (Math.abs(actual - axisWidth) > 0.5) {
-	        axisWidth = actual;
-	        window.requestAnimationFrame(() => instance.update('none'));
-	      }
-	    }
-	  };
-	  const chart = new window.Chart(canvas, {
-	    type: 'bar',
-	    data: {
-	      labels: [],
-	      datasets: []
-	    },
-	    plugins: [fitPlotArea],
-	    options: {
-	      responsive: true,
-	      maintainAspectRatio: false,
-	      layout: {
-	        padding: {
-	          right: 0
-	        }
-	      },
-	      plugins: {
-	        legend: {
-	          display: false
-	        },
-	        tooltip: {
-	          backgroundColor: '#ffffff',
-	          titleColor: '#1e1e1e',
-	          bodyColor: '#1e1e1e',
-	          borderColor: '#e0e0e0',
-	          borderWidth: 1,
-	          padding: 12,
-	          displayColors: true,
-	          boxPadding: 4,
-	          callbacks: {
-	            title: items => String(items[0].label),
-	            label: context => ` ${context.dataset.label} ${Number(context.parsed.y).toFixed(2)} GBp`,
-	            labelColor: context => ({
-	              borderColor: context.dataset.backgroundColor,
-	              backgroundColor: context.dataset.backgroundColor
-	            })
-	          }
-	        }
-	      },
-	      scales: {
-	        x: {
-	          stacked: true,
-	          grid: {
-	            display: false
-	          }
-	        },
-	        y: {
-	          stacked: true,
-	          beginAtZero: true,
-	          title: {
-	            display: true,
-	            text: 'Dividend (GBp)'
-	          },
-	          ticks: {
-	            stepSize: 1,
-	            autoSkip: false
-	          },
-	          grid: {
-	            color: '#e5e5e5'
-	          }
-	        }
-	      }
-	    }
-	  });
-
-	  // Scriptable so a viewport change between mobile and desktop picks up
-	  // the right bar:pitch ratio on the next layout without a rebuild.
-	  const barShare = () => {
-	    const {
-	      bar,
-	      gap
-	    } = geometry();
-	    return bar / (bar + gap);
-	  };
-	  const render = count => {
-	    const slice = 0 === count ? years : years.slice(-count);
-	    chart.data.labels = slice.map(row => row.year);
-	    // Stack order: first dataset sits at the bottom — Interim (purple)
-	    // below, Final (blue) on top.
-	    chart.data.datasets = [{
-	      label: 'Interim',
-	      data: slice.map(row => row.interim),
-	      backgroundColor: '#7628d4',
-	      categoryPercentage: 1,
-	      barPercentage: barShare,
-	      borderRadius: 3,
-	      borderSkipped: 'start'
-	    }, {
-	      label: 'Final',
-	      data: slice.map(row => row.final),
-	      backgroundColor: '#307eff',
-	      categoryPercentage: 1,
-	      barPercentage: barShare,
-	      borderRadius: 3,
-	      borderSkipped: 'start'
-	    }];
-	    chart.update();
-	  };
-	  const pills = section.querySelector('[data-div-pills]');
-	  if (pills) {
-	    pills.querySelectorAll('button[data-years]').forEach(button => {
-	      button.addEventListener('click', () => {
-	        pills.querySelectorAll('button[data-years]').forEach(other => {
-	          other.classList.toggle('is-active', other === button);
-	        });
-	        render(parseInt(button.getAttribute('data-years'), 10) || 0);
-	      });
-	    });
-	  }
-	  render(5);
-	}
-	function initDividendHistory(section) {
-	  const rows = Array.from(section.querySelectorAll('[data-div-row]'));
-	  if (!rows.length) {
-	    return;
-	  }
-	  const search = section.querySelector('[data-div-search]');
-	  const more = section.querySelector('[data-div-more]');
-	  const count = section.querySelector('[data-div-count]');
-	  const csv = section.querySelector('[data-div-csv]');
-	  const table = section.querySelector('[data-div-export]');
-	  let shown = 10;
-	  const apply = () => {
-	    const query = (search?.value || '').trim().toLowerCase();
-	    const matches = rows.filter(row => !query || (row.getAttribute('data-search') || '').includes(query));
-	    let visible = 0;
-	    rows.forEach(row => {
-	      const show = matches.includes(row) && visible < shown;
-	      if (show) {
-	        visible += 1;
-	        row.classList.toggle('is-alt', 0 === visible % 2);
-	      } else {
-	        row.classList.remove('is-alt');
-	      }
-	      row.hidden = !show;
-	    });
-	    if (count) {
-	      count.textContent = `${visible} of ${matches.length}`;
-	    }
-	    if (more) {
-	      more.hidden = visible >= matches.length;
-	    }
-	  };
-	  rows.forEach((row, index) => {
-	    if (index < 10) {
-	      row.classList.toggle('is-alt', 0 === (index + 1) % 2);
-	    }
-	  });
-	  if (search) {
-	    search.addEventListener('input', () => {
-	      shown = 10;
-	      apply();
-	    });
-	  }
-	  if (more) {
-	    more.addEventListener('click', () => {
-	      shown += 10;
-	      apply();
-	    });
-	  }
-	  if (csv && table) {
-	    csv.addEventListener('click', () => {
-	      let all = [];
-	      try {
-	        all = JSON.parse(table.getAttribute('data-div-export') || '[]');
-	      } catch (err) {
-	        return;
-	      }
-	      const lines = ['Ex-dividend date,Payment date,Dividend type,Dividend (GBp)'].concat(all.map(cells => cells.map(cell => `"${String(cell).replace(/"/g, '""')}"`).join(',')));
-	      const blob = new Blob([lines.join('\r\n')], {
-	        type: 'text/csv'
-	      });
-	      const link = document.createElement('a');
-	      link.href = URL.createObjectURL(blob);
-	      link.download = 'dividend-history.csv';
-	      document.body.appendChild(link);
-	      link.click();
-	      URL.revokeObjectURL(link.href);
-	      link.remove();
-	    });
-	  }
-	  apply();
-	}
-
-	/**
-	 * Dividend calculator form ([data-div-calc]) — submits its dates and
-	 * share count to GET hub/v1/dividend-calc and renders the total plus
-	 * yield, with failures shown inline. Scoped per section.
-	 */
-	function initDividendCalculator() {
-	  document.querySelectorAll('[data-div-calc]').forEach(form => {
-	    const section = form.closest('.hub-dividend-calculator') || document;
-	    const submit = form.querySelector('[data-div-calc-submit]');
-	    const error = form.querySelector('[data-div-calc-error]');
-	    const results = section.querySelector('[data-div-calc-results]');
-	    const total = section.querySelector('[data-div-calc-total]');
-	    const payments = section.querySelector('[data-div-calc-payments]');
-	    const paymentRows = section.querySelector('[data-div-calc-payment-rows]');
-	    let lastYieldText = '–';
-	    const gbp = value => Number(value).toLocaleString('en-GB', {
-	      minimumFractionDigits: 2,
-	      maximumFractionDigits: 2
-	    });
-
-	    // Recompute per-row amounts plus the grand total from the row
-	    // inputs. Yield is per-share by definition, so row edits move the
-	    // amounts/total but never the yield.
-	    const recalc = () => {
-	      let grand = 0;
-	      if (paymentRows) {
-	        paymentRows.querySelectorAll('tr').forEach(row => {
-	          const input = row.querySelector('input');
-	          const amount = row.querySelector('[data-div-calc-amount]');
-	          if (!input || !amount) {
-	            return;
-	          }
-	          const shares = Math.max(0, parseInt(input.value, 10) || 0);
-	          const value = parseFloat(input.getAttribute('data-value')) || 0;
-	          const rowTotal = shares * value;
-	          amount.textContent = gbp(rowTotal);
-	          grand += rowTotal;
-	        });
-	      }
-	      if (total) {
-	        total.textContent = gbp(grand);
-	      }
-	      if (live) {
-	        live.textContent = `Total dividend amount ${gbp(grand)} GBp. Dividend yield ${lastYieldText}.`;
-	      }
-	    };
-	    if (paymentRows) {
-	      paymentRows.addEventListener('input', recalc);
-	    }
-	    const yieldOut = section.querySelector('[data-div-calc-yield]');
-	    const yieldNote = section.querySelector('[data-div-calc-yield-note]');
-	    const live = section.querySelector('[data-div-calc-live]');
-	    const endpoint = form.getAttribute('data-endpoint');
-	    if (!endpoint) {
-	      return;
-	    }
-	    form.addEventListener('submit', async event => {
-	      event.preventDefault();
-	      const params = new URLSearchParams(new FormData(form));
-	      if (error) {
-	        error.hidden = true;
-	      }
-	      if (submit) {
-	        submit.disabled = true;
-	      }
-	      try {
-	        const response = await fetch(`${endpoint}?${params.toString()}`, {
-	          headers: {
-	            Accept: 'application/json'
-	          }
-	        });
-	        const data = await response.json();
-	        if (!response.ok) {
-	          throw new Error(data?.message || 'Calculation failed.');
-	        }
-	        const totalText = `${Number(data.total_gbp).toLocaleString('en-GB', {
-          minimumFractionDigits: 2,
-          maximumFractionDigits: 2
-        })}`;
-	        const yieldText = null === data.yield_pct ? '–' : `${Number(data.yield_pct).toFixed(2)}%`;
-	        if (total) {
-	          total.textContent = totalText;
-	        }
-	        if (yieldOut) {
-	          yieldOut.textContent = yieldText;
-	        }
-	        if (yieldNote) {
-	          const noteText = data.yield_note || '';
-	          yieldNote.textContent = noteText;
-	          yieldNote.hidden = '' === noteText;
-	        }
-	        if (results) {
-	          results.hidden = false;
-	        }
-	        lastYieldText = yieldText;
-	        if (payments && paymentRows) {
-	          paymentRows.textContent = '';
-	          const formShares = Math.max(0, parseInt(new FormData(form).get('shares'), 10) || 0);
-	          (data.payments || []).forEach(payment => {
-	            const row = document.createElement('tr');
-	            [payment.ex, payment.pay, payment.type, Number(payment.value).toFixed(2)].forEach((cell, index) => {
-	              const td = document.createElement('td');
-	              td.textContent = cell ?? '';
-	              if (3 === index) {
-	                td.className = 'hub-dividends__value-col';
-	              }
-	              row.appendChild(td);
-	            });
-	            const sharesTd = document.createElement('td');
-	            const sharesInput = document.createElement('input');
-	            sharesInput.type = 'number';
-	            sharesInput.min = '0';
-	            sharesInput.step = '1';
-	            sharesInput.value = String(formShares);
-	            sharesInput.setAttribute('data-value', String(payment.value));
-	            sharesInput.setAttribute('aria-label', `Shares held for dividend paid ${payment.pay}`);
-	            sharesTd.appendChild(sharesInput);
-	            row.appendChild(sharesTd);
-	            const amountTd = document.createElement('td');
-	            amountTd.className = 'hub-dividends__value-col';
-	            amountTd.setAttribute('data-div-calc-amount', '');
-	            amountTd.textContent = gbp(formShares * Number(payment.value));
-	            row.appendChild(amountTd);
-	            paymentRows.appendChild(row);
-	          });
-	          payments.hidden = 0 === (data.payments || []).length;
-	        }
-	        if (live) {
-	          live.textContent = `Total dividend amount ${totalText} GBp. Dividend yield ${yieldText}.`;
-	        }
-	      } catch (err) {
-	        if (error) {
-	          error.textContent = err?.message || 'Calculation failed.';
-	          error.hidden = false;
-	        }
-	        if (results) {
-	          results.hidden = true;
-	        }
-	        if (payments) {
-	          payments.hidden = true;
-	        }
-	      } finally {
-	        if (submit) {
-	          submit.disabled = false;
-	        }
-	      }
-	    });
-	  });
-	}
-
-	/**
 	 * Document library filtering ([data-doc-row]) — one category pill at a
 	 * time (toggle off by clicking again), overflow categories under the More
 	 * dropdown, and a keyword search. Which pills show is rebalanced from the
@@ -2010,6 +1584,170 @@
 	  section.classList.add('hub-ann-counts-replaced');
 	}
 
+	/**
+	 * Investis dividend tools (HUB Dividends / HUB Dividend Calculator) print
+	 * dates as US month/day/year ("09/18/2026") whatever the data-lang. The site
+	 * standard is DD Mon YYYY (18 Sep 2026), so every such date in the tools'
+	 * output is rewritten in place. The tools render client-side and re-render
+	 * when the range or calculator inputs change, so this watches for changes
+	 * rather than running once. Only whole-text-node matches are touched, and
+	 * never anything inside an input.
+	 */
+	const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+	const usDate = /\b(\d{2})\/(\d{2})\/(\d{4})\b/g;
+	function convert(text) {
+	  return text.replace(usDate, (match, month, day, year) => {
+	    const m = Number(month);
+	    return m >= 1 && m <= 12 ? `${day} ${months[m - 1]} ${year}` : match;
+	  });
+	}
+	function rewrite(root) {
+	  const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
+	  let node = walker.nextNode();
+	  while (node) {
+	    if (usDate.test(node.nodeValue) && !node.parentElement?.closest('input, textarea, script, style')) {
+	      node.nodeValue = convert(node.nodeValue);
+	    }
+	    usDate.lastIndex = 0;
+	    node = walker.nextNode();
+	  }
+	}
+
+	// The calculator's date pickers (Duet) also show and parse US month/day/year.
+	// Duet exposes a dateAdapter for exactly this: DD/MM/YYYY out, and DD/MM/YYYY
+	// (or . or - separated) in. Set once per picker after it has hydrated; the
+	// value is then nudged so the input redraws in the new format. The picker's
+	// own value stays ISO (YYYY-MM-DD), so the calculator itself is unaffected.
+	const pad = n => String(n).padStart(2, '0');
+	const dateAdapter = {
+	  parse(value = '', createDate) {
+	    const match = String(value).trim().match(/^(\d{1,2})[/.\-](\d{1,2})[/.\-](\d{4})$/);
+	    return match ? createDate(match[3], match[2], match[1]) : undefined;
+	  },
+	  format(date) {
+	    return `${pad(date.getDate())}/${pad(date.getMonth() + 1)}/${date.getFullYear()}`;
+	  }
+	};
+	function fixPickers(root) {
+	  root.querySelectorAll('duet-date-picker.hydrated:not([data-hub-dmy])').forEach(picker => {
+	    picker.setAttribute('data-hub-dmy', '');
+	    picker.dateAdapter = dateAdapter;
+	    const value = picker.value;
+	    if (value) {
+	      picker.value = '';
+	      window.setTimeout(() => {
+	        picker.value = value;
+	      }, 50);
+	    }
+	  });
+	}
+	function initInvestisDates() {
+	  document.querySelectorAll('.gsct-dvc-overview, .gsct-dvc-calc').forEach(root => {
+	    let queued = false;
+	    const run = () => {
+	      queued = false;
+	      rewrite(root);
+	      fixPickers(root);
+	    };
+	    new MutationObserver(() => {
+	      if (!queued) {
+	        queued = true;
+	        window.requestAnimationFrame(run);
+	      }
+	    }).observe(root, {
+	      childList: true,
+	      subtree: true,
+	      characterData: true
+	    });
+	    rewrite(root);
+	    fixPickers(root);
+	  });
+	}
+
+	/**
+	 * Dividend history (HUB Dividends): searchable table with progressive
+	 * disclosure ten rows at a time, plus CSV export. Scoped per section so
+	 * multiple blocks never interfere. Table striping is re-applied to visible
+	 * rows on every pass (.is-alt), so hiding rows can't break the alternation.
+	 */
+	function initDividendHistory() {
+	  document.querySelectorAll('.hub-dividends').forEach(section => {
+	    initHistory(section);
+	  });
+	}
+	function initHistory(section) {
+	  const rows = Array.from(section.querySelectorAll('[data-div-row]'));
+	  if (!rows.length) {
+	    return;
+	  }
+	  const search = section.querySelector('[data-div-search]');
+	  const more = section.querySelector('[data-div-more]');
+	  const count = section.querySelector('[data-div-count]');
+	  const csv = section.querySelector('[data-div-csv]');
+	  const table = section.querySelector('[data-div-export]');
+	  let shown = 10;
+	  const apply = () => {
+	    const query = (search?.value || '').trim().toLowerCase();
+	    const matches = rows.filter(row => !query || (row.getAttribute('data-search') || '').includes(query));
+	    let visible = 0;
+	    rows.forEach(row => {
+	      const show = matches.includes(row) && visible < shown;
+	      if (show) {
+	        visible += 1;
+	        row.classList.toggle('is-alt', 0 === visible % 2);
+	      } else {
+	        row.classList.remove('is-alt');
+	      }
+	      row.hidden = !show;
+	    });
+	    if (count) {
+	      count.textContent = `${visible} of ${matches.length}`;
+	    }
+	    if (more) {
+	      more.hidden = visible >= matches.length;
+	    }
+	  };
+	  rows.forEach((row, index) => {
+	    if (index < 10) {
+	      row.classList.toggle('is-alt', 0 === (index + 1) % 2);
+	    }
+	  });
+	  if (search) {
+	    search.addEventListener('input', () => {
+	      shown = 10;
+	      apply();
+	    });
+	  }
+	  if (more) {
+	    more.addEventListener('click', () => {
+	      shown += 10;
+	      apply();
+	    });
+	  }
+	  if (csv && table) {
+	    csv.addEventListener('click', () => {
+	      let all = [];
+	      try {
+	        all = JSON.parse(table.getAttribute('data-div-export') || '[]');
+	      } catch (err) {
+	        return;
+	      }
+	      const lines = ['Ex-dividend date,Payment date,Dividend type,Dividend (GBp)'].concat(all.map(cells => cells.map(cell => `"${String(cell).replace(/"/g, '""')}"`).join(',')));
+	      const blob = new Blob([lines.join('\r\n')], {
+	        type: 'text/csv'
+	      });
+	      const link = document.createElement('a');
+	      link.href = URL.createObjectURL(blob);
+	      link.download = 'dividend-history.csv';
+	      document.body.appendChild(link);
+	      link.click();
+	      URL.revokeObjectURL(link.href);
+	      link.remove();
+	    });
+	  }
+	  apply();
+	}
+
 	document.addEventListener('DOMContentLoaded', () => {
 	  initLenis();
 	  initNavToggle();
@@ -2031,8 +1769,8 @@
 	  initReturnPerformance();
 	  initDocumentLibraries();
 	  initAnnouncements();
-	  initDividends();
-	  initDividendCalculator();
+	  initInvestisDates();
+	  initDividendHistory();
 	});
 
 })();

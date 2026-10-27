@@ -7,7 +7,7 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 	return (
 		<EditorBlockShell blockProps={ blockProps } clientId={ clientId } classPrefix="hub" textDomain="hub-gsct2026" title="HUB Dividends">
 			<p className="hub-editor-block__note">
-				Latest dividend card, annual chart and full history table — everything populates live from the corporate actions API on the frontend.
+				Investis Dividend Centre overview (latest dividend, annual chart and history) — the tool loads and renders on the frontend, styled by the theme.
 			</p>
 		</EditorBlockShell>
 	);
