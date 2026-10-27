@@ -2,77 +2,101 @@
 /**
  * Block template for HUB Return Performance.
  *
- * Hand-entered numbers throughout (fixed fields, not a repeater) — the
- * bar chart reads the cumulative values, so there's one source of truth
- * and nothing extra to keep in sync. If an API feed ever arrives, these
- * same attributes are the shape it would populate.
+ * Hand-entered numbers, pasted in as two small CSV blocks rather than a
+ * field per number: each is four lines — headings (periods / financial
+ * years), then NAV, share price and benchmark, in that order, no label
+ * column. The bar chart reads the cumulative values, so there's one source
+ * of truth and nothing extra to keep in sync. If an API feed ever arrives,
+ * these grids are the shape it would populate.
  *
- * Discrete year-column labels are editable text so they roll forward each
- * year (2025/26 → 2026/27) without touching the block.
+ * One shared "as at" date replaces {date} in the chart title, subtitle and
+ * both table headings, so a month-end update is one edit.
  *
  * @package hub-gsct2026
  */
 
 defined( 'ABSPATH' ) || exit;
 
-$chart_title    = $attributes['chartTitle'] ?? '';
-$chart_subtitle = $attributes['chartSubtitle'] ?? '';
-$cum_heading    = $attributes['cumHeading'] ?? '';
-$disc_heading   = $attributes['discHeading'] ?? '';
+$as_at          = hub_gsct2026_format_date( $attributes['asAt'] ?? '' );
+$with_date      = static function ( $text ) use ( $as_at ) {
+	return str_replace( '{date}', $as_at, (string) $text );
+};
+$chart_title    = $with_date( $attributes['chartTitle'] ?? '' );
+$chart_subtitle = $with_date( $attributes['chartSubtitle'] ?? '' );
+$cum_heading    = $with_date( $attributes['cumHeading'] ?? '' );
+$disc_heading   = $with_date( $attributes['discHeading'] ?? '' );
 $disclaimer     = $attributes['disclaimer'] ?? '';
 
-$cum_periods = array(
-	'1m'  => '1M',
-	'Ytd' => 'YTD',
-	'1y'  => '1Y',
-	'3y'  => '3Y',
-	'5y'  => '5Y',
-);
-
+// Leg order is fixed: line 2 of each CSV is NAV, 3 share price, 4 benchmark.
 // Leg colours: canvas needs real hex, not var() — these mirror the
 // --col-chart-* tokens in src/css/tokens.css, keep them in sync. The
 // hand-rendered legend below uses the vars themselves.
 $chart_legs = array(
 	array(
-		'key'   => 'Nav',
-		'label' => 'NAV',
-		'token' => 'var(--col-chart-3)',
-		'hex'   => '#307eff',
+		'label'     => 'NAV',
+		'row_label' => 'NAV (debt at market value)',
+		'token'     => 'var(--col-chart-3)',
+		'hex'       => '#307eff',
 	),
 	array(
-		'key'   => 'Price',
-		'label' => 'Share price',
-		'token' => 'var(--col-chart-2)',
-		'hex'   => '#7628d4',
+		'label'     => 'Share price',
+		'row_label' => 'Share price',
+		'token'     => 'var(--col-chart-2)',
+		'hex'       => '#7628d4',
 	),
 	array(
-		'key'   => 'Bench',
-		'label' => 'Benchmark',
-		'token' => 'var(--col-chart-1)',
-		'hex'   => '#f74333',
+		'label'     => 'Benchmark',
+		'row_label' => 'Benchmark',
+		'token'     => 'var(--col-chart-1)',
+		'hex'       => '#f74333',
 	),
 );
 
-$chart_datasets = array();
-foreach ( $chart_legs as $leg ) {
-	$values = array();
-	foreach ( $cum_periods as $period_key => $period_label ) {
-		$values[] = (float) ( $attributes[ 'cum' . $leg['key'] . $period_key ] ?? 0 );
+/**
+ * Turn pasted CSV into headings plus one value row per leg, each padded or
+ * trimmed to the number of headings. A data row with one extra leading
+ * non-numeric cell (someone pasted the row label too) has it dropped.
+ */
+$read_grid = static function ( $csv ) use ( $chart_legs ) {
+	$rows     = hub_gsct2026_parse_csv_grid( $csv );
+	$headings = $rows ? array_shift( $rows ) : array();
+	$count    = count( $headings );
+	$legs     = array();
+
+	foreach ( array_keys( $chart_legs ) as $index => $leg_index ) {
+		$cells = $rows[ $index ] ?? array();
+		if ( count( $cells ) === $count + 1 && isset( $cells[0] ) && ! is_numeric( $cells[0] ) ) {
+			array_shift( $cells );
+		}
+		$legs[ $leg_index ] = array_pad( array_slice( $cells, 0, $count ), $count, '' );
 	}
+
+	return array(
+		'headings' => $headings,
+		'legs'     => $legs,
+	);
+};
+
+$cumulative = $read_grid( $attributes['cumulativeCsv'] ?? '' );
+$discrete   = $read_grid( $attributes['discreteCsv'] ?? '' );
+
+$chart_datasets = array();
+foreach ( $chart_legs as $leg_index => $leg ) {
 	$chart_datasets[] = array(
 		'label' => $leg['label'],
-		'data'  => $values,
+		'data'  => array_map(
+			static function ( $value ) {
+				return is_numeric( $value ) ? (float) $value : null;
+			},
+			$cumulative['legs'][ $leg_index ]
+		),
 		'color' => $leg['hex'],
 	);
 }
 
-$disc_years = array();
-for ( $i = 1; $i <= 5; $i++ ) {
-	$disc_years[] = $attributes[ "year{$i}" ] ?? '';
-}
-
+// Numbers to two decimals; anything else (n/a, a dash) is shown as typed.
 $fmt = static function ( $value ) {
-	return number_format( (float) $value, 2 );
+	return is_numeric( $value ) ? number_format( (float) $value, 2 ) : (string) $value;
 };
 
 $wrapper_attributes = get_block_wrapper_attributes( array( 'class' => 'hub-return-performance' ) );
@@ -95,7 +119,7 @@ $wrapper_attributes = get_block_wrapper_attributes( array( 'class' => 'hub-retur
 			<div class="hub-return-performance__canvas">
 				<canvas
 					data-return-chart
-					data-labels="<?= esc_attr( wp_json_encode( array_values( $cum_periods ) ) ); ?>"
+					data-labels="<?= esc_attr( wp_json_encode( $cumulative['headings'] ) ); ?>"
 					data-datasets="<?= esc_attr( wp_json_encode( $chart_datasets ) ); ?>"
 					role="img"
 					aria-label="<?= esc_attr( $chart_title ? $chart_title : 'Historical return performance chart' ); ?>"
@@ -129,7 +153,7 @@ $wrapper_attributes = get_block_wrapper_attributes( array( 'class' => 'hub-retur
 					<tr>
 						<th scope="col"><span class="screen-reader-text">Row</span></th>
 						<?php
-						foreach ( $cum_periods as $period_label ) {
+						foreach ( $cumulative['headings'] as $period_label ) {
 							?>
 							<th scope="col" class="hub-return-performance__value-col"><?= esc_html( $period_label ); ?></th>
 							<?php
@@ -139,19 +163,14 @@ $wrapper_attributes = get_block_wrapper_attributes( array( 'class' => 'hub-retur
 				</thead>
 				<tbody>
 					<?php
-					$cum_rows = array(
-						'NAV (debt at market value)' => 'Nav',
-						'Share price'                => 'Price',
-						'Benchmark'                  => 'Bench',
-					);
-					foreach ( $cum_rows as $row_label => $leg_key ) {
+					foreach ( $chart_legs as $leg_index => $leg ) {
 						?>
 						<tr>
-							<td><?= esc_html( $row_label ); ?></td>
+							<td><?= esc_html( $leg['row_label'] ); ?></td>
 							<?php
-							foreach ( $cum_periods as $period_key => $period_label ) {
+							foreach ( $cumulative['legs'][ $leg_index ] as $value ) {
 								?>
-								<td class="hub-return-performance__value-col"><?= esc_html( $fmt( $attributes[ 'cum' . $leg_key . $period_key ] ?? 0 ) ); ?></td>
+								<td class="hub-return-performance__value-col"><?= esc_html( $fmt( $value ) ); ?></td>
 								<?php
 							}
 							?>
@@ -175,7 +194,7 @@ $wrapper_attributes = get_block_wrapper_attributes( array( 'class' => 'hub-retur
 					<tr>
 						<th scope="col"><span class="screen-reader-text">Row</span></th>
 						<?php
-						foreach ( $disc_years as $year_label ) {
+						foreach ( $discrete['headings'] as $year_label ) {
 							?>
 							<th scope="col" class="hub-return-performance__value-col"><?= esc_html( $year_label ); ?></th>
 							<?php
@@ -185,19 +204,14 @@ $wrapper_attributes = get_block_wrapper_attributes( array( 'class' => 'hub-retur
 				</thead>
 				<tbody>
 					<?php
-					$disc_rows = array(
-						'NAV (debt at market value)' => 'Nav',
-						'Share price'                => 'Price',
-						'Benchmark'                  => 'Bench',
-					);
-					foreach ( $disc_rows as $row_label => $leg_key ) {
+					foreach ( $chart_legs as $leg_index => $leg ) {
 						?>
 						<tr>
-							<td><?= esc_html( $row_label ); ?></td>
+							<td><?= esc_html( $leg['row_label'] ); ?></td>
 							<?php
-							for ( $i = 1; $i <= 5; $i++ ) {
+							foreach ( $discrete['legs'][ $leg_index ] as $value ) {
 								?>
-								<td class="hub-return-performance__value-col"><?= esc_html( $fmt( $attributes[ "disc{$leg_key}{$i}" ] ?? 0 ) ); ?></td>
+								<td class="hub-return-performance__value-col"><?= esc_html( $fmt( $value ) ); ?></td>
 								<?php
 							}
 							?>

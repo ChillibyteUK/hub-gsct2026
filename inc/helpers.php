@@ -50,6 +50,27 @@ function hub_gsct2026_format_date( $raw ) {
 }
 
 /**
+ * Parse pasted CSV text into a grid of trimmed cells. Blank lines and lines
+ * starting with # are skipped; quoted cells may contain commas.
+ *
+ * @param string $csv CSV text.
+ * @return array<int, array<int, string>>
+ */
+function hub_gsct2026_parse_csv_grid( $csv ) {
+	$rows = array();
+
+	foreach ( preg_split( '/\r\n|\r|\n/', (string) $csv ) as $line ) {
+		$line = trim( $line );
+		if ( '' === $line || '#' === $line[0] ) {
+			continue;
+		}
+		$rows[] = array_map( 'trim', str_getcsv( $line, ',', '"', '' ) );
+	}
+
+	return $rows;
+}
+
+/**
  * Excerpt derived from the post's own content, ignoring the manual excerpt
  * field entirely.
  *
