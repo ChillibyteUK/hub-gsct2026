@@ -42,9 +42,11 @@ $hero_text  = get_the_content( null, false, $page_for_posts_id );
 			<?php
 		}
 		?>
+		<?= hub_gsct2026_post_search_form( $current_cat_id, 'hub-insights-results', '[data-insights-grid], [data-insights-more]', 'Search articles', '.hub-insights-filters' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- escaped inside. ?>
 		<nav class="hub-insights-filters pb-4" aria-label="Filter insights by category">
 			<a
 				class="hub-filter-pill<?= 0 === $current_cat_id ? ' is-active' : ''; ?>"
+				data-cat-id="0"
 				href="<?= esc_url( get_post_type_archive_link( 'post' ) ); ?>"
 				<?= 0 === $current_cat_id ? 'aria-current="page"' : ''; ?>
 			>All perspectives</a>
@@ -53,6 +55,7 @@ $hero_text  = get_the_content( null, false, $page_for_posts_id );
 				?>
 				<a
 					class="hub-filter-pill<?= $current_cat_id === (int) $cat->term_id ? ' is-active' : ''; ?>"
+					data-cat-id="<?= (int) $cat->term_id; ?>"
 					href="<?= esc_url( get_category_link( $cat ) ); ?>"
 					<?= $current_cat_id === (int) $cat->term_id ? 'aria-current="page"' : ''; ?>
 				><?= esc_html( $cat->name ); ?></a>
@@ -65,6 +68,7 @@ $hero_text  = get_the_content( null, false, $page_for_posts_id );
 
 <div class="hub-insights-list">
 	<div class="container">
+		<div class="hub-post-results" id="hub-insights-results" hidden></div>
 		<?php
 		// See-more pagination (src/js/insights-more.js): how many the main
 		// query rendered on this page vs how many exist overall. Offset/total

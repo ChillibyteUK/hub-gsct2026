@@ -11,6 +11,7 @@ import { initThreePoints } from './three-points';
 import { initTimelines } from './timeline';
 import { initLearningGrids } from './learning-posts-grid';
 import { initInsightsMore } from './insights-more';
+import { initPostSearch } from './post-search';
 import { initShareButtons } from './share';
 import { initRelatedInsights } from './related-insights';
 import { initHoldings } from './holdings';
@@ -35,6 +36,7 @@ document.addEventListener('DOMContentLoaded', () => {
 	initTimelines();
 	initLearningGrids();
 	initInsightsMore();
+	initPostSearch();
 	initShareButtons();
 	initRelatedInsights();
 	initHoldings();

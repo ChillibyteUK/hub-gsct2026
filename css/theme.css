@@ -5479,7 +5479,7 @@ a.hub-document-library-hero__card:focus-visible {
 }
 
 .hub-document-library__snippet mark {
-	padding: 0 0.15em;
+	padding: 0;
 	border-radius: 2px;
 	background-color: var(--col-brand-yellow);
 	color: var(--col-black);
@@ -6352,6 +6352,110 @@ a.hub-nav-cards__card:focus-visible {
 		display: flex;
 		margin-top: var(--space-4);
 	}
+}
+
+/* --- src/blocks/post-search.css --- */
+/* Post search (Insights index + Learning posts grid) — search box and the
+   list view that replaces the card grid while a term is entered. */
+
+.hub-post-search {
+	position: relative;
+	margin-bottom: var(--space-3);
+}
+
+.hub-post-search svg {
+	position: absolute;
+	top: 50%;
+	left: var(--space-3);
+	transform: translateY(-50%);
+	color: var(--col-brand-red);
+	pointer-events: none;
+}
+
+/* See the same rule in document-library.css: forms.css input padding
+   can't be beaten fairly, so the icon clearance takes !important. */
+.hub-post-search .hub-post-search__input {
+	width: 100%;
+	padding-left: calc(var(--space-3) * 2 + 18px) !important;
+}
+
+.hub-learning-posts-grid .hub-post-search {
+	margin-block: var(--space-4);
+}
+
+.hub-post-results[hidden] {
+	display: none;
+}
+
+.hub-post-results__status {
+	margin: 0 0 var(--space-3);
+	color: var(--col-medium-grey);
+}
+
+.hub-post-results__list {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+.hub-post-results__item {
+	padding: var(--space-3) var(--space-2);
+	border-bottom: 1px solid var(--col-light-grey);
+}
+
+.hub-post-results__item:nth-child(even) {
+	background-color: var(--col-lightest-grey);
+}
+
+.hub-post-results__meta {
+	margin: 0 0 0.25rem;
+	color: var(--col-body);
+	font-size: 0.875rem;
+}
+
+.hub-post-results__title {
+	margin: 0;
+}
+
+.hub-post-results__title a {
+	color: inherit;
+}
+
+.hub-post-results__snippet {
+	margin: 0.25rem 0 0;
+	color: var(--col-medium-grey);
+	font-size: 0.875rem;
+	line-height: 1.4;
+}
+
+.hub-post-results mark {
+	padding: 0;
+	border-radius: 2px;
+	background-color: var(--col-brand-yellow);
+	color: var(--col-black);
+}
+
+/* On the Insights index the list overlaps the hero gradient, so it sits on
+   a white panel rather than straight on the pink. */
+.hub-insights-list .hub-post-results {
+	padding: var(--space-3) var(--space-3) 0;
+	background-color: var(--col-white);
+	border-radius: var(--radius-sm);
+}
+
+/* Learning series results are all one category, so the date · category
+   line is dropped there. */
+.hub-learning-posts-grid .hub-post-results__meta {
+	display: none;
+}
+
+/* The grids and pill rows set their own display, which beats the hidden
+   attribute — restore it so the search can swap the view. */
+[data-insights-grid][hidden],
+.hub-learning-posts-grid__grid[hidden],
+.hub-learning-posts-grid__more[hidden],
+.hub-insights-filters[hidden] {
+	display: none !important;
 }
 
 /* --- src/blocks/primary-hero.css --- */

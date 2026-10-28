@@ -264,7 +264,7 @@
 }
 
 .hub-document-library__snippet mark {
-	padding: 0 0.15em;
+	padding: 0;
 	border-radius: 2px;
 	background-color: var(--col-brand-yellow);
 	color: var(--col-black);

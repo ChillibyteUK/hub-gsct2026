@@ -50,7 +50,10 @@ $wrapper_attributes = get_block_wrapper_attributes( array( 'class' => 'hub-learn
 			<?php
 		}
 		if ( $posts ) {
+			$hub_results_id = wp_unique_id( 'hub-learning-results-' );
+			echo hub_gsct2026_post_search_form( $category ? (int) $category->term_id : 0, $hub_results_id, '.hub-learning-posts-grid__grid, .hub-learning-posts-grid__more', 'Search learning articles' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- escaped inside.
 			?>
+			<div class="hub-post-results" id="<?= esc_attr( $hub_results_id ); ?>" hidden></div>
 			<div class="row hub-learning-posts-grid__grid" data-category="<?= $category ? esc_attr( (int) $category->term_id ) : ''; ?>" data-offset="5" data-per-page="3" data-total="<?= esc_attr( $total_posts ); ?>">
 				<?php
 				foreach ( $posts as $index => $post ) {
