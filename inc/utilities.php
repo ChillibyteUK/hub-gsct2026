@@ -123,7 +123,9 @@ function hub_gsct2026_contact_phone_shortcode( $atts ) {
 
 	$anchor_text = ! empty( $atts['text'] ) ? wp_kses_post( $atts['text'] ) : esc_html( $phone );
 
-	return '<a href="tel:' . esc_attr( parse_phone( $phone ) ) . '" class="' . esc_attr( $atts['class'] ) . '">' . $anchor_text . '</a>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $anchor_text built from wp_kses_post()/esc_html().
+	$class_attr = '' !== trim( $atts['class'] ) ? ' class="' . esc_attr( $atts['class'] ) . '"' : '';
+
+	return '<a href="tel:' . esc_attr( parse_phone( $phone ) ) . '"' . $class_attr . '>' . $anchor_text . '</a>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $anchor_text built from wp_kses_post()/esc_html().
 }
 add_shortcode( 'contact_phone', 'hub_gsct2026_contact_phone_shortcode' );
 
