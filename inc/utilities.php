@@ -154,7 +154,9 @@ function hub_gsct2026_contact_email_shortcode( $atts ) {
 
 	$anchor_text = ! empty( $atts['text'] ) ? wp_kses_post( $atts['text'] ) : esc_html( $email );
 
-	return '<a href="mailto:' . esc_attr( antispambot( $email ) ) . '" class="' . esc_attr( $atts['class'] ) . '">' . $anchor_text . '</a>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $anchor_text built from wp_kses_post()/esc_html().
+	$class_attr = '' !== trim( $atts['class'] ) ? ' class="' . esc_attr( $atts['class'] ) . '"' : '';
+
+	return '<a href="mailto:' . esc_attr( antispambot( $email ) ) . '"' . $class_attr . '>' . $anchor_text . '</a>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $anchor_text built from wp_kses_post()/esc_html().
 }
 add_shortcode( 'contact_email', 'hub_gsct2026_contact_email_shortcode' );
 
