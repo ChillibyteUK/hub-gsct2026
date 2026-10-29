@@ -44,7 +44,7 @@ $disclaimers = hub_gsct2026_get_setting( 'footer_disclaimers' );
 				<div>&copy; <?php echo esc_html( gmdate( 'Y' ) ); ?> Global Smallers Trust</div>
 				<nav>
 					<li><a href="/privacy-policy/">Privacy Policy</a></li>
-					<li><a href="/terms-of-use/">Terms of Use</a></li>
+					<li><a href="https://www.columbiathreadneedle.com/en/terms-and-conditions/" target="_blank">Terms of Use</a></li>
 					<li><a href="/cookie-policy/">Cookie Policy</a></li>
 				</nav>
 			</div>
