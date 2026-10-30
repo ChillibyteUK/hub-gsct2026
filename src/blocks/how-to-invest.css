@@ -24,6 +24,15 @@
             height: auto;
         }
     }
+
+    a.logos__logo {
+        transition: box-shadow 0.3s ease;
+
+        &:hover,
+        &:focus-visible {
+            box-shadow: var(--shadow-lg);
+        }
+    }
 }
 
 /* Section link mirrors the cards-section arrow link (flex row, right

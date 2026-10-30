@@ -168,9 +168,19 @@ function hub_gsct2026_register_settings_page() {
 		),
 		'how_to_invest_logos'       => array(
 			'label'       => 'Logos',
-			'type'        => 'gallery',
+			'type'        => 'repeater',
 			'section'     => 'hub_gsct2026_how_to_invest',
-			'description' => 'Platform/provider logos, shown in selection order — drag thumbnails to reorder. Read with hub_gsct2026_get_gallery_setting( \'how_to_invest_logos\' ).',
+			'sub_fields'  => array(
+				'logo' => array(
+					'label' => 'Logo',
+					'type'  => 'image',
+				),
+				'url'  => array(
+					'label' => 'Link URL (optional)',
+					'type'  => 'text',
+				),
+			),
+			'description' => 'Platform/provider logos, shown in row order. Add a link URL to make the logo a link (opens in a new tab); leave it blank for a plain logo. Read with hub_gsct2026_get_how_to_invest_logos().',
 		),
 		'how_to_invest_link_text'   => array(
 			'label'   => 'Link Text',
@@ -252,6 +262,49 @@ function hub_gsct2026_get_repeater_setting( $key ) {
 function hub_gsct2026_get_gallery_setting( $key ) {
 	$ids = array_filter( array_map( 'absint', explode( ',', hub_gsct2026_get_setting( $key ) ) ) );
 	return array_values( $ids );
+}
+
+/**
+ * Convert a legacy `gallery` CSV of attachment IDs into repeater rows.
+ *
+ * `how_to_invest_logos` used to be a gallery field (CSV string); it is now a
+ * repeater of logo + link rows. Until the settings page is next saved the
+ * stored value is still the old CSV, so readers and the admin field both go
+ * through this to keep existing logos instead of showing an empty list.
+ *
+ * @param string $csv       e.g. "12,34,56".
+ * @param string $image_key Repeater sub-field that holds the attachment ID.
+ * @return array[]
+ */
+function hub_gsct2026_gallery_csv_to_rows( $csv, $image_key ) {
+	$ids = array_filter( array_map( 'absint', explode( ',', (string) $csv ) ) );
+	return array_map(
+		static function ( $id ) use ( $image_key ) {
+			return array( $image_key => $id );
+		},
+		array_values( $ids )
+	);
+}
+
+/**
+ * Read the How to Invest logos as an array of [ 'logo' => attachment ID,
+ * 'url' => string ] rows, whether the stored value is the current repeater
+ * array or the legacy gallery CSV. Rows with no logo are dropped.
+ *
+ * @return array[]
+ */
+function hub_gsct2026_get_how_to_invest_logos() {
+	$value = hub_gsct2026_get_setting( 'how_to_invest_logos', array() );
+	$rows  = is_array( $value ) ? $value : hub_gsct2026_gallery_csv_to_rows( $value, 'logo' );
+
+	return array_values(
+		array_filter(
+			$rows,
+			static function ( $row ) {
+				return ! empty( $row['logo'] );
+			}
+		)
+	);
 }
 
 /**
@@ -519,6 +572,12 @@ function hub_gsct2026_render_repeater_field( $args ) {
 	$key        = $args['key'];
 	$sub_fields = $args['sub_fields'];
 	$rows       = hub_gsct2026_get_repeater_setting( $key );
+
+	// Legacy gallery value (CSV of IDs) → rows, so the first save after the
+	// gallery→repeater switch doesn't wipe the existing logos.
+	if ( ! $rows && 'how_to_invest_logos' === $key ) {
+		$rows = hub_gsct2026_gallery_csv_to_rows( hub_gsct2026_get_setting( $key ), 'logo' );
+	}
 	?>
 	<div class="hub-settings-repeater" data-repeater-key="<?php echo esc_attr( $key ); ?>">
 		<div style="display: flex; align-items: center; gap: 12px; padding: 0 12px; margin-bottom: 4px;">

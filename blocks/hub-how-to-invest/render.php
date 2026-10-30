@@ -17,8 +17,8 @@ $link_url   = hub_gsct2026_get_setting( 'how_to_invest_link_url' );
 $risk_title = hub_gsct2026_get_setting( 'how_to_invest_risk_title' );
 $risk_text  = hub_gsct2026_get_setting( 'how_to_invest_risk_wording' );
 
-// Logos store as a CSV of attachment IDs — parse the same way the gallery field renderer does.
-$logo_ids = array_filter( array_map( 'absint', explode( ',', hub_gsct2026_get_setting( 'how_to_invest_logos' ) ) ) );
+// Logos are rows of [ logo => attachment ID, url => optional link ].
+$logos = hub_gsct2026_get_how_to_invest_logos();
 
 $wrapper_attributes = get_block_wrapper_attributes( array( 'class' => 'hub-how-to-invest has-brand-yellow-background-color' ) );
 ?>
@@ -35,15 +35,38 @@ $wrapper_attributes = get_block_wrapper_attributes( array( 'class' => 'hub-how-t
 		<div class="intro"><?= wp_kses_post( $intro ); ?></div>
 			<?php
 		}
-		if ( $logo_ids ) {
+		if ( $logos ) {
 			?>
 		<div class="logos row mt-5 mb-4">
 			<?php
-			foreach ( $logo_ids as $logo_id ) {
-				?>
+			foreach ( $logos as $logo ) {
+				$logo_id  = absint( $logo['logo'] );
+				$logo_url = trim( (string) ( $logo['url'] ?? '' ) );
+				$image    = wp_get_attachment_image( $logo_id, 'full' );
+				if ( ! $image ) {
+					continue;
+				}
+
+				if ( ! $logo_url ) {
+					?>
 				<div class="col-6 col-lg-3 logos__logo">
-					<?= wp_get_attachment_image( $logo_id, 'full' ); ?>
+					<?= $image; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- wp_get_attachment_image() escapes. ?>
 				</div>
+					<?php
+					continue;
+				}
+
+				// A linked logo's only content is the image, so it needs an
+				// accessible name: media library alt first, then a
+				// filename-derived fallback (same as How To Invest Full).
+				$logo_alt = trim( (string) get_post_meta( $logo_id, '_wp_attachment_image_alt', true ) );
+				if ( '' === $logo_alt ) {
+					$logo_alt = preg_replace( '/[-_]+/', ' ', pathinfo( (string) get_attached_file( $logo_id ), PATHINFO_FILENAME ) );
+					$logo_alt = ucwords( trim( preg_replace( '/\s+\d+$/', '', (string) $logo_alt ) ) );
+					$image    = wp_get_attachment_image( $logo_id, 'full', false, array( 'alt' => $logo_alt ) );
+				}
+				?>
+				<a class="col-6 col-lg-3 logos__logo" href="<?= esc_url( $logo_url ); ?>" target="_blank" rel="noopener"><?= $image; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- wp_get_attachment_image() escapes. ?></a>
 				<?php
 			}
 			?>
