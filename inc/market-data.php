@@ -9,10 +9,11 @@
  *
  *     define( 'HUB_INVESTIS_API_KEY', '...' );
  *
- * Responses are cached in a short-lived transient (default 15 minutes,
+ * Responses are cached in a short-lived transient (default 60 seconds,
  * filterable) so every page view doesn't hit the API, plus a fallback
  * option holding the last good snapshot — if a fetch fails the banner
- * shows slightly stale data instead of breaking. Verify with:
+ * keeps showing the last good data for up to an hour (filterable), then
+ * shows dashes rather than a stale figure. Verify with:
  *
  *     wp eval "print_r( hub_gsct2026_get_market_snapshot() );"
  *
@@ -65,6 +66,42 @@ function hub_gsct2026_market_group() {
 }
 
 /**
+ * Cache lifetime for market data, in seconds. Short on purpose: the cache
+ * exists only to stop every page view calling the API. It is a lazy
+ * transient (refreshed by whichever request finds it expired) — no cron.
+ *
+ * @return int
+ */
+function hub_gsct2026_market_cache_ttl() {
+	return (int) apply_filters( 'hub_gsct2026_market_cache_ttl', MINUTE_IN_SECONDS );
+}
+
+/**
+ * Longest age, in seconds, a last-good fallback may be shown after the API
+ * starts failing. Beyond this the data is treated as unavailable and the
+ * banner shows a dash instead of a stale figure.
+ *
+ * @return int
+ */
+function hub_gsct2026_market_max_fallback_age() {
+	return (int) apply_filters( 'hub_gsct2026_market_max_fallback_age', HOUR_IN_SECONDS );
+}
+
+/**
+ * Whether a stored market record (carrying a `fetched` timestamp) is recent
+ * enough to show as a fallback.
+ *
+ * @param mixed $record Stored snapshot/NAV array.
+ * @return bool
+ */
+function hub_gsct2026_market_fallback_is_usable( $record ) {
+	return is_array( $record )
+		&& $record
+		&& isset( $record['fetched'] )
+		&& ( time() - (int) $record['fetched'] ) <= hub_gsct2026_market_max_fallback_age();
+}
+
+/**
  * Latest market snapshot: fresh transient when available, last good
  * fallback when a fetch fails, null when nothing was ever fetched
  * (e.g. no API key yet).
@@ -85,18 +122,14 @@ function hub_gsct2026_get_market_snapshot() {
 	$data = hub_gsct2026_fetch_market_snapshot();
 
 	if ( is_array( $data ) ) {
-		set_transient(
-			'hub_market_snapshot',
-			$data,
-			apply_filters( 'hub_gsct2026_market_cache_ttl', 15 * MINUTE_IN_SECONDS )
-		);
+		set_transient( 'hub_market_snapshot', $data, hub_gsct2026_market_cache_ttl() );
 		update_option( 'hub_market_snapshot_fallback', $data, false );
 		return $data;
 	}
 
 	$fallback = get_option( 'hub_market_snapshot_fallback', array() );
 
-	return is_array( $fallback ) && $fallback ? $fallback : null;
+	return hub_gsct2026_market_fallback_is_usable( $fallback ) ? $fallback : null;
 }
 
 /**
@@ -117,6 +150,10 @@ function hub_gsct2026_fetch_market_snapshot() {
 			'Group'             => hub_gsct2026_market_group(),
 			'corporateActions'  => 'dividend',
 			'adjustedDividend'  => 'false',
+			// Default is YTD dividends only, which understated yield (final
+			// dividend alone). 'false' = trailing 12 months, matching the
+			// factsheet. Per Investis; yearlyDividendYield is the node to read.
+			'ytdDividend'       => 'false',
 		),
 		'https://api.investisdigital.com/marketdata/v1/instruments/' . rawurlencode( hub_gsct2026_market_instrument() ) . '/snapshot'
 	);
@@ -218,11 +255,7 @@ function hub_gsct2026_get_latest_nav() {
 			update_option( 'hub_latest_nav_fallback', $data, false );
 		}
 
-		set_transient(
-			'hub_latest_nav',
-			$fresh,
-			apply_filters( 'hub_gsct2026_market_cache_ttl', 15 * MINUTE_IN_SECONDS )
-		);
+		set_transient( 'hub_latest_nav', $fresh, hub_gsct2026_market_cache_ttl() );
 	}
 
 	if ( $fresh ) {
@@ -231,7 +264,7 @@ function hub_gsct2026_get_latest_nav() {
 
 	$fallback = get_option( 'hub_latest_nav_fallback', array() );
 
-	return is_array( $fallback ) && $fallback ? $fallback : null;
+	return hub_gsct2026_market_fallback_is_usable( $fallback ) ? $fallback : null;
 }
 
 /**
@@ -316,7 +349,8 @@ function hub_gsct2026_get_premium_percent() {
 
 /**
  * Net yield in percent, straight from the snapshot's yearly dividend
- * yield. Null when the API doesn't return one.
+ * yield (trailing 12 months — see ytdDividend in the snapshot request).
+ * Calculated by Investis, not here. Null when the API doesn't return one.
  *
  * @return float|null
  */
