@@ -2668,7 +2668,7 @@ a.hub-document-library-hero__card:focus-visible {
 
 a.hub-how-to-invest-full__platform:hover,
 a.hub-how-to-invest-full__platform:focus-visible {
-    box-shadow: var(--shadow-lg);
+    box-shadow: 0 12px 32px rgb(0 0 0 / 0.4);
 }
 
 /* Stacked (below lg, where the three cards sit side by side): 16px between
@@ -2716,6 +2716,15 @@ a.hub-how-to-invest-full__platform:focus-visible {
             max-height: 70px;
             width: auto;
             height: auto;
+        }
+    }
+
+    a.logos__logo {
+        transition: box-shadow 0.3s ease;
+
+        &:hover,
+        &:focus-visible {
+            box-shadow: 0 12px 32px rgb(0 0 0 / 0.4);
         }
     }
 }

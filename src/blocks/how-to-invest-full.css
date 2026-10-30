@@ -79,7 +79,7 @@
 
 a.hub-how-to-invest-full__platform:hover,
 a.hub-how-to-invest-full__platform:focus-visible {
-    box-shadow: var(--shadow-lg);
+    box-shadow: 0 12px 32px rgb(0 0 0 / 0.4);
 }
 
 /* Stacked (below lg, where the three cards sit side by side): 16px between

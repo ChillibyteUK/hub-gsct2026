@@ -5769,7 +5769,7 @@ a.hub-document-library-hero__card:focus-visible {
 
 a.hub-how-to-invest-full__platform:hover,
 a.hub-how-to-invest-full__platform:focus-visible {
-    box-shadow: var(--shadow-lg);
+    box-shadow: 0 12px 32px rgb(0 0 0 / 0.4);
 }
 
 /* Stacked (below lg, where the three cards sit side by side): 16px between
@@ -5814,6 +5814,12 @@ a.hub-how-to-invest-full__platform:focus-visible {
             max-height: 70px;
             width: auto;
             height: auto;
+        }
+.hub-how-to-invest a.logos__logo {
+        transition: box-shadow 0.3s ease;
+    }
+:is(.hub-how-to-invest a.logos__logo):hover,:is(.hub-how-to-invest a.logos__logo):focus-visible {
+            box-shadow: 0 12px 32px rgb(0 0 0 / 0.4);
         }
 
 /* Section link mirrors the cards-section arrow link (flex row, right

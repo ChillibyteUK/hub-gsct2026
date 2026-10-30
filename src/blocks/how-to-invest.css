@@ -30,7 +30,7 @@
 
         &:hover,
         &:focus-visible {
-            box-shadow: var(--shadow-lg);
+            box-shadow: 0 12px 32px rgb(0 0 0 / 0.4);
         }
     }
 }
