@@ -7,33 +7,15 @@
 
 defined( 'ABSPATH' ) || exit;
 
-$hub_snapshot = hub_gsct2026_get_market_snapshot();
-$hub_price    = $hub_snapshot && isset( $hub_snapshot['price'] )
-	? number_format( (float) $hub_snapshot['price'], 2 ) . ' GBp'
-	: '&ndash;';
+$hub_stats = hub_gsct2026_get_market_stats();
 
-$hub_nav_data    = hub_gsct2026_get_latest_nav();
-$hub_nav         = $hub_nav_data ? $hub_nav_data['value'] : null;
-$hub_nav_display = $hub_nav
-	? number_format( $hub_nav, 2 ) . ' GBp'
-	: '&ndash;';
-
-$hub_premium         = hub_gsct2026_get_premium_percent();
-$hub_premium_display = null !== $hub_premium
-	? number_format( $hub_premium, 2 ) . '%'
-	: '&ndash;';
-$hub_premium_label   = 'Premium';
-
-if ( null !== $hub_premium ) {
-	$hub_premium_label = $hub_premium < 0 ? 'Discount' : ( $hub_premium > 0 ? 'Premium' : 'At NAV' );
-}
-
-$hub_yield         = hub_gsct2026_get_net_yield();
-$hub_yield_display = null !== $hub_yield
-	? number_format( $hub_yield, 2 ) . '%'
-	: '&ndash;';
-
-$wrapper_attributes = get_block_wrapper_attributes( array( 'class' => 'hub-stats-banner' ) );
+$wrapper_attributes = get_block_wrapper_attributes(
+	array(
+		'class'         => 'hub-stats-banner',
+		'data-endpoint' => esc_url_raw( rest_url( 'hub/v1/market-stats' ) ),
+		'data-as-of'    => (string) $hub_stats['as_of'],
+	)
+);
 ?>
 <section <?php echo $wrapper_attributes; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- get_block_wrapper_attributes() already escapes. ?>>
 	<div class="container">
@@ -44,36 +26,32 @@ $wrapper_attributes = get_block_wrapper_attributes( array( 'class' => 'hub-stats
 			<div class="text-label text-uppercase">
 				Share Price
 			</div>
-			<div class="h2-data-l">
-				<?= $hub_price; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- number_format() output plus an entity, no user input. ?>
-			</div>
+			<div class="h2-data-l" data-stat="price"><?php echo esc_html( $hub_stats['price'] ); ?></div>
 		</div>
 		<div class="hub-stats-banner__stat">
 			<div class="text-label text-uppercase">
 				NAV per Share
 			</div>
-			<div class="h2-data-l">
-				<?= $hub_nav_display; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- number_format() output plus an entity, no user input. ?>
-			</div>
-			<?php if ( $hub_nav_data ) : ?>
-				<small>NAV as at <time datetime="<?php echo esc_attr( $hub_nav_data['date'] ); ?>"><?php echo esc_html( wp_date( 'j M Y', strtotime( $hub_nav_data['date'] . ' 12:00:00 UTC' ) ) ); ?></time></small>
-			<?php endif; ?>
+			<div class="h2-data-l" data-stat="nav"><?php echo esc_html( $hub_stats['nav'] ); ?></div>
+			<small data-stat="nav-date"<?php echo $hub_stats['nav_date'] ? '' : ' hidden'; ?>>
+				<?php
+				if ( $hub_stats['nav_date'] ) {
+					?>
+				NAV as at <time datetime="<?php echo esc_attr( $hub_stats['nav_date'] ); ?>"><?php echo esc_html( $hub_stats['nav_date_label'] ); ?></time>
+					<?php
+				}
+				?>
+			</small>
 		</div>
 		<div class="hub-stats-banner__stat">
-			<div class="text-label text-uppercase">
-				<?php echo esc_html( $hub_premium_label ); ?>
-			</div>
-			<div class="h2-data-l">
-				<?= $hub_premium_display; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- number_format() output plus an entity, no user input. ?>
-			</div>
+			<div class="text-label text-uppercase" data-stat="premium-label"><?php echo esc_html( $hub_stats['premium_label'] ); ?></div>
+			<div class="h2-data-l" data-stat="premium"><?php echo esc_html( $hub_stats['premium'] ); ?></div>
 		</div>
 		<div class="hub-stats-banner__stat">
 			<div class="text-label text-uppercase">
 				Net Dividend Yield
 			</div>
-			<div class="h2-data-l">
-				<?= $hub_yield_display; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- number_format() output plus an entity, no user input. ?>
-			</div>
+			<div class="h2-data-l" data-stat="yield"><?php echo esc_html( $hub_stats['yield'] ); ?></div>
 		</div>
 	</div>
 </section>

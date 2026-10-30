@@ -539,6 +539,157 @@ add_action(
 );
 
 /**
+ * Display values for the HUB Stats Banner — one source for the server render
+ * (blocks/hub-stats-banner/render.php) and the REST route below, so the two
+ * can never disagree. Plain text, no markup. Any figure that is unavailable
+ * (including fallback data past the max fallback age) is a dash.
+ *
+ * `as_of` is the Unix time of the OLDEST underlying fetch (0 when nothing is
+ * available) — the banner script uses it to blank figures if it cannot reach
+ * the REST route and the page it is on is old (e.g. a cached copy).
+ *
+ * @return array
+ */
+function hub_gsct2026_get_market_stats() {
+	$dash     = '–';
+	$snapshot = hub_gsct2026_get_market_snapshot();
+	$nav_data = hub_gsct2026_get_latest_nav();
+	$premium  = hub_gsct2026_get_premium_percent();
+	$yield    = hub_gsct2026_get_net_yield();
+
+	$premium_label = 'Premium';
+	if ( null !== $premium ) {
+		$premium_label = $premium < 0 ? 'Discount' : ( $premium > 0 ? 'Premium' : 'At NAV' );
+	}
+
+	$fetched = array_filter(
+		array(
+			$snapshot ? (int) ( $snapshot['fetched'] ?? 0 ) : 0,
+			$nav_data ? (int) ( $nav_data['fetched'] ?? 0 ) : 0,
+		)
+	);
+
+	return array(
+		'price'          => $snapshot && isset( $snapshot['price'] ) ? number_format( (float) $snapshot['price'], 2 ) . ' GBp' : $dash,
+		'nav'            => $nav_data ? number_format( $nav_data['value'], 2 ) . ' GBp' : $dash,
+		'nav_date'       => $nav_data ? $nav_data['date'] : '',
+		'nav_date_label' => $nav_data ? wp_date( 'j M Y', strtotime( $nav_data['date'] . ' 12:00:00 UTC' ) ) : '',
+		'premium'        => null !== $premium ? number_format( $premium, 2 ) . '%' : $dash,
+		'premium_label'  => $premium_label,
+		'yield'          => null !== $yield ? number_format( $yield, 2 ) . '%' : $dash,
+		'as_of'          => $fetched ? min( $fetched ) : 0,
+		'now'            => time(),
+	);
+}
+
+/**
+ * Display values for the HUB Share Price block — same role as
+ * hub_gsct2026_get_market_stats() above: one source for the server render
+ * (blocks/hub-share-price/render.php) and the REST route. Plain text; an
+ * unavailable figure is a dash. `change_class` is 'is-up', 'is-down' or ''.
+ * `status` is '' when the exchange status is unknown (the badge is hidden).
+ *
+ * @return array
+ */
+function hub_gsct2026_get_share_price_stats() {
+	$dash     = '–';
+	$snapshot = hub_gsct2026_get_market_snapshot();
+	$snap     = is_array( $snapshot ) ? $snapshot : array();
+
+	$pence = static function ( $value ) use ( $dash ) {
+		return null !== $value ? number_format( (float) $value, 2 ) . ' GBp' : $dash;
+	};
+	$plain = static function ( $value ) use ( $dash ) {
+		return null !== $value ? number_format( (float) $value, 2 ) : $dash;
+	};
+
+	$abs = $snap['absChange'] ?? null;
+	$pct = $snap['percentChange'] ?? null;
+
+	if ( null !== $abs && null !== $pct ) {
+		$change       = number_format( (float) $abs, 2 ) . ' (' . number_format( (float) $pct, 2 ) . '%)';
+		$change_class = $abs < 0 ? 'is-down' : ( $abs > 0 ? 'is-up' : '' );
+	} else {
+		$change       = $dash;
+		$change_class = '';
+	}
+
+	$status_raw = $snap['exchangeStatus'] ?? '';
+	$status     = 'Closed' === $status_raw ? 'CLOSE' : ( 'Open' === $status_raw ? 'OPEN' : strtoupper( $status_raw ) );
+
+	$updated = $dash;
+
+	if ( ! empty( $snap['lastTrade'] ) ) {
+		$time = strtotime( $snap['lastTrade'] );
+
+		if ( false !== $time ) {
+			try {
+				$tz = ! empty( $snap['timeZone'] ) ? new DateTimeZone( $snap['timeZone'] ) : wp_timezone();
+			} catch ( Exception $e ) {
+				$tz = wp_timezone();
+			}
+
+			$updated = wp_date( 'd M Y H:i', $time, $tz );
+		}
+	}
+
+	return array(
+		'price'        => $pence( $snap['price'] ?? null ),
+		'status'       => $status,
+		'change'       => $change,
+		'change_class' => $change_class,
+		'updated'      => $updated,
+		'open'         => $pence( $snap['open'] ?? null ),
+		'prev'         => $pence( $snap['prevClose'] ?? null ),
+		'day_low'      => $plain( $snap['low'] ?? null ),
+		'day_high'     => $plain( $snap['high'] ?? null ),
+		'volume'       => isset( $snap['volume'] ) ? number_format( (int) $snap['volume'] ) : $dash,
+		// Market cap arrives in pence (LSE GBX instrument), so £m is cap / 1e8.
+		'mcap'         => isset( $snap['marketCap'] ) ? number_format( (float) $snap['marketCap'] / 100000000, 2 ) . ' Mn GBp' : $dash,
+		'year_low'     => $plain( $snap['fiftytwoWeekLow'] ?? null ),
+		'year_high'    => $plain( $snap['fiftytwoWeekHigh'] ?? null ),
+		'as_of'        => $snap ? (int) ( $snap['fetched'] ?? 0 ) : 0,
+		'now'          => time(),
+	);
+}
+
+/**
+ * Live block figures over REST: GET /wp-json/hub/v1/market-stats (Stats
+ * Banner) and /share-price-stats (Share Price block).
+ *
+ * These exist because a block's HTML can be served from a page cache
+ * (Kinsta) for far longer than the 60s data cache, while REST routes bypass
+ * it. The block scripts (src/js/live-stats.js) fetch these on load and every
+ * minute. Read-only, no secrets; sent no-store so nothing between here and
+ * the browser keeps a copy.
+ */
+add_action(
+	'rest_api_init',
+	static function () {
+		$routes = array(
+			'/market-stats'      => 'hub_gsct2026_get_market_stats',
+			'/share-price-stats' => 'hub_gsct2026_get_share_price_stats',
+		);
+
+		foreach ( $routes as $route => $builder ) {
+			register_rest_route(
+				'hub/v1',
+				$route,
+				array(
+					'methods'             => 'GET',
+					'permission_callback' => '__return_true',
+					'callback'            => static function () use ( $builder ) {
+						$response = rest_ensure_response( $builder() );
+						$response->header( 'Cache-Control', 'no-store, max-age=0' );
+						return $response;
+					},
+				)
+			);
+		}
+	}
+);
+
+/**
  * Validate a Y-m-d date string.
  *
  * @param string $value Input.

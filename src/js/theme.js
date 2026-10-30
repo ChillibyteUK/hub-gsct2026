@@ -21,6 +21,8 @@ import { initDocumentLibraries } from './document-library';
 import { initAnnouncements } from './announcements';
 import { initInvestisDates } from './investis-dates';
 import { initDividendHistory } from './dividend-history';
+import { initStatsBanner } from './stats-banner';
+import { initSharePrice } from './share-price';
 
 document.addEventListener('DOMContentLoaded', () => {
 	initLenis();
@@ -46,4 +48,6 @@ document.addEventListener('DOMContentLoaded', () => {
 	initAnnouncements();
 	initInvestisDates();
 	initDividendHistory();
+	initStatsBanner();
+	initSharePrice();
 });

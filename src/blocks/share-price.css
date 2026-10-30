@@ -34,6 +34,12 @@
 	text-transform: uppercase;
 }
 
+/* display above would otherwise beat the [hidden] the live-refresh script
+   sets when the exchange status is unknown or the data is stale. */
+.hub-share-price__status[hidden] {
+	display: none;
+}
+
 .hub-share-price__change {
 	margin-top: var(--space-1);
 	font-weight: var(--fw-bold);
