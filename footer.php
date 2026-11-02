@@ -41,7 +41,7 @@ $disclaimers = hub_gsct2026_get_setting( 'footer_disclaimers' );
 		<div class="colophon">
 			<div class="mb-3"><?= esc_html( $colophon ); ?></div>
 			<div class="d-flex flex-wrap justify-content-between">
-				<div>&copy; <?php echo esc_html( gmdate( 'Y' ) ); ?> Global Smallers Trust</div>
+				<div>&copy; <?php echo esc_html( gmdate( 'Y' ) ); ?> The Global Smaller Companies Trust PLC</div>
 				<nav>
 					<li><a href="/privacy-policy/">Privacy Policy</a></li>
 					<li><a href="https://www.columbiathreadneedle.com/en/terms-and-conditions/" target="_blank">Terms of Use</a></li>
