@@ -8,6 +8,11 @@
  * the words in their file text (shown with a snippet). Everything combines
  * client-side with no reload; visible rows are re-striped and re-counted
  * on every pass. Scoped per section so multiple libraries never interfere.
+ *
+ * A filtered view is linkable: ?dl_cat=<category slug>&dl_q=<keywords>
+ * pre-applies on load, and the address bar follows the filters (replaceState)
+ * so the current view can be copied. (Not doc_category — that is the
+ * taxonomy's query var and would turn the page into a term archive.)
  */
 export function initDocumentLibraries() {
 	document.querySelectorAll( '.hub-document-library' ).forEach( ( section ) => {
@@ -110,6 +115,22 @@ export function initDocumentLibraries() {
 			} );
 		};
 
+		const syncUrl = () => {
+			const url = new URL( window.location.href );
+
+			url.searchParams.delete( 'dl_cat' );
+			url.searchParams.delete( 'dl_q' );
+
+			if ( activeCat ) {
+				url.searchParams.set( 'dl_cat', activeCat );
+			}
+			if ( search && search.value.trim() ) {
+				url.searchParams.set( 'dl_q', search.value.trim() );
+			}
+
+			window.history.replaceState( null, '', url );
+		};
+
 		const apply = () => {
 			const query = ( search?.value || '' ).trim().toLowerCase();
 			const hitsCurrent = contentQuery === query;
@@ -139,6 +160,8 @@ export function initDocumentLibraries() {
 			if ( clear ) {
 				clear.hidden = ! activeCat && ! query;
 			}
+
+			syncUrl();
 		};
 
 		const selectCat = ( slug ) => {
@@ -318,6 +341,21 @@ export function initDocumentLibraries() {
 				clearTimeout( timer );
 				timer = setTimeout( () => fetchContent( search.value.trim().toLowerCase() ), 250 );
 			} );
+		}
+
+		// Linked filtered view.
+		const params = new URLSearchParams( window.location.search );
+		const startCat = params.get( 'dl_cat' ) || '';
+		const startQuery = ( params.get( 'dl_q' ) || '' ).trim();
+
+		if ( startCat && section.querySelector( `[data-cat="${ CSS.escape( startCat ) }"]` ) ) {
+			selectCat( startCat );
+		}
+
+		if ( search && startQuery ) {
+			search.value = startQuery;
+			apply();
+			fetchContent( startQuery.toLowerCase() );
 		}
 	} );
 }
