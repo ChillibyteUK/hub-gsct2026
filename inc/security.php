@@ -4,7 +4,8 @@
  *
  * Comments, gravatars, tags and emojis are always off here (no options
  * UI — the plugin's checkboxes are gone with the plugin), as are the
- * HSTS / Cross-Origin-Opener-Policy / X-Frame-Options response headers.
+ * HSTS / Cross-Origin-Opener-Policy / X-Frame-Options / Permissions-Policy
+ * response headers.
  * Deliberately NOT ported: the plugin's dashboard widget, update-nag and
  * object-cache suppressions, Trusted Types, blog-disabling, ACF workarounds
  * and the major-core-auto-update pin — removing the plugin drops those too.
@@ -286,6 +287,7 @@ function hub_gsct2026_send_security_headers() {
 	header( 'X-Frame-Options: SAMEORIGIN' );
 	header( 'X-Content-Type-Options: nosniff' );
 	header( 'Referrer-Policy: strict-origin-when-cross-origin' );
+	header( 'Permissions-Policy: accelerometer=(), camera=(), geolocation=(), gyroscope=(), magnetometer=(), microphone=(), payment=(), usb=()' );
 }
 add_action( 'send_headers', 'hub_gsct2026_send_security_headers' );
 
