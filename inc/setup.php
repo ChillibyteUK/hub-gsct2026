@@ -28,6 +28,7 @@ function hub_gsct2026_setup() {
 		array(
 			'primary' => __( 'Primary Menu', 'hub-gsct2026' ),
 			'footer'  => __( 'Footer Menu', 'hub-gsct2026' ),
+			'colophon' => __( 'Footer Legal Links (Privacy, Terms, Cookies)', 'hub-gsct2026' ),
 		)
 	);
 }

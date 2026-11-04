@@ -1166,7 +1166,7 @@ footer .colophon {
         padding-top: 1rem;
     }
 
-:is(footer .colophon) nav {
+:is(footer .colophon) .colophon-nav__list {
             list-style: none;
             padding: 0;
             margin: 0;
@@ -1175,7 +1175,7 @@ footer .colophon {
             gap: var(--space-4);
         }
 
-:is(:is(footer .colophon) nav) a {
+:is(:is(footer .colophon) .colophon-nav__list) a {
                 text-decoration: underline;
             }
 

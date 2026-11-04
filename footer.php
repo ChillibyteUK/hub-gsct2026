@@ -42,11 +42,30 @@ $disclaimers = hub_gsct2026_get_setting( 'footer_disclaimers' );
 			<div class="mb-3"><?= esc_html( $colophon ); ?></div>
 			<div class="d-flex flex-wrap justify-content-between">
 				<div>&copy; <?php echo esc_html( gmdate( 'Y' ) ); ?> The Global Smaller Companies Trust PLC</div>
-				<nav>
-					<li><a href="/privacy-policy/">Privacy Policy</a></li>
-					<li><a href="https://www.columbiathreadneedle.com/en/terms-and-conditions/" target="_blank">Terms of Use</a></li>
-					<li><a href="/cookie-policy/">Cookie Policy</a></li>
-				</nav>
+				<?php
+				wp_nav_menu(
+					array(
+						'theme_location'  => 'colophon',
+						'container'       => 'nav',
+						'container_class' => 'colophon-nav',
+						'container_aria_label' => 'Legal',
+						'menu_class'      => 'colophon-nav__list',
+						'depth'           => 1,
+						'fallback_cb'     => static function () {
+							// Until a menu is assigned in Appearance > Menus.
+							?>
+							<nav class="colophon-nav" aria-label="Legal">
+								<ul class="colophon-nav__list">
+									<li><a href="/privacy-policy/">Privacy Policy</a></li>
+									<li><a href="https://www.columbiathreadneedle.com/en/terms-and-conditions/" target="_blank" rel="noopener">Terms of Use</a></li>
+									<li><a href="/cookie-policy/">Cookie Policy</a></li>
+								</ul>
+							</nav>
+							<?php
+						},
+					)
+				);
+				?>
 			</div>
 			<div class="mt-5"><?= wp_kses_post( wpautop( $disclaimers ) ); ?></div>
 		</div>
