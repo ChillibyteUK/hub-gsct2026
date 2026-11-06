@@ -42,6 +42,10 @@
 			"type": "string",
 			"default": "text-media"
 		},
+		"padding": {
+			"type": "string",
+			"default": "loose"
+		},
 		"mobileOrder": {
 			"type": "string",
 			"default": ""

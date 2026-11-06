@@ -36,6 +36,7 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 		listItems,
 		titleColour,
 		titleWeight,
+		padding,
 		formShortcode,
 		formTitle,
 	} = attributes;
@@ -154,6 +155,18 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 				/>
 			</div>
 		</div>
+			<RadioControl
+				className="hub-radio-horizontal"
+				label={ __( 'Padding', 'hub-gsct2026' ) }
+				selected={ padding || 'loose' }
+				options={ [
+					{ label: __( 'None', 'hub-gsct2026' ), value: 'none' },
+					{ label: __( 'Tight', 'hub-gsct2026' ), value: 'tight' },
+					{ label: __( 'Loose', 'hub-gsct2026' ), value: 'loose' },
+				] }
+				onChange={ ( value ) => setAttributes( { padding: value } ) }
+				help={ __( 'Top and bottom padding. Overridden by any class set under Advanced → Additional CSS class(es).', 'hub-gsct2026' ) }
+			/>
 			<RadioControl
 				className="hub-radio-horizontal"
 				label={ __( 'Media type', 'hub-gsct2026' ) }

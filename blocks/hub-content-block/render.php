@@ -56,10 +56,40 @@ if ( $is_quote ) {
 	$media_class .= $media_first ? ' hub-content-block__quote--left' : ' hub-content-block__quote--right';
 }
 
+$hub_extra_class = trim( (string) ( $attributes['className'] ?? '' ) );
+
 $wrapper_attributes = get_block_wrapper_attributes( array( 'class' => 'hub-content-block' ) );
+
+if ( '' !== $hub_extra_class ) {
+	// Additional CSS applies to the inner container only — strip it back
+	// out of the section wrapper (core merges className there
+	// automatically, and the supports API reads the parsed block, so it
+	// can't be withheld up front).
+	$hub_extra_tokens   = preg_split( '/\s+/', $hub_extra_class, -1, PREG_SPLIT_NO_EMPTY );
+	$wrapper_attributes = (string) preg_replace_callback(
+		'/class="([^"]*)"/',
+		static function ( $hub_matches ) use ( $hub_extra_tokens ) {
+			$hub_kept = array_diff( preg_split( '/\s+/', $hub_matches[1], -1, PREG_SPLIT_NO_EMPTY ), $hub_extra_tokens );
+			return 'class="' . implode( ' ', $hub_kept ) . '"';
+		},
+		$wrapper_attributes,
+		1
+	);
+}
+
+// Padding radio sets the container's vertical padding (unset = loose, so
+// blocks saved before the option existed are unchanged). Editor "Additional
+// CSS class(es)" apply to the inner container and replace it.
+$hub_padding_classes = array(
+	'none'  => '',
+	'tight' => 'py-5',
+	'loose' => 'py-7',
+);
+$hub_padding_class   = $hub_padding_classes[ $attributes['padding'] ?? 'loose' ] ?? 'py-7';
+$hub_container_class = trim( 'container ' . ( '' !== $hub_extra_class ? $hub_extra_class : $hub_padding_class ) );
 ?>
 <section <?= $wrapper_attributes; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- get_block_wrapper_attributes() already escapes. ?>>
-	<div class="container py-7">
+	<div class="<?= esc_attr( $hub_container_class ); ?>">
 		<div class="row gap-6">
 			<div class="<?= esc_attr( $text_class ); ?>">
 				<?php
