@@ -378,3 +378,30 @@ function hub_gsct2026_restrict_rest_users( $endpoints ) {
 	return $endpoints;
 }
 add_filter( 'rest_endpoints', 'hub_gsct2026_restrict_rest_users' );
+
+/**
+ * Reject logged-out requests to /wp/v2/users* (including single user
+ * lookups and ?rest_route=) with an explicit auth error so usernames
+ * cannot be harvested. Logged-in requests are untouched.
+ *
+ * @param mixed           $result  Response to replace the dispatched one, or null.
+ * @param WP_REST_Server  $server  REST server instance.
+ * @param WP_REST_Request $request Current request.
+ * @return mixed|WP_Error
+ */
+function hub_gsct2026_block_rest_user_requests( $result, $server, $request ) {
+	if ( is_user_logged_in() ) {
+		return $result;
+	}
+
+	if ( preg_match( '#^/wp/v2/users(/|$)#', $request->get_route() ) ) {
+		return new WP_Error(
+			'rest_user_cannot_view',
+			__( 'Sorry, you are not allowed to list users.', 'hub-gsct2026' ),
+			array( 'status' => rest_authorization_required_code() )
+		);
+	}
+
+	return $result;
+}
+add_filter( 'rest_pre_dispatch', 'hub_gsct2026_block_rest_user_requests', 10, 3 );
